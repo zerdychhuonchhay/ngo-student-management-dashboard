@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
-import { Menu, X, Users, DollarSign, Archive, Settings, Filter, PlusCircle, ArrowUpDown, BookOpen, FileText, BarChart2, Mail, CreditCard, Building, Edit, Eye, User, Mail as MailIcon, Phone, GraduationCap, School, Briefcase, BookCopy, Trash2 } from 'lucide-react';
+import { Menu, X, Users, DollarSign, Archive, Settings, Filter, PlusCircle, ArrowUpDown, BookOpen, FileText, BarChart2, Mail, CreditCard, Building, Edit, Eye, User, Mail as MailIcon, Phone, GraduationCap, School, Briefcase, BookCopy, Trash2, Calendar, ArrowLeft } from 'lucide-react';
 
 // --- INITIAL DATA (from your JSON files) ---
 const initialStudents = [
-    { "StudentID": "CPB00039", "Given Name": "Kunthea", "Family Name": "Yim", "Sex": "F", "DOB": "2003-05-12", "Grade": "University", "School": "RULE", "Monthly": "300", "Guardian Name": "Chan Makara", "Guardian Contact": "012345678", "Major": "Laws", "Comments": "Top 5 in school" },
-    { "StudentID": "CPG00025", "Given Name": "Sopheaktra", "Family Name": "Nim", "Sex": "F", "DOB": "2002-09-20", "Grade": "University", "School": "RUPP", "Monthly": "175", "Guardian Name": "", "Guardian Contact": "", "Major": "Business" },
-    { "StudentID": "CPB00041", "Given Name": "Dara", "Family Name": "Yim", "Sex": "M", "DOB": "2001-01-30", "Grade": "University", "School": "RULE", "Monthly": "250", "Guardian Name": "", "Guardian Contact": "", "Major": "Laws" },
-    { "StudentID": "CPG00026", "Given Name": "Manita", "Family Name": "Run", "Sex": "F", "DOB": "2004-03-15", "Grade": "University", "School": "UEF", "Monthly": "310", "Guardian Name": "Mom Sopheap", "Guardian Contact": "965455371", "Major": "Accounting and Finance" },
-    { "StudentID": "CPB00042", "Given Name": "Songha", "Family Name": "Run", "Sex": "M", "DOB": "2000-11-05", "Grade": "University", "School": "PPIU", "Monthly": "224.7", "Guardian Name": "Mom Sopheap", "Guardian Contact": "965455371", "Major": "Business" },
-    { "StudentID": "CPG00027", "Given Name": "SivKheu", "Family Name": "Ny", "Sex": "F", "DOB": "2003-08-22", "Grade": "University", "School": "UEF", "Monthly": "310", "Guardian Name": "Sor Sokhom", "Guardian Contact": "89217867", "Major": "Accounting and Finance" },
-    { "StudentID": "CPB00043", "Given Name": "Sreypich", "Family Name": "Chan", "Sex": "F", "DOB": "2005-02-10", "Grade": "12", "School": "SPS_Tep", "Monthly": "150", "Guardian Name": "", "Guardian Contact": "" },
-    { "StudentID": "CPG00028", "Given Name": "Raveen", "Family Name": "Samnang", "Sex": "M", "DOB": "2009-07-18", "Grade": "9", "School": "NewLife", "Monthly": "70", "Guardian Name": "Say Sotheary", "Guardian Contact": "977408378" }
+    { "StudentID": "CPB00039", "Given Name": "Kunthea", "Family Name": "Yim", "Sex": "F", "DOB": "2003-05-12", "Grade": "University", "School": "RULE", "Monthly": "300", "Guardian Name": "Chan Makara", "Guardian Contact": "012345678", "Major": "Laws", "Comments": "Top 5 in school", "EnrollmentDate": "2022-09-01" },
+    { "StudentID": "CPG00025", "Given Name": "Sopheaktra", "Family Name": "Nim", "Sex": "F", "DOB": "2002-09-20", "Grade": "University", "School": "RUPP", "Monthly": "175", "Guardian Name": "", "Guardian Contact": "", "Major": "Business", "EnrollmentDate": "2022-09-01" },
+    { "StudentID": "CPB00041", "Given Name": "Dara", "Family Name": "Yim", "Sex": "M", "DOB": "2001-01-30", "Grade": "University", "School": "RULE", "Monthly": "250", "Guardian Name": "", "Guardian Contact": "", "Major": "Laws", "EnrollmentDate": "2021-09-01" },
+    { "StudentID": "CPG00026", "Given Name": "Manita", "Family Name": "Run", "Sex": "F", "DOB": "2004-03-15", "Grade": "University", "School": "UEF", "Monthly": "310", "Guardian Name": "Mom Sopheap", "Guardian Contact": "965455371", "Major": "Accounting and Finance", "EnrollmentDate": "2023-09-01" },
+    { "StudentID": "CPB00042", "Given Name": "Songha", "Family Name": "Run", "Sex": "M", "DOB": "2000-11-05", "Grade": "University", "School": "PPIU", "Monthly": "224.7", "Guardian Name": "Mom Sopheap", "Guardian Contact": "965455371", "Major": "Business", "EnrollmentDate": "2020-09-01" },
+    { "StudentID": "CPG00027", "Given Name": "SivKheu", "Family Name": "Ny", "Sex": "F", "DOB": "2003-08-22", "Grade": "University", "School": "UEF", "Monthly": "310", "Guardian Name": "Sor Sokhom", "Guardian Contact": "89217867", "Major": "Accounting and Finance", "EnrollmentDate": "2023-09-01" },
+    { "StudentID": "CPB00043", "Given Name": "Sreypich", "Family Name": "Chan", "Sex": "F", "DOB": "2005-02-10", "Grade": "12", "School": "SPS_Tep", "Monthly": "150", "Guardian Name": "", "Guardian Contact": "", "EnrollmentDate": "2018-09-01" },
+    { "StudentID": "CPG00028", "Given Name": "Raveen", "Family Name": "Samnang", "Sex": "M", "DOB": "2009-07-18", "Grade": "9", "School": "NewLife", "Monthly": "70", "Guardian Name": "Say Sotheary", "Guardian Contact": "977408378", "EnrollmentDate": "2015-09-01" }
 ];
 
 const initialGrades = [
@@ -52,6 +52,8 @@ const initialCurriculum = {
         }
     }
 };
+
+const initialFollowUps = {};
 
 // --- Helper Hooks ---
 function useStickyState(defaultValue, key) {
@@ -95,11 +97,12 @@ export default function App() {
     const [archivedStudents, setArchivedStudents] = useStickyState([], 'archivedStudentData');
     const [grades, setGrades] = useStickyState(initialGrades, 'studentGradesData');
     const [curriculum, setCurriculum] = useStickyState(initialCurriculum, 'studentCurriculumData');
+    const [followUps, setFollowUps] = useStickyState(initialFollowUps, 'studentFollowUpsData');
     
     const ALL_COLUMNS = useMemo(() => [
         { key: 'StudentID', label: 'Student ID' }, { key: 'Given Name', label: 'First Name' }, { key: 'Family Name', label: 'Family Name' },
         { key: 'Age', label: 'Age' }, { key: 'Sex', label: 'Sex' }, { key: 'Grade', label: 'Grade' },
-        { key: 'School', label: 'School' }, { key: 'Monthly', label: 'Monthly Fee' }
+        { key: 'School', label: 'School' }, { key: 'Monthly', label: 'Monthly Fee' }, { key: 'EnrollmentDate', label: 'Enrolled' }
     ], []);
 
     const [visibleColumns, setVisibleColumns] = useStickyState(
@@ -162,7 +165,10 @@ export default function App() {
                 let valA = a[sort.column] || '', valB = b[sort.column] || '';
                 if (sort.column === 'Age' || sort.column === 'Monthly') {
                     valA = parseFloat(valA) || 0; valB = parseFloat(valB) || 0;
-                } else {
+                } else if (sort.column === 'EnrollmentDate') {
+                    valA = new Date(valA); valB = new Date(valB);
+                }
+                else {
                     valA = String(valA).toLowerCase(); valB = String(valB).toLowerCase();
                 }
                 if (valA < valB) return sort.direction === 'asc' ? -1 : 1;
@@ -192,6 +198,11 @@ export default function App() {
         setActiveTab('school-center');
     };
 
+    const handleSelectStudent = (student) => {
+        setSelectedStudent(student);
+        setActiveTab('profile');
+    };
+
     const handleReviewStudent = (formData) => {
         setReviewData(formData);
         setModal('review');
@@ -201,6 +212,7 @@ export default function App() {
         const formData = reviewData;
         if (modal === 'edit') {
             setStudents(students.map(s => s.StudentID === formData.StudentID ? formData : s));
+            setSelectedStudent(formData);
         } else {
             const newId = `CPB${Math.floor(10000 + Math.random() * 90000)}`;
             setStudents([...students, { ...formData, StudentID: newId }]);
@@ -210,14 +222,20 @@ export default function App() {
     };
     
     const handleArchiveStudent = () => {
-        setArchivedStudents([...archivedStudents, selectedStudent]);
+        const studentToArchive = {
+            ...selectedStudent,
+            DateLeft: new Date().toISOString().split('T')[0]
+        };
+        setArchivedStudents([...archivedStudents, studentToArchive]);
         setStudents(students.filter(s => s.StudentID !== selectedStudent.StudentID));
         setModal(null);
         setSelectedStudent(null);
+        setActiveTab('dashboard');
     };
     
     const handleRestoreStudent = (studentToRestore) => {
-        setStudents([...students, studentToRestore]);
+        const { DateLeft, ...restoredStudent } = studentToRestore;
+        setStudents([...students, restoredStudent]);
         setArchivedStudents(archivedStudents.filter(s => s.StudentID !== studentToRestore.StudentID));
     };
 
@@ -238,16 +256,44 @@ export default function App() {
         setModal(null);
     };
 
+    const handleAddFollowUp = (studentId, note) => {
+        const newFollowUp = {
+            date: new Date().toISOString(),
+            note: note,
+        };
+        setFollowUps(prev => ({
+            ...prev,
+            [studentId]: [...(prev[studentId] || []), newFollowUp]
+        }));
+    };
+    
+    const handleUpdateFollowUp = (studentId, index, newNote) => {
+        setFollowUps(prev => {
+            const updatedFollowUps = [...(prev[studentId] || [])];
+            updatedFollowUps[index].note = newNote;
+            return { ...prev, [studentId]: updatedFollowUps };
+        });
+    };
+
+    const handleDeleteFollowUp = (studentId, index) => {
+        if (window.confirm("Are you sure you want to delete this note?")) {
+            setFollowUps(prev => {
+                const updatedFollowUps = [...(prev[studentId] || [])];
+                updatedFollowUps.splice(index, 1);
+                return { ...prev, [studentId]: updatedFollowUps };
+            });
+        }
+    };
+
     // --- Render Components ---
     const renderModals = () => (
         <>
             {modal === 'add' && <StudentFormModal onReview={handleReviewStudent} onClose={() => setModal(null)} />}
             {modal === 'edit' && <StudentFormModal student={selectedStudent} onReview={handleReviewStudent} onClose={() => setModal(null)} onArchive={() => setModal('archive')} />}
-            {modal === 'view' && <StudentDetailsModal student={selectedStudent} onClose={() => setModal(null)} onEdit={() => setModal('edit')} onViewGrades={() => { setModal(null); setActiveTab('grades'); }} />}
             {modal === 'review' && <ReviewModal data={reviewData} onConfirm={handleSaveStudent} onEdit={() => setModal(selectedStudent ? 'edit' : 'add')} onClose={() => setModal(null)} />}
             {modal === 'filter' && <FilterModal currentFilters={filters} onApply={setFilters} onClose={() => setModal(null)} allStudents={studentsWithAge} />}
             {modal === 'settings' && <SettingsModal visibleColumns={visibleColumns} setVisibleColumns={setVisibleColumns} allColumns={ALL_COLUMNS} onReset={handleResetData} onClose={() => setModal(null)} />}
-            {modal === 'archive' && <ConfirmationModal title="Confirm Archive" message={`Are you sure you want to archive ${selectedStudent?.['Given Name']}?`} onConfirm={handleArchiveStudent} onClose={() => setModal('view')} />}
+            {modal === 'archive' && <ConfirmationModal title="Confirm Archive" message={`Are you sure you want to archive ${selectedStudent?.['Given Name']}?`} onConfirm={handleArchiveStudent} onClose={() => setActiveTab('profile')} />}
             {modal === 'add-grades' && <AddGradesModal student={selectedStudent} curriculum={curriculum} onAddGrades={handleAddGrades} onClose={() => setModal(null)} />}
         </>
     );
@@ -258,9 +304,10 @@ export default function App() {
             <div className="flex-grow flex flex-col h-screen w-full">
                 <TopBar onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} menuBtnRef={menuBtnRef} />
                 <div className="flex-grow overflow-y-auto">
-                    {activeTab === 'dashboard' && <DashboardPage students={filteredAndSortedStudents} onSort={handleSort} sort={sort} visibleColumns={visibleColumns} allColumns={ALL_COLUMNS} onOpenModal={openModal} setCategory={setCategory} category={category} totals={totals} onSelectSchool={handleSelectSchool} />}
+                    {activeTab === 'dashboard' && <DashboardPage students={filteredAndSortedStudents} onSort={handleSort} sort={sort} visibleColumns={visibleColumns} allColumns={ALL_COLUMNS} onOpenModal={openModal} setCategory={setCategory} category={category} totals={totals} onSelectSchool={handleSelectSchool} onSelectStudent={handleSelectStudent} />}
+                    {activeTab === 'profile' && <StudentProfilePage student={selectedStudent} onOpenModal={openModal} setActiveTab={setActiveTab} followUps={followUps[selectedStudent.StudentID] || []} onAddFollowUp={handleAddFollowUp} onUpdateFollowUp={handleUpdateFollowUp} onDeleteFollowUp={handleDeleteFollowUp} />}
                     {activeTab === 'grades' && <GradesPage student={selectedStudent} grades={studentGrades} onOpenModal={openModal} />}
-                    {activeTab === 'school-center' && <SchoolCenterPage students={studentsWithAge} grades={grades} selectedSchool={selectedSchool} onSelectSchool={setSelectedSchool} getCategoryForStudent={getCategoryForStudent} onOpenStudentModal={openModal}/>}
+                    {activeTab === 'school-center' && <SchoolCenterPage students={studentsWithAge} grades={grades} selectedSchool={selectedSchool} onSelectSchool={setSelectedSchool} getCategoryForStudent={getCategoryForStudent} onSelectStudent={handleSelectStudent}/>}
                     {activeTab === 'curriculum' && <CurriculumPage curriculum={curriculum} setCurriculum={setCurriculum} />}
                     {activeTab === 'archive' && <ArchivePage archivedStudents={archivedStudents} onRestore={handleRestoreStudent} />}
                     {activeTab === 'plan' && <ProjectPlanPage />}
@@ -309,7 +356,7 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, setOpen, onOpenSettings, men
     );
 };
 
-const DashboardPage = ({ students, onSort, sort, visibleColumns, allColumns, onOpenModal, setCategory, category, totals, onSelectSchool }) => (
+const DashboardPage = ({ students, onSort, sort, visibleColumns, allColumns, onOpenModal, setCategory, category, totals, onSelectSchool, onSelectStudent }) => (
     <div className="p-4 sm:p-6 lg:p-8 flex flex-col flex-grow min-h-0">
         <header className="bg-white shadow-md rounded-lg p-6 mb-6">
             <div className="flex flex-col md:flex-row justify-between md:items-center">
@@ -337,7 +384,7 @@ const DashboardPage = ({ students, onSort, sort, visibleColumns, allColumns, onO
             </div>
         </header>
         <main className="flex-grow overflow-y-auto bg-white shadow-md rounded-lg">
-            <StudentTable students={students} onSort={onSort} sort={sort} visibleColumns={visibleColumns} allColumns={allColumns} onOpenModal={onOpenModal} onSelectSchool={onSelectSchool} />
+            <StudentTable students={students} onSort={onSort} sort={sort} visibleColumns={visibleColumns} allColumns={allColumns} onSelectStudent={onSelectStudent} onSelectSchool={onSelectSchool} />
         </main>
     </div>
 );
@@ -356,7 +403,7 @@ const CategoryFilters = ({ setCategory, activeCategory }) => {
     );
 };
 
-const StudentTable = ({ students, onSort, sort, visibleColumns, allColumns, onOpenModal, onSelectSchool }) => (
+const StudentTable = ({ students, onSort, sort, visibleColumns, allColumns, onSelectStudent, onSelectSchool }) => (
     <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50 sticky top-0">
@@ -378,7 +425,7 @@ const StudentTable = ({ students, onSort, sort, visibleColumns, allColumns, onOp
                         {allColumns.map(col => visibleColumns[col.key] && (
                             <td key={col.key} className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                                 {col.key === 'Given Name' ? (
-                                    <a href="#" onClick={(e) => { e.preventDefault(); onOpenModal('view', student); }}
+                                    <a href="#" onClick={(e) => { e.preventDefault(); onSelectStudent(student); }}
                                        className="font-semibold text-indigo-600 hover:underline">
                                         {student[col.key] || 'N/A'}
                                     </a>
@@ -534,7 +581,7 @@ const GradesPage = ({ student, grades, onOpenModal }) => {
     );
 };
 
-const SchoolCenterPage = ({ students, grades, selectedSchool, onSelectSchool, getCategoryForStudent, onOpenStudentModal }) => {
+const SchoolCenterPage = ({ students, grades, selectedSchool, onSelectSchool, getCategoryForStudent, onSelectStudent }) => {
     const analyticsData = useMemo(() => {
         const studentIds = students.map(s => s.StudentID);
         const relevantGrades = grades.filter(g => studentIds.includes(g.StudentID));
@@ -648,7 +695,7 @@ const SchoolCenterPage = ({ students, grades, selectedSchool, onSelectSchool, ge
                                             {schoolStudents.map(student => (
                                                 <tr key={student.StudentID} className="border-b">
                                                     <td className="px-4 py-2">
-                                                        <a href="#" onClick={(e) => { e.preventDefault(); onOpenStudentModal('view', student); }} className="text-indigo-600 hover:underline">{student['Given Name']} {student['Family Name']}</a>
+                                                        <a href="#" onClick={(e) => { e.preventDefault(); onSelectStudent(student); }} className="text-indigo-600 hover:underline">{student['Given Name']} {student['Family Name']}</a>
                                                     </td>
                                                     <td className="px-4 py-2">{student.Grade}</td>
                                                 </tr>
@@ -672,11 +719,11 @@ const ArchivePage = ({ archivedStudents, onRestore }) => (
         <main className="flex-grow overflow-y-auto bg-white shadow-md rounded-lg">
             <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50"><tr><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student ID</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grade</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th></tr></thead>
+                    <thead className="bg-gray-50"><tr><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student ID</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grade</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Left</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th></tr></thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                         {archivedStudents.map(student => (
                             <tr key={student.StudentID}>
-                                <td className="px-6 py-4">{student.StudentID}</td><td className="px-6 py-4">{student['Given Name']} {student['Family Name']}</td><td className="px-6 py-4">{student.Grade}</td>
+                                <td className="px-6 py-4">{student.StudentID}</td><td className="px-6 py-4">{student['Given Name']} {student['Family Name']}</td><td className="px-6 py-4">{student.Grade}</td><td className="px-6 py-4">{student.DateLeft}</td>
                                 <td className="px-6 py-4"><button onClick={() => onRestore(student)} className="text-indigo-600 hover:underline">Restore</button></td>
                             </tr>
                         ))}
@@ -853,7 +900,7 @@ const Modal = ({ children, title, onClose, maxWidth = 'max-w-3xl' }) => {
 }
 
 const StudentFormModal = ({ student, onReview, onClose, onArchive }) => {
-    const [formData, setFormData] = useState(student || { 'Given Name': '', 'Family Name': '', DOB: '', Sex: '', Grade: '', School: '', Monthly: '', 'Guardian Name': '', 'Guardian Contact': '', 'Major': '', 'Comments': '' });
+    const [formData, setFormData] = useState(student || { 'Given Name': '', 'Family Name': '', DOB: '', Sex: '', Grade: '', School: '', Monthly: '', 'Guardian Name': '', 'Guardian Contact': '', 'Major': '', 'Comments': '', 'EnrollmentDate': '' });
 
     const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
     const handleSubmit = (e) => { e.preventDefault(); onReview(formData); };
@@ -862,13 +909,13 @@ const StudentFormModal = ({ student, onReview, onClose, onArchive }) => {
         <Modal title={student ? "Edit Student" : "Add New Student"} onClose={onClose}>
             <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-                    {Object.keys(formData).filter(k => !['StudentID', 'Age'].includes(k)).map(key => (
+                    {Object.keys(formData).filter(k => !['StudentID', 'Age', 'DateLeft'].includes(k)).map(key => (
                         <div key={key} className={key === 'Comments' ? 'md:col-span-2' : ''}>
                             <label className="block text-sm font-medium text-gray-700">{key}</label>
                             {key === 'Comments' ? (
                                 <textarea name={key} value={formData[key] || ''} onChange={handleChange} className="mt-1 block w-full p-2 border rounded-md" rows="3" />
                             ) : (
-                                <input type={key === 'DOB' ? 'date' : key === 'Monthly' ? 'number' : 'text'}
+                                <input type={key === 'DOB' || key === 'EnrollmentDate' ? 'date' : key === 'Monthly' ? 'number' : 'text'}
                                        name={key} value={formData[key] || ''} onChange={handleChange}
                                        className="mt-1 block w-full p-2 border rounded-md" />
                             )}
@@ -910,41 +957,109 @@ const DetailItem = ({ icon, label, value }) => (
     </div>
 );
 
-const StudentDetailsModal = ({ student, onClose, onEdit, onViewGrades }) => (
-    <Modal title={`${student['Given Name']} ${student['Family Name']}`} onClose={onClose} maxWidth="max-w-2xl">
-        <div>
-            <div className="border-b pb-4 mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">Personal Details</h3>
-                <dl className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-6">
-                    <DetailItem icon={<User size={16} className="text-gray-400"/>} label="Student ID" value={student.StudentID} />
-                    <DetailItem icon={<User size={16} className="text-gray-400"/>} label="Age" value={student.Age} />
-                    <DetailItem icon={<User size={16} className="text-gray-400"/>} label="Sex" value={student.Sex === 'M' ? 'Male' : 'Female'} />
-                    <DetailItem icon={<User size={16} className="text-gray-400"/>} label="Date of Birth" value={student.DOB} />
-                </dl>
-            </div>
-             <div className="border-b pb-4 mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">Academic Info</h3>
-                <dl className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-6">
-                    <DetailItem icon={<School size={16} className="text-gray-400"/>} label="School" value={student.School} />
-                    <DetailItem icon={<GraduationCap size={16} className="text-gray-400"/>} label="Grade" value={student.Grade} />
-                    <DetailItem icon={<Briefcase size={16} className="text-gray-400"/>} label="Major" value={student.Major} />
-                    <DetailItem icon={<DollarSign size={16} className="text-gray-400"/>} label="Monthly Fee" value={`$${parseFloat(student.Monthly || 0).toFixed(2)}`} />
-                </dl>
-            </div>
-             <div>
-                <h3 className="text-lg font-semibold text-gray-800">Guardian Contact</h3>
-                <dl className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-6">
-                    <DetailItem icon={<User size={16} className="text-gray-400"/>} label="Guardian Name" value={student['Guardian Name']} />
-                    <DetailItem icon={<Phone size={16} className="text-gray-400"/>} label="Guardian Contact" value={student['Guardian Contact']} />
-                </dl>
+const StudentProfilePage = ({ student, onOpenModal, setActiveTab, followUps, onAddFollowUp, onUpdateFollowUp, onDeleteFollowUp }) => {
+    const [newNote, setNewNote] = useState('');
+    const [editingIndex, setEditingIndex] = useState(null);
+    const [editingText, setEditingText] = useState('');
+
+    if (!student) {
+        return <div className="p-8 text-center text-gray-600">No student selected. Please go back to the dashboard.</div>;
+    }
+
+    const handleAddNote = () => {
+        if (newNote.trim()) {
+            onAddFollowUp(student.StudentID, newNote.trim());
+            setNewNote('');
+        }
+    };
+
+    const handleEdit = (note, index) => {
+        setEditingIndex(index);
+        setEditingText(note.note);
+    };
+
+    const handleSaveEdit = (index) => {
+        onUpdateFollowUp(student.StudentID, index, editingText);
+        setEditingIndex(null);
+        setEditingText('');
+    };
+
+    return (
+        <div className="p-4 sm:p-6 lg:p-8">
+            <header className="bg-white shadow-md rounded-lg p-6 mb-6">
+                <div className="flex justify-between items-center">
+                    <div>
+                        <h1 className="text-3xl font-bold text-gray-900">{student['Given Name']} {student['Family Name']}</h1>
+                        <p className="text-gray-600">Student Profile</p>
+                    </div>
+                    <div className="flex gap-2">
+                        <button onClick={() => onOpenModal('edit', student)} className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 flex items-center gap-2"><Edit size={16}/> Edit</button>
+                        <button onClick={() => { setActiveTab('grades'); }} className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 flex items-center gap-2"><Eye size={16}/> View Grades</button>
+                    </div>
+                </div>
+            </header>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-1 space-y-6">
+                    <div className="bg-white p-6 rounded-lg shadow-md">
+                        <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">Personal Details</h3>
+                        <dl className="space-y-4">
+                            <DetailItem icon={<User size={16} className="text-gray-400"/>} label="Student ID" value={student.StudentID} />
+                            <DetailItem icon={<User size={16} className="text-gray-400"/>} label="Age" value={student.Age} />
+                            <DetailItem icon={<User size={16} className="text-gray-400"/>} label="Sex" value={student.Sex === 'M' ? 'Male' : 'Female'} />
+                            <DetailItem icon={<Calendar size={16} className="text-gray-400"/>} label="Date of Birth" value={student.DOB} />
+                            <DetailItem icon={<Calendar size={16} className="text-gray-400"/>} label="Enrollment Date" value={student.EnrollmentDate} />
+                        </dl>
+                    </div>
+                    <div className="bg-white p-6 rounded-lg shadow-md">
+                        <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">Academic Info</h3>
+                        <dl className="space-y-4">
+                            <DetailItem icon={<School size={16} className="text-gray-400"/>} label="School" value={student.School} />
+                            <DetailItem icon={<GraduationCap size={16} className="text-gray-400"/>} label="Grade" value={student.Grade} />
+                            <DetailItem icon={<Briefcase size={16} className="text-gray-400"/>} label="Major" value={student.Major} />
+                            <DetailItem icon={<DollarSign size={16} className="text-gray-400"/>} label="Monthly Fee" value={`$${parseFloat(student.Monthly || 0).toFixed(2)}`} />
+                        </dl>
+                    </div>
+                </div>
+                <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
+                    <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">Follow-up History</h3>
+                    <div className="space-y-4">
+                        <div>
+                            <textarea value={newNote} onChange={(e) => setNewNote(e.target.value)} className="w-full p-2 border rounded-md" rows="3" placeholder="Add a new follow-up note..."></textarea>
+                            <button onClick={handleAddNote} className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Add Note</button>
+                        </div>
+                        <div className="space-y-4 max-h-96 overflow-y-auto">
+                            {followUps.slice().reverse().map((followUp, index) => {
+                                const originalIndex = followUps.length - 1 - index;
+                                return (
+                                    <div key={index} className="bg-gray-50 p-4 rounded-md">
+                                        <div className="flex justify-between items-start">
+                                            <div>
+                                                <p className="text-sm text-gray-500">{new Date(followUp.date).toLocaleString()}</p>
+                                                {editingIndex === originalIndex ? (
+                                                    <textarea value={editingText} onChange={(e) => setEditingText(e.target.value)} className="mt-1 w-full p-2 border rounded-md" rows="2"></textarea>
+                                                ) : (
+                                                    <p className="mt-1">{followUp.note}</p>
+                                                )}
+                                            </div>
+                                            <div className="flex gap-2 flex-shrink-0 ml-4">
+                                                {editingIndex === originalIndex ? (
+                                                    <button onClick={() => handleSaveEdit(originalIndex)} className="text-sm text-green-600 hover:underline">Save</button>
+                                                ) : (
+                                                    <button onClick={() => handleEdit(followUp, originalIndex)} className="text-sm text-blue-600 hover:underline"><Edit size={14}/></button>
+                                                )}
+                                                <button onClick={() => onDeleteFollowUp(student.StudentID, originalIndex)} className="text-sm text-red-600 hover:underline"><Trash2 size={14}/></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div className="mt-6 pt-4 border-t flex justify-end gap-4">
-            <button type="button" onClick={onEdit} className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 flex items-center gap-2"><Edit size={16}/> Edit Student</button>
-            <button type="button" onClick={onViewGrades} className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 flex items-center gap-2"><Eye size={16}/> View Grades</button>
-        </div>
-    </Modal>
-);
+    );
+};
 
 
 const FilterModal = ({ currentFilters, onApply, onClose, allStudents }) => {
