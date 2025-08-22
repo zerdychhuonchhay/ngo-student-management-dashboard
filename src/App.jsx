@@ -696,8 +696,8 @@ const ProjectPlanPage = () => {
 
     return (
         <div className="p-4 sm:p-6 lg:p-8">
-            <div className="bg-white shadow-md rounded-lg p-6 prose max-w-none">
-                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-8 not-prose">
+            <div className="bg-white shadow-md rounded-lg p-6">
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-8">
                     <h2 className="text-xl font-bold mt-0 mb-3">On This Page</h2>
                     <ul className="list-none pl-0 space-y-2">
                         <li><a href="#phase1" onClick={(e) => handleNavClick(e, 'phase1')} className="text-indigo-600 hover:underline">Phase 1: Core Functionality (Complete)</a></li>
@@ -707,49 +707,51 @@ const ProjectPlanPage = () => {
                     </ul>
                 </div>
 
-                <h2 id="main-title">Project Roadmap</h2>
-                <p>This document outlines the current features and future development plans for the Student Dashboard application.</p>
-                
-                <hr />
-                <h3 id="phase1">Phase 1: Core Functionality (v1.0) - Complete & Expanded</h3>
-                <p>The foundational features that are currently implemented, plus planned enhancements for robustness and user experience.</p>
-                <ul>
-                    <li><strong>Student & Grade Management:</strong> Core CRUD (Create, Read, Update, Archive) for student and grade records.</li>
-                    <li><strong>Data Persistence:</strong> All data is saved in the browser's local storage to persist between sessions.</li>
-                    <li><strong>Advanced Filtering & Sorting:</strong> Robust controls for searching, filtering, and sorting the student list.</li>
-                    <li><strong>Basic Reporting:</strong> Dynamic calculation of student and fee totals, plus individual grade charts.</li>
-                    <li><strong>Customizable UI:</strong> Users can toggle the visibility of columns in the main student table.</li>
-                    <li><strong>Enhanced User Feedback:</strong> Implement notifications (e.g., "Student Saved Successfully") to confirm user actions.</li>
-                    <li><strong>Input Validation:</strong> Add validation to forms to ensure data integrity (e.g., checking for valid email formats, ensuring required fields are not empty).</li>
-                    <li><strong>Search Result Highlighting:</strong> When a user searches for a student, the matching text in the results table will be highlighted to be more visible.</li>
-                    <li><strong>Bulk Actions:</strong> Introduce checkboxes on the student list to allow for actions on multiple students at once, such as "Archive Selected".</li>
-                </ul>
+                <div className="prose max-w-none">
+                    <h2 id="main-title">Project Roadmap</h2>
+                    <p>This document outlines the current features and future development plans for the Student Dashboard application.</p>
+                    
+                    <hr />
+                    <h3 id="phase1">Phase 1: Core Functionality (v1.0) - Complete & Expanded</h3>
+                    <p>The foundational features that are currently implemented, plus planned enhancements for robustness and user experience.</p>
+                    <ul>
+                        <li><strong>Student & Grade Management:</strong> Core CRUD (Create, Read, Update, Archive) for student and grade records.</li>
+                        <li><strong>Data Persistence:</strong> All data is saved in the browser's local storage to persist between sessions.</li>
+                        <li><strong>Advanced Filtering & Sorting:</strong> Robust controls for searching, filtering, and sorting the student list.</li>
+                        <li><strong>Basic Reporting:</strong> Dynamic calculation of student and fee totals, plus individual grade charts.</li>
+                        <li><strong>Customizable UI:</strong> Users can toggle the visibility of columns in the main student table.</li>
+                        <li><strong>Enhanced User Feedback:</strong> Implement notifications (e.g., "Student Saved Successfully") to confirm user actions.</li>
+                        <li><strong>Input Validation:</strong> Add validation to forms to ensure data integrity (e.g., checking for valid email formats, ensuring required fields are not empty).</li>
+                        <li><strong>Search Result Highlighting:</strong> When a user searches for a student, the matching text in the results table will be highlighted to be more visible.</li>
+                        <li><strong>Bulk Actions:</strong> Introduce checkboxes on the student list to allow for actions on multiple students at once, such as "Archive Selected".</li>
+                    </ul>
 
-                <hr />
-                <h3 id="phase2">Phase 2: Enhanced Analytics & Reporting (Future)</h3>
-                <p>Focus on providing deeper insights into the school's overall performance.</p>
-                <ul>
-                    <li><strong>School Analytics Dashboard <BarChart2 className="inline-block w-4 h-4" />:</strong> A new page with charts visualizing school-wide data, such as student distribution by grade, average grades across subjects, and overall attendance rates.</li>
-                    <li><strong>Printable Student Reports <FileText className="inline-block w-4 h-4" />:</strong> An option to generate a clean, printable PDF "report card" for any selected student, summarizing their information, grades, and attendance history.</li>
-                </ul>
+                    <hr />
+                    <h3 id="phase2">Phase 2: Enhanced Analytics & Reporting (Future)</h3>
+                    <p>Focus on providing deeper insights into the school's overall performance.</p>
+                    <ul>
+                        <li><strong>School Analytics Dashboard <BarChart2 className="inline-block w-4 h-4" />:</strong> A new page with charts visualizing school-wide data, such as student distribution by grade, average grades across subjects, and overall attendance rates.</li>
+                        <li><strong>Printable Student Reports <FileText className="inline-block w-4 h-4" />:</strong> An option to generate a clean, printable PDF "report card" for any selected student, summarizing their information, grades, and attendance history.</li>
+                    </ul>
 
-                <hr />
-                <h3 id="phase3">Phase 3: User Roles & Communication (Future)</h3>
-                <p>Expand the application to be a multi-user platform for collaboration.</p>
-                <ul>
-                    <li><strong>User Accounts (Admins, Teachers) <Users className="inline-block w-4 h-4" />:</strong> Introduce a login system with different permission levels. Admins would have full control, while Teachers could be restricted to viewing and managing only their assigned students.</li>
-                    <li><strong>Parent/Student Portal:</strong> A secure, read-only view for parents and students to log in and see their own grades and attendance information.</li>
-                    <li><strong>Announcements System <Mail className="inline-block w-4 h-4" />:</strong> A feature for admins to create and display important announcements on the dashboard for all users.</li>
-                </ul>
+                    <hr />
+                    <h3 id="phase3">Phase 3: User Roles & Communication (Future)</h3>
+                    <p>Expand the application to be a multi-user platform for collaboration.</p>
+                    <ul>
+                        <li><strong>User Accounts (Admins, Teachers) <Users className="inline-block w-4 h-4" />:</strong> Introduce a login system with different permission levels. Admins would have full control, while Teachers could be restricted to viewing and managing only their assigned students.</li>
+                        <li><strong>Parent/Student Portal:</strong> A secure, read-only view for parents and students to log in and see their own grades and attendance information.</li>
+                        <li><strong>Announcements System <Mail className="inline-block w-4 h-4" />:</strong> A feature for admins to create and display important announcements on the dashboard for all users.</li>
+                    </ul>
 
-                <hr />
-                <h3 id="phase4">Phase 4: Financial Management & Advanced Data (Future)</h3>
-                <p>Add dedicated tools for financial tracking and more complex data operations.</p>
-                <ul>
-                    <li><strong>Financial Dashboard <CreditCard className="inline-block w-4 h-4" />:</strong> A dedicated page for tracking tuition payments. It would show total income, list students with outstanding balances, and allow logging of payments.</li>
-                    <li><strong>Advanced Attendance Module:</strong> A dedicated interface for marking daily attendance for all students, with reporting features to track tardiness and absences over time.</li>
-                    <li><strong>Data Import/Export:</strong> Functionality in the Settings modal to export all student or grade data to a CSV file, and to import a list of new students from a formatted CSV file.</li>
-                </ul>
+                    <hr />
+                    <h3 id="phase4">Phase 4: Financial Management & Advanced Data (Future)</h3>
+                    <p>Add dedicated tools for financial tracking and more complex data operations.</p>
+                    <ul>
+                        <li><strong>Financial Dashboard <CreditCard className="inline-block w-4 h-4" />:</strong> A dedicated page for tracking tuition payments. It would show total income, list students with outstanding balances, and allow logging of payments.</li>
+                        <li><strong>Advanced Attendance Module:</strong> A dedicated interface for marking daily attendance for all students, with reporting features to track tardiness and absences over time.</li>
+                        <li><strong>Data Import/Export:</strong> Functionality in the Settings modal to export all student or grade data to a CSV file, and to import a list of new students from a formatted CSV file.</li>
+                    </ul>
+                </div>
             </div>
         </div>
     );
