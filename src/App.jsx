@@ -1,17 +1,28 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
-import { Menu, X, Users, DollarSign, Archive, Settings, Filter, PlusCircle, ArrowUpDown, BookOpen, FileText, BarChart2, Mail, CreditCard, Building, Edit, Eye, User, Mail as MailIcon, Phone, GraduationCap, School, Briefcase, BookCopy, Trash2, Calendar, ArrowLeft } from 'lucide-react';
+import { Menu, X, Users, DollarSign, Archive, Settings, Filter, PlusCircle, ArrowUpDown, BookOpen, FileText, BarChart2, Mail, CreditCard, Building, Edit, Eye, User, Mail as MailIcon, Phone, GraduationCap, School, Briefcase, BookCopy, Trash2, Calendar, ArrowLeft, ChevronDown } from 'lucide-react';
 
-// --- INITIAL DATA (from your JSON files) ---
+// ===================================================================================
+// --- DATA (data.js) ---
+// In a larger application, this data would come from an API or a separate file.
+// ===================================================================================
+
 const initialStudents = [
-    { "StudentID": "CPB00039", "Given Name": "Kunthea", "Family Name": "Yim", "Sex": "F", "DOB": "2003-05-12", "Grade": "University", "School": "RULE", "Monthly": "300", "Guardian Name": "Chan Makara", "Guardian Contact": "012345678", "Major": "Laws", "Comments": "Top 5 in school", "EnrollmentDate": "2022-09-01" },
-    { "StudentID": "CPG00025", "Given Name": "Sopheaktra", "Family Name": "Nim", "Sex": "F", "DOB": "2002-09-20", "Grade": "University", "School": "RUPP", "Monthly": "175", "Guardian Name": "", "Guardian Contact": "", "Major": "Business", "EnrollmentDate": "2022-09-01" },
-    { "StudentID": "CPB00041", "Given Name": "Dara", "Family Name": "Yim", "Sex": "M", "DOB": "2001-01-30", "Grade": "University", "School": "RULE", "Monthly": "250", "Guardian Name": "", "Guardian Contact": "", "Major": "Laws", "EnrollmentDate": "2021-09-01" },
-    { "StudentID": "CPG00026", "Given Name": "Manita", "Family Name": "Run", "Sex": "F", "DOB": "2004-03-15", "Grade": "University", "School": "UEF", "Monthly": "310", "Guardian Name": "Mom Sopheap", "Guardian Contact": "965455371", "Major": "Accounting and Finance", "EnrollmentDate": "2023-09-01" },
-    { "StudentID": "CPB00042", "Given Name": "Songha", "Family Name": "Run", "Sex": "M", "DOB": "2000-11-05", "Grade": "University", "School": "PPIU", "Monthly": "224.7", "Guardian Name": "Mom Sopheap", "Guardian Contact": "965455371", "Major": "Business", "EnrollmentDate": "2020-09-01" },
-    { "StudentID": "CPG00027", "Given Name": "SivKheu", "Family Name": "Ny", "Sex": "F", "DOB": "2003-08-22", "Grade": "University", "School": "UEF", "Monthly": "310", "Guardian Name": "Sor Sokhom", "Guardian Contact": "89217867", "Major": "Accounting and Finance", "EnrollmentDate": "2023-09-01" },
-    { "StudentID": "CPB00043", "Given Name": "Sreypich", "Family Name": "Chan", "Sex": "F", "DOB": "2005-02-10", "Grade": "12", "School": "SPS_Tep", "Monthly": "150", "Guardian Name": "", "Guardian Contact": "", "EnrollmentDate": "2018-09-01" },
-    { "StudentID": "CPG00028", "Given Name": "Raveen", "Family Name": "Samnang", "Sex": "M", "DOB": "2009-07-18", "Grade": "9", "School": "NewLife", "Monthly": "70", "Guardian Name": "Say Sotheary", "Guardian Contact": "977408378", "EnrollmentDate": "2015-09-01" }
+    { "StudentID": "CPB00039", "Given Name": "Kunthea", "Family Name": "Yim", "Sex": "F", "DOB": "2003-05-12", "Grade": "University", "School": "RULE", "FeeAmount": "300", "FeeFrequency": "Monthly", "Guardian Name": "Chan Makara", "Guardian Contact": "012345678", "Major": "Laws", "Comments": "Top 5 in school", "EnrollmentDate": "2022-09-01" },
+    { "StudentID": "CPG00025", "Given Name": "Sopheaktra", "Family Name": "Nim", "Sex": "F", "DOB": "2002-09-20", "Grade": "University", "School": "RUPP", "FeeAmount": "175", "FeeFrequency": "Monthly", "Guardian Name": "", "Guardian Contact": "", "Major": "Business", "EnrollmentDate": "2022-09-01" },
+    { "StudentID": "CPB00041", "Given Name": "Dara", "Family Name": "Yim", "Sex": "M", "DOB": "2001-01-30", "Grade": "University", "School": "RULE", "FeeAmount": "750", "FeeFrequency": "Quarterly", "Guardian Name": "", "Guardian Contact": "", "Major": "Laws", "EnrollmentDate": "2021-09-01" },
+    { "StudentID": "CPG00026", "Given Name": "Manita", "Family Name": "Run", "Sex": "F", "DOB": "2004-03-15", "Grade": "University", "School": "UEF", "FeeAmount": "620", "FeeFrequency": "Semester", "Guardian Name": "Mom Sopheap", "Guardian Contact": "965455371", "Major": "Accounting and Finance", "EnrollmentDate": "2023-09-01" },
+    { "StudentID": "CPB00042", "Given Name": "Songha", "Family Name": "Run", "Sex": "M", "DOB": "2000-11-05", "Grade": "University", "School": "PPIU", "FeeAmount": "449.4", "FeeFrequency": "Semester", "Guardian Name": "Mom Sopheap", "Guardian Contact": "965455371", "Major": "Business", "EnrollmentDate": "2020-09-01" },
+    { "StudentID": "CPG00027", "Given Name": "SivKheu", "Family Name": "Ny", "Sex": "F", "DOB": "2003-08-22", "Grade": "University", "School": "UEF", "FeeAmount": "310", "FeeFrequency": "Monthly", "Guardian Name": "Sor Sokhom", "Guardian Contact": "89217867", "Major": "Accounting and Finance", "EnrollmentDate": "2023-09-01" },
+    { "StudentID": "CPB00043", "Given Name": "Sreypich", "Family Name": "Chan", "Sex": "F", "DOB": "2005-02-10", "Grade": "12", "School": "SPS_Tep", "FeeAmount": "1500", "FeeFrequency": "Yearly", "Guardian Name": "", "Guardian Contact": "", "EnrollmentDate": "2018-09-01" },
+    { "StudentID": "CPG00028", "Given Name": "Raveen", "Family Name": "Samnang", "Sex": "M", "DOB": "2009-07-18", "Grade": "9", "School": "NewLife", "FeeAmount": "70", "FeeFrequency": "Monthly", "Guardian Name": "Say Sotheary", "Guardian Contact": "977408378", "EnrollmentDate": "2015-09-01" },
+    { "StudentID": "CPB00002", "Given Name": "Sovanna", "Family Name": "Sok (Mao)", "Sex": "M", "DOB": "2008-10-07", "Grade": "4", "School": "NewLife", "FeeAmount": "60", "FeeFrequency": "Monthly", "Guardian Name": "Sok Khoeun", "Guardian Contact": "095 927592", "Major": "", "Comments": "", "EnrollmentDate": "" },
+    { "StudentID": "CPB00008", "Given Name": "Chanvie", "Family Name": "Sophan", "Sex": "M", "DOB": "2010-09-10", "Grade": "6", "School": "", "FeeAmount": "149", "FeeFrequency": "Monthly", "Guardian Name": "Sophan Chankakada", "Guardian Contact": "", "Major": "", "Comments": "", "EnrollmentDate": "2015-10-28" },
+    { "StudentID": "CPB00009", "Given Name": "Meng", "Family Name": "Sorn", "Sex": "M", "DOB": "2005-05-15", "Grade": "10", "School": "SPS_TK", "FeeAmount": "70", "FeeFrequency": "Monthly", "Guardian Name": "Ti Ra", "Guardian Contact": "096 3378336", "Major": "", "Comments": "Trying, abcent a lot, not catching up, not attending math tutoring", "EnrollmentDate": "" },
+    { "StudentID": "CPB00018", "Given Name": "Chantha", "Family Name": "Samnang", "Sex": "M", "DOB": "2006-06-12", "Grade": "11", "School": "NewLife", "FeeAmount": "10", "FeeFrequency": "Monthly", "Guardian Name": "Say Sotheary", "Guardian Contact": "097 7408378", "Major": "", "Comments": "", "EnrollmentDate": "" },
+    { "StudentID": "CPB00021", "Given Name": "Raveen", "Family Name": "Samnang", "Sex": "M", "DOB": "2009-02-01", "Grade": "9", "School": "NewLife", "FeeAmount": "70", "FeeFrequency": "Monthly", "Guardian Name": "Say Sotheary", "Guardian Contact": "097 7408378", "Major": "", "Comments": "Try hard but couldn’t catch the lessons, attendance regularly", "EnrollmentDate": "" },
+    { "StudentID": "CPB00031", "Given Name": "Parin", "Family Name": "Proseur", "Sex": "M", "DOB": "2010-02-03", "Grade": "7", "School": "NewLife", "FeeAmount": "70", "FeeFrequency": "Monthly", "Guardian Name": "", "Guardian Contact": "", "Major": "", "Comments": "", "EnrollmentDate": "" },
+    { "StudentID": "CPB00035", "Given Name": "Daravichen", "Family Name": "Sem", "Sex": "M", "DOB": "2009-03-21", "Grade": "9", "School": "SPS_Tep", "FeeAmount": "130", "FeeFrequency": "Monthly", "Guardian Name": "Chan Thom", "Guardian Contact": "", "Major": "", "Comments": "Getting better, but still limited, not attend math tutoring regualarly", "EnrollmentDate": "" }
 ];
 
 const initialGrades = [
@@ -29,11 +40,19 @@ const initialGrades = [
 
 const initialCurriculum = {
     "NewLife": {
+        "4": ["Math", "Science", "Khmer", "English"],
+        "6": ["Math", "Science", "Khmer", "English"],
+        "7": ["Math", "Science", "Khmer", "English"],
         "9": ["Math", "Science", "Khmer", "English", "Social Studies"],
-        "10": ["Algebra", "Biology", "Khmer Literature", "English II", "World History"]
+        "10": ["Algebra", "Biology", "Khmer Literature", "English II", "World History"],
+        "11": ["Algebra II", "Chemistry", "Khmer Literature", "English III", "World History"],
     },
     "SPS_Tep": {
+        "9": ["Math", "Physics", "Khmer", "English"],
         "12": ["Calculus", "Physics", "Chemistry", "Advanced English", "Cambodian History"]
+    },
+     "SPS_TK": {
+        "10": ["Math", "Science", "Khmer", "English"]
     },
     "UEF": {
         "Accounting and Finance": {
@@ -50,12 +69,32 @@ const initialCurriculum = {
                 "Semester 2": ["Criminal Law", "Legal Research"]
             }
         }
+    },
+    "RUPP": {
+        "Business": {
+             "Year 1": {
+                "Semester 1": ["Principles of Management", "Principles of Marketing"],
+                "Semester 2": ["Business Law", "Business Communication"]
+            }
+        }
+    },
+    "PPIU": {
+        "Business": {
+             "Year 1": {
+                "Semester 1": ["Intro to Business", "Accounting I"],
+                "Semester 2": ["Microeconomics", "Business Statistics"]
+            }
+        }
     }
 };
 
 const initialFollowUps = {};
 
-// --- Helper Hooks ---
+// ===================================================================================
+// --- HOOKS (hooks.js) ---
+// Custom hooks for reusable logic like persisting state to localStorage.
+// ===================================================================================
+
 function useStickyState(defaultValue, key) {
     const [value, setValue] = useState(() => {
         try {
@@ -90,235 +129,10 @@ function useOnClickOutside(ref, handler, menuRef) {
 }
 
 
-// --- Main App Component ---
-export default function App() {
-    // --- State Management ---
-    const [students, setStudents] = useStickyState(initialStudents, 'studentDashboardData');
-    const [archivedStudents, setArchivedStudents] = useStickyState([], 'archivedStudentData');
-    const [grades, setGrades] = useStickyState(initialGrades, 'studentGradesData');
-    const [curriculum, setCurriculum] = useStickyState(initialCurriculum, 'studentCurriculumData');
-    const [followUps, setFollowUps] = useStickyState(initialFollowUps, 'studentFollowUpsData');
-    
-    const ALL_COLUMNS = useMemo(() => [
-        { key: 'StudentID', label: 'Student ID' }, { key: 'Given Name', label: 'First Name' }, { key: 'Family Name', label: 'Family Name' },
-        { key: 'Age', label: 'Age' }, { key: 'Sex', label: 'Sex' }, { key: 'Grade', label: 'Grade' },
-        { key: 'School', label: 'School' }, { key: 'Monthly', label: 'Monthly Fee' }, { key: 'EnrollmentDate', label: 'Enrolled' }
-    ], []);
-
-    const [visibleColumns, setVisibleColumns] = useStickyState(
-        ALL_COLUMNS.reduce((acc, col) => ({ ...acc, [col.key]: true }), {}),
-        'studentDashboardColumns'
-    );
-
-    const [activeTab, setActiveTab] = useState('dashboard');
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const [selectedStudent, setSelectedStudent] = useState(null);
-    const [selectedSchool, setSelectedSchool] = useState(null);
-    const [modal, setModal] = useState(null); 
-    const [reviewData, setReviewData] = useState(null);
-    
-    const [filters, setFilters] = useState({
-        search: '', grade: '', school: '', sex: '', age: '', status: ''
-    });
-    const [category, setCategory] = useState('all');
-    const [sort, setSort] = useState({ column: 'Given Name', direction: 'asc' });
-    const menuBtnRef = useRef();
-
-    // --- Derived State & Data Processing ---
-    const studentsWithAge = useMemo(() => {
-        return students.map(s => ({
-            ...s,
-            Age: s.DOB ? new Date().getFullYear() - new Date(s.DOB).getFullYear() : 'N/A'
-        }));
-    }, [students]);
-
-    const getCategoryForStudent = (student) => {
-        const grade = student.Grade ? String(student.Grade).toLowerCase() : '';
-        if (grade.includes('university') || grade.includes('year')) return 'university';
-        const gradeNum = parseInt(grade);
-        if (!isNaN(gradeNum)) {
-            if (gradeNum >= 9) return 'high-school';
-            if (gradeNum >= 6) return 'middle-school';
-            return 'elementary';
-        }
-        return 'other';
-    };
-
-    const filteredAndSortedStudents = useMemo(() => {
-        let processedData = studentsWithAge
-            .filter(student => category === 'all' || getCategoryForStudent(student) === category)
-            .filter(student => {
-                const fullName = `${student['Given Name'] || ''} ${student['Family Name'] || ''}`.toLowerCase();
-                const isComplete = student.School && student.Age !== 'N/A' && student.Monthly;
-                return (
-                    fullName.includes(filters.search.toLowerCase()) &&
-                    (!filters.grade || student.Grade === filters.grade) &&
-                    (!filters.school || student.School === filters.school) &&
-                    (!filters.sex || student.Sex === filters.sex) &&
-                    (!filters.age || student.Age.toString() === filters.age) &&
-                    (!filters.status || (filters.status === 'complete' && isComplete) || (filters.status === 'incomplete' && !isComplete))
-                );
-            });
-
-        if (sort.column) {
-            processedData.sort((a, b) => {
-                let valA = a[sort.column] || '', valB = b[sort.column] || '';
-                if (sort.column === 'Age' || sort.column === 'Monthly') {
-                    valA = parseFloat(valA) || 0; valB = parseFloat(valB) || 0;
-                } else if (sort.column === 'EnrollmentDate') {
-                    valA = new Date(valA); valB = new Date(valB);
-                }
-                else {
-                    valA = String(valA).toLowerCase(); valB = String(valB).toLowerCase();
-                }
-                if (valA < valB) return sort.direction === 'asc' ? -1 : 1;
-                if (valA > valB) return sort.direction === 'asc' ? 1 : -1;
-                return 0;
-            });
-        }
-        return processedData;
-    }, [studentsWithAge, category, filters, sort]);
-    
-    const studentGrades = useMemo(() => {
-        if (!selectedStudent) return [];
-        return grades.filter(g => g.StudentID === selectedStudent.StudentID);
-    }, [grades, selectedStudent]);
-
-    const totals = useMemo(() => ({
-        count: filteredAndSortedStudents.length,
-        fees: filteredAndSortedStudents.reduce((sum, s) => sum + (parseFloat(s.Monthly) || 0), 0)
-    }), [filteredAndSortedStudents]);
-
-
-    // --- Handlers ---
-    const handleSort = (columnKey) => setSort(s => ({ column: columnKey, direction: s.column === columnKey && s.direction === 'asc' ? 'desc' : 'asc' }));
-    
-    const handleSelectSchool = (schoolName) => {
-        setSelectedSchool(schoolName);
-        setActiveTab('school-center');
-    };
-
-    const handleSelectStudent = (student) => {
-        setSelectedStudent(student);
-        setActiveTab('profile');
-    };
-
-    const handleReviewStudent = (formData) => {
-        setReviewData(formData);
-        setModal('review');
-    };
-
-    const handleSaveStudent = () => {
-        const formData = reviewData;
-        if (modal === 'edit') {
-            setStudents(students.map(s => s.StudentID === formData.StudentID ? formData : s));
-            setSelectedStudent(formData);
-        } else {
-            const newId = `CPB${Math.floor(10000 + Math.random() * 90000)}`;
-            setStudents([...students, { ...formData, StudentID: newId }]);
-        }
-        setModal(null);
-        setReviewData(null);
-    };
-    
-    const handleArchiveStudent = () => {
-        const studentToArchive = {
-            ...selectedStudent,
-            DateLeft: new Date().toISOString().split('T')[0]
-        };
-        setArchivedStudents([...archivedStudents, studentToArchive]);
-        setStudents(students.filter(s => s.StudentID !== selectedStudent.StudentID));
-        setModal(null);
-        setSelectedStudent(null);
-        setActiveTab('dashboard');
-    };
-    
-    const handleRestoreStudent = (studentToRestore) => {
-        const { DateLeft, ...restoredStudent } = studentToRestore;
-        setStudents([...students, restoredStudent]);
-        setArchivedStudents(archivedStudents.filter(s => s.StudentID !== studentToRestore.StudentID));
-    };
-
-    const handleResetData = () => {
-        if (window.confirm("Are you sure? This will erase all changes and restore the original student list.")) {
-            localStorage.clear();
-            window.location.reload();
-        }
-    };
-    
-    const openModal = (modalType, student = null) => {
-        setSelectedStudent(student);
-        setModal(modalType);
-    };
-
-    const handleAddGrades = (newGrades) => {
-        setGrades(prevGrades => [...prevGrades, ...newGrades]);
-        setModal(null);
-    };
-
-    const handleAddFollowUp = (studentId, note) => {
-        const newFollowUp = {
-            date: new Date().toISOString(),
-            note: note,
-        };
-        setFollowUps(prev => ({
-            ...prev,
-            [studentId]: [...(prev[studentId] || []), newFollowUp]
-        }));
-    };
-    
-    const handleUpdateFollowUp = (studentId, index, newNote) => {
-        setFollowUps(prev => {
-            const updatedFollowUps = [...(prev[studentId] || [])];
-            updatedFollowUps[index].note = newNote;
-            return { ...prev, [studentId]: updatedFollowUps };
-        });
-    };
-
-    const handleDeleteFollowUp = (studentId, index) => {
-        if (window.confirm("Are you sure you want to delete this note?")) {
-            setFollowUps(prev => {
-                const updatedFollowUps = [...(prev[studentId] || [])];
-                updatedFollowUps.splice(index, 1);
-                return { ...prev, [studentId]: updatedFollowUps };
-            });
-        }
-    };
-
-    // --- Render Components ---
-    const renderModals = () => (
-        <>
-            {modal === 'add' && <StudentFormModal onReview={handleReviewStudent} onClose={() => setModal(null)} />}
-            {modal === 'edit' && <StudentFormModal student={selectedStudent} onReview={handleReviewStudent} onClose={() => setModal(null)} onArchive={() => setModal('archive')} />}
-            {modal === 'review' && <ReviewModal data={reviewData} onConfirm={handleSaveStudent} onEdit={() => setModal(selectedStudent ? 'edit' : 'add')} onClose={() => setModal(null)} />}
-            {modal === 'filter' && <FilterModal currentFilters={filters} onApply={setFilters} onClose={() => setModal(null)} allStudents={studentsWithAge} />}
-            {modal === 'settings' && <SettingsModal visibleColumns={visibleColumns} setVisibleColumns={setVisibleColumns} allColumns={ALL_COLUMNS} onReset={handleResetData} onClose={() => setModal(null)} />}
-            {modal === 'archive' && <ConfirmationModal title="Confirm Archive" message={`Are you sure you want to archive ${selectedStudent?.['Given Name']}?`} onConfirm={handleArchiveStudent} onClose={() => setActiveTab('profile')} />}
-            {modal === 'add-grades' && <AddGradesModal student={selectedStudent} curriculum={curriculum} onAddGrades={handleAddGrades} onClose={() => setModal(null)} />}
-        </>
-    );
-
-    return (
-        <div className="bg-gray-100 text-gray-800 h-screen overflow-hidden flex font-sans relative">
-            <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} isOpen={isSidebarOpen} setOpen={setIsSidebarOpen} onOpenSettings={() => setModal('settings')} menuRef={menuBtnRef} />
-            <div className="flex-grow flex flex-col h-screen w-full">
-                <TopBar onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} menuBtnRef={menuBtnRef} />
-                <div className="flex-grow overflow-y-auto">
-                    {activeTab === 'dashboard' && <DashboardPage students={filteredAndSortedStudents} onSort={handleSort} sort={sort} visibleColumns={visibleColumns} allColumns={ALL_COLUMNS} onOpenModal={openModal} setCategory={setCategory} category={category} totals={totals} onSelectSchool={handleSelectSchool} onSelectStudent={handleSelectStudent} />}
-                    {activeTab === 'profile' && <StudentProfilePage student={selectedStudent} onOpenModal={openModal} setActiveTab={setActiveTab} followUps={followUps[selectedStudent.StudentID] || []} onAddFollowUp={handleAddFollowUp} onUpdateFollowUp={handleUpdateFollowUp} onDeleteFollowUp={handleDeleteFollowUp} />}
-                    {activeTab === 'grades' && <GradesPage student={selectedStudent} grades={studentGrades} onOpenModal={openModal} />}
-                    {activeTab === 'school-center' && <SchoolCenterPage students={studentsWithAge} grades={grades} selectedSchool={selectedSchool} onSelectSchool={setSelectedSchool} getCategoryForStudent={getCategoryForStudent} onSelectStudent={handleSelectStudent}/>}
-                    {activeTab === 'curriculum' && <CurriculumPage curriculum={curriculum} setCurriculum={setCurriculum} />}
-                    {activeTab === 'archive' && <ArchivePage archivedStudents={archivedStudents} onRestore={handleRestoreStudent} />}
-                    {activeTab === 'plan' && <ProjectPlanPage />}
-                </div>
-            </div>
-            {renderModals()}
-        </div>
-    );
-}
-
-// --- Page & Layout Components ---
+// ===================================================================================
+// --- LAYOUT COMPONENTS (components/layout.js) ---
+// Components responsible for the main structure of the app, like sidebars and top bars.
+// ===================================================================================
 
 const TopBar = ({ onMenuClick, menuBtnRef }) => (
     <div className="p-4 bg-white shadow-md">
@@ -341,11 +155,10 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, setOpen, onOpenSettings, men
             <h2 className="text-2xl font-bold text-gray-800 px-2">Dashboard</h2>
             <nav className="mt-4 space-y-1">
                 <Tab id="dashboard" icon={<Users className="w-5 h-5" />}>Student List</Tab>
-                <Tab id="grades" icon={<BookOpen className="w-5 h-5" />}>Grades Center</Tab>
                 <Tab id="school-center" icon={<Building className="w-5 h-5" />}>School Center</Tab>
                 <Tab id="curriculum" icon={<BookCopy className="w-5 h-5" />}>Curriculum</Tab>
                 <Tab id="archive" icon={<Archive className="w-5 h-5" />}>Archived</Tab>
-                <Tab id="plan" icon={<FileText className="w-5 h-5" />}>Project Plan</Tab>
+                <Tab id="manual-instructions" icon={<FileText className="w-5 h-5" />}>Manual Instructions</Tab>
             </nav>
             <div className="mt-auto">
                 <a href="#" onClick={(e) => { e.preventDefault(); onOpenSettings(); setOpen(false); }} className="w-full text-left font-semibold text-gray-700 flex items-center gap-3 transition hover:bg-gray-50 p-2 rounded-md mt-4 border-t pt-4">
@@ -355,6 +168,12 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, setOpen, onOpenSettings, men
         </aside>
     );
 };
+
+
+// ===================================================================================
+// --- PAGE COMPONENTS (pages/*.js) ---
+// Each component here represents a major view/page in the application.
+// ===================================================================================
 
 const DashboardPage = ({ students, onSort, sort, visibleColumns, allColumns, onOpenModal, setCategory, category, totals, onSelectSchool, onSelectStudent }) => (
     <div className="p-4 sm:p-6 lg:p-8 flex flex-col flex-grow min-h-0">
@@ -434,8 +253,8 @@ const StudentTable = ({ students, onSort, sort, visibleColumns, allColumns, onSe
                                        className="font-semibold text-blue-600 hover:underline">
                                         {student[col.key] || 'N/A'}
                                     </a>
-                                ) : col.key === 'Monthly' ? (
-                                    `$${parseFloat(student[col.key] || 0).toFixed(2)}`
+                                ) : col.key === 'Fee' ? (
+                                    `$${parseFloat(student.FeeAmount || 0).toFixed(2)} / ${student.FeeFrequency || 'N/A'}`
                                 ) : (
                                     student[col.key] || 'N/A'
                                 )}
@@ -524,25 +343,25 @@ const GradesPage = ({ student, grades, onOpenModal }) => {
             </header>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="bg-white p-6 rounded-lg shadow-md lg:col-span-2">
-                     <h2 className="text-xl font-semibold mb-4">All Grade Records</h2>
-                     <div className="max-h-80 overflow-y-auto">
-                        <table className="min-w-full">
-                            <thead className="bg-gray-50 sticky top-0"><tr><th className="px-4 py-2 text-left">Date</th><th className="px-4 py-2 text-left">Subject</th><th className="px-4 py-2 text-left">Score</th><th className="px-4 py-2 text-left">Grade</th></tr></thead>
-                            <tbody>
-                            {grades.map((grade, i) => {
-                                const cambodianGrade = getCambodianGrade(grade.Score);
-                                return (
-                                    <tr key={i} className="border-b">
-                                        <td className="px-4 py-2">{grade.Date}</td>
-                                        <td className="px-4 py-2">{grade.Subject}</td>
-                                        <td className="px-4 py-2 font-semibold">{grade.Score}</td>
-                                        <td className={`px-4 py-2 font-bold ${cambodianGrade.color}`}>{cambodianGrade.grade}</td>
-                                    </tr>
-                                )
-                            })}
-                            </tbody>
-                        </table>
-                     </div>
+                       <h2 className="text-xl font-semibold mb-4">All Grade Records</h2>
+                       <div className="max-h-80 overflow-y-auto">
+                            <table className="min-w-full">
+                                <thead className="bg-gray-50 sticky top-0"><tr><th className="px-4 py-2 text-left">Date</th><th className="px-4 py-2 text-left">Subject</th><th className="px-4 py-2 text-left">Score</th><th className="px-4 py-2 text-left">Grade</th></tr></thead>
+                                <tbody>
+                                {grades.map((grade, i) => {
+                                    const cambodianGrade = getCambodianGrade(grade.Score);
+                                    return (
+                                        <tr key={i} className="border-b">
+                                            <td className="px-4 py-2">{grade.Date}</td>
+                                            <td className="px-4 py-2">{grade.Subject}</td>
+                                            <td className="px-4 py-2 font-semibold">{grade.Score}</td>
+                                            <td className={`px-4 py-2 font-bold ${cambodianGrade.color}`}>{cambodianGrade.grade}</td>
+                                        </tr>
+                                    )
+                                })}
+                                </tbody>
+                            </table>
+                       </div>
                 </div>
                 <div className="bg-white p-6 rounded-lg shadow-md lg:col-span-2">
                     <h2 className="text-xl font-semibold mb-4">Monthly/Semester Summary</h2>
@@ -735,75 +554,6 @@ const ArchivePage = ({ archivedStudents, onRestore }) => (
     </div>
 );
 
-const ProjectPlanPage = () => {
-    const handleNavClick = (e, targetId) => {
-        e.preventDefault();
-        document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
-    };
-
-    return (
-        <div className="p-4 sm:p-6 lg:p-8">
-            <div className="bg-white shadow-md rounded-lg p-6">
-                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-8">
-                    <h2 className="text-xl font-bold mt-0 mb-3">On This Page</h2>
-                    <ul className="list-none pl-0 space-y-2">
-                        <li><a href="#phase1" onClick={(e) => handleNavClick(e, 'phase1')} className="text-indigo-600 hover:underline">Phase 1: Core Functionality (Complete)</a></li>
-                        <li><a href="#phase2" onClick={(e) => handleNavClick(e, 'phase2')} className="text-indigo-600 hover:underline">Phase 2: Enhanced Analytics & Reporting</a></li>
-                        <li><a href="#phase3" onClick={(e) => handleNavClick(e, 'phase3')} className="text-indigo-600 hover:underline">Phase 3: User Roles & Communication</a></li>
-                        <li><a href="#phase4" onClick={(e) => handleNavClick(e, 'phase4')} className="text-indigo-600 hover:underline">Phase 4: Financial Management & Advanced Data</a></li>
-                    </ul>
-                </div>
-
-                <div className="prose max-w-none">
-                    <h2 id="main-title">Project Roadmap</h2>
-                    <p>This document outlines the current features and future development plans for the Student Dashboard application.</p>
-                    
-                    <hr />
-                    <h3 id="phase1">Phase 1: Core Functionality (v1.0) - Complete & Expanded</h3>
-                    <p>The foundational features that are currently implemented, plus planned enhancements for robustness and user experience.</p>
-                    <ul>
-                        <li><strong>Student & Grade Management:</strong> Core CRUD (Create, Read, Update, Archive) for student and grade records.</li>
-                        <li><strong>Data Persistence:</strong> All data is saved in the browser's local storage to persist between sessions.</li>
-                        <li><strong>Advanced Filtering & Sorting:</strong> Robust controls for searching, filtering, and sorting the student list.</li>
-                        <li><strong>Basic Reporting:</strong> Dynamic calculation of student and fee totals, plus individual grade charts.</li>
-                        <li><strong>Customizable UI:</strong> Users can toggle the visibility of columns in the main student table.</li>
-                        <li><strong>Enhanced User Feedback:</strong> Implement notifications (e.g., "Student Saved Successfully") to confirm user actions.</li>
-                        <li><strong>Input Validation:</strong> Add validation to forms to ensure data integrity (e.g., checking for valid email formats, ensuring required fields are not empty).</li>
-                        <li><strong>Search Result Highlighting:</strong> When a user searches for a student, the matching text in the results table will be highlighted to be more visible.</li>
-                        <li><strong>Bulk Actions:</strong> Introduce checkboxes on the student list to allow for actions on multiple students at once, such as "Archive Selected".</li>
-                    </ul>
-
-                    <hr />
-                    <h3 id="phase2">Phase 2: Enhanced Analytics & Reporting (Future)</h3>
-                    <p>Focus on providing deeper insights into the school's overall performance.</p>
-                    <ul>
-                        <li><strong>School Analytics Dashboard <BarChart2 className="inline-block w-4 h-4" />:</strong> A new page with charts visualizing school-wide data, such as student distribution by grade, average grades across subjects, and overall attendance rates.</li>
-                        <li><strong>Printable Student Reports <FileText className="inline-block w-4 h-4" />:</strong> An option to generate a clean, printable PDF "report card" for any selected student, summarizing their information, grades, and attendance history.</li>
-                    </ul>
-
-                    <hr />
-                    <h3 id="phase3">Phase 3: User Roles & Communication (Future)</h3>
-                    <p>Expand the application to be a multi-user platform for collaboration.</p>
-                    <ul>
-                        <li><strong>User Accounts (Admins, Teachers) <Users className="inline-block w-4 h-4" />:</strong> Introduce a login system with different permission levels. Admins would have full control, while Teachers could be restricted to viewing and managing only their assigned students.</li>
-                        <li><strong>Parent/Student Portal:</strong> A secure, read-only view for parents and students to log in and see their own grades and attendance information.</li>
-                        <li><strong>Announcements System <Mail className="inline-block w-4 h-4" />:</strong> A feature for admins to create and display important announcements on the dashboard for all users.</li>
-                    </ul>
-
-                    <hr />
-                    <h3 id="phase4">Phase 4: Financial Management & Advanced Data (Future)</h3>
-                    <p>Add dedicated tools for financial tracking and more complex data operations.</p>
-                    <ul>
-                        <li><strong>Financial Dashboard <CreditCard className="inline-block w-4 h-4" />:</strong> A dedicated page for tracking tuition payments. It would show total income, list students with outstanding balances, and allow logging of payments.</li>
-                        <li><strong>Advanced Attendance Module:</strong> A dedicated interface for marking daily attendance for all students, with reporting features to track tardiness and absences over time.</li>
-                        <li><strong>Data Import/Export:</strong> Functionality in the Settings modal to export all student or grade data to a CSV file, and to import a list of new students from a formatted CSV file.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    );
-};
-
 const CurriculumPage = ({ curriculum, setCurriculum }) => {
     
     const handleSubjectChange = (path, newSubjects) => {
@@ -879,8 +629,215 @@ const CurriculumPage = ({ curriculum, setCurriculum }) => {
     );
 };
 
+const ManualInstructionsPage = () => {
+    const Section = ({ title, children }) => (
+        <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+            <h2 className="text-2xl font-semibold text-gray-800 border-b pb-2 mb-4">{title}</h2>
+            <div className="prose max-w-none prose-indigo">{children}</div>
+        </div>
+    );
 
-// --- Modal Components ---
+    return (
+        <div className="p-4 sm:p-6 lg:p-8">
+            <header className="bg-white shadow-md rounded-lg p-6 mb-6">
+                <h1 className="text-3xl font-bold text-gray-900">Manual Instructions</h1>
+                <p className="text-gray-600 mt-1">A guide to all features and functions of the Student Management Dashboard.</p>
+            </header>
+            
+            <Section title="Dashboard: Student List">
+                <p>This is the main page where you can see a list of all active students.</p>
+                <ul>
+                    <li><strong>Sorting:</strong> Click on any column header (e.g., "First Name", "Age") to sort the table by that column. Click again to reverse the order.</li>
+                    <li><strong>Category Filters:</strong> Use the buttons at the top (e.g., "University", "High School") to quickly filter students by their educational level.</li>
+                    <li><strong>Advanced Filtering:</strong> Click the <strong>Filter</strong> button to open a modal where you can search by name or filter by multiple criteria like grade, school, sex, and age.</li>
+                    <li><strong>Add Student:</strong> Click the <strong>Add Student</strong> button to open a form for adding a new student record.</li>
+                    <li><strong>Navigation:</strong> Click on a student's name to go to their detailed <strong>Profile Page</strong>. Click on a school's name to go to the <strong>School Center</strong> page for that school.</li>
+                </ul>
+            </Section>
+
+            <Section title="Student Profile Page">
+                <p>This page shows all information for a single student.</p>
+                <ul>
+                    <li><strong>Information Cards:</strong> Personal, Academic, and Guardian details are displayed in separate cards for clarity.</li>
+                    <li><strong>Edit Profile:</strong> Click the <strong>Edit</strong> button to open a form where you can update the student's information. From the edit form, you can also <strong>Archive</strong> the student.</li>
+                    <li><strong>View Grades:</strong> Click the <strong>View Grades</strong> button to navigate to the <strong>Grades Center</strong> for that specific student.</li>
+                    <li><strong>Follow-up History:</strong> This section shows a chronological list of all follow-ups. You can <strong>Add</strong>, <strong>Edit</strong>, or <strong>Delete</strong> follow-up records from here.</li>
+                </ul>
+            </Section>
+
+            <Section title="Monthly Follow-Up Procedure">
+                <p>The follow-up form is designed to capture a holistic view of the student's well-being and progress. It should be completed monthly.</p>
+                <h3 className="font-semibold mt-4">1. Well-being Progress</h3>
+                <p>Rate the student's Physical Health, Social Interaction, and Home Life as "Good," "Average," or "Poor." If you select "Average" or "Poor," a text box will appear, requiring you to provide specific details and explain how we can help.</p>
+                <h3 className="font-semibold mt-4">2. Risk Factors</h3>
+                <p>Check all applicable risk factors from the comprehensive list. If any risk factors are selected, you must provide details in the text area that appears below the list.</p>
+                <h3 className="font-semibold mt-4">3. Staff Notes & Recommendations</h3>
+                <p>Use the "Notes" section for any information not captured elsewhere. Use the "Changes / Recommendations" section to suggest actionable steps for supporting the student.</p>
+            </Section>
+
+            <Section title="Grades Center">
+                <p>This page provides a detailed academic overview for a selected student. You must first select a student from the Dashboard or Profile page to view this section.</p>
+                <ul>
+                    <li><strong>All Grade Records:</strong> A table showing every grade ever entered for the student, including the Cambodian letter grade (A-F).</li>
+                    <li><strong>Monthly/Semester Summary:</strong> A summary table that averages the scores for each subject by month (for K-12) or semester (for University).</li>
+                    <li><strong>Yearly Summary:</strong> A simple table showing the overall average score for each year.</li>
+                    <li><strong>Add Grades:</strong> Click the <strong>Add Grades</strong> button to enter new scores. The subjects available in the form are pulled directly from the <strong>Curriculum</strong> page.</li>
+                </ul>
+            </Section>
+
+            <Section title="School Center">
+                <p>This page provides analytics to compare performance across different schools and educational levels.</p>
+                <ul>
+                    <li><strong>Average Grades by School Level:</strong> A bar chart comparing the average scores in core subjects across different levels (e.g., University vs. High School).</li>
+                    <li><strong>School-Specific Details:</strong> When you navigate here by clicking a school name on the dashboard, you will see detailed charts and a list of all students attending that specific school.</li>
+                </ul>
+            </Section>
+
+            <Section title="Curriculum Management">
+                 <p>This page allows administrators to define the official list of subjects for each school, grade, and university major.</p>
+                 <ul>
+                    <li><strong>Editing Subjects:</strong> To edit the curriculum, simply type in the text boxes. Subjects should be separated by a comma (e.g., Math, Science, History).</li>
+                    <li><strong>Impact:</strong> The subjects defined here will automatically appear in the "Add Grades" form for students, ensuring consistency in data entry.</li>
+                </ul>
+            </Section>
+
+            <Section title="Archived Students">
+                <p>This page lists all students who are no longer active in the program.</p>
+                <ul>
+                    <li><strong>Archiving:</strong> A student can be archived from the "Edit Student" form on their profile page.</li>
+                    <li><strong>Restoring:</strong> If a student returns, you can find them in the archive list and click the <strong>Restore</strong> button to move them back to the active student list.</li>
+                </ul>
+            </Section>
+
+            <Section title="Settings">
+                 <p>This section allows for app-wide configuration.</p>
+                 <ul>
+                    <li><strong>Column Visibility:</strong> Check or uncheck boxes to control which columns are visible on the main dashboard's student table.</li>
+                    <li><strong>Data Management:</strong> The <strong>Reset All Data</strong> button will erase all student records, grades, and follow-ups, restoring the application to its original state. <strong>Use with extreme caution, as this action cannot be undone.</strong></li>
+                </ul>
+            </Section>
+        </div>
+    );
+};
+
+
+const DetailItem = ({ icon, label, value }) => (
+    <div>
+        <dt className="text-sm font-medium text-gray-500 flex items-center gap-2">
+            {icon} {label}
+        </dt>
+        <dd className="mt-1 text-md text-gray-900">{value || 'N/A'}</dd>
+    </div>
+);
+
+const StudentProfilePage = ({ student, onOpenModal, setActiveTab, followUps, onDeleteFollowUp }) => {
+    if (!student) {
+        return <div className="p-8 text-center text-gray-600">No student selected. Please go back to the dashboard.</div>;
+    }
+
+    const FollowUpDetail = ({ label, rating, details }) => {
+        const color = rating === 'Good' ? 'text-green-600' : rating === 'Average' ? 'text-yellow-600' : 'text-red-600';
+        return (
+            <div>
+                <strong>{label}:</strong>
+                <span className={`font-semibold ml-2 ${color}`}>{rating}</span>
+                {details && <p className="text-sm text-gray-600 pl-4">- {details}</p>}
+            </div>
+        );
+    };
+
+    return (
+        <div className="p-4 sm:p-6 lg:p-8">
+            <header className="bg-white shadow-md rounded-lg p-6 mb-6">
+                <div className="flex justify-between items-center">
+                    <div>
+                        <h1 className="text-3xl font-bold text-gray-900">{student['Given Name']} {student['Family Name']}</h1>
+                        <p className="text-gray-600">Student Profile</p>
+                    </div>
+                    <div className="flex gap-2">
+                        <button onClick={() => onOpenModal('edit', student)} className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 flex items-center gap-2"><Edit size={16}/> Edit</button>
+                        <button onClick={() => { setActiveTab('grades'); }} className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 flex items-center gap-2"><Eye size={16}/> View Grades</button>
+                    </div>
+                </div>
+            </header>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-1 space-y-6">
+                     <div className="bg-white p-6 rounded-lg shadow-md">
+                        <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">Personal Details</h3>
+                        <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6">
+                            <DetailItem icon={<User size={16} className="text-gray-400"/>} label="Student ID" value={student.StudentID} />
+                            <DetailItem icon={<User size={16} className="text-gray-400"/>} label="Age" value={student.Age} />
+                            <DetailItem icon={<User size={16} className="text-gray-400"/>} label="Sex" value={student.Sex === 'M' ? 'Male' : 'Female'} />
+                            <DetailItem icon={<Calendar size={16} className="text-gray-400"/>} label="Date of Birth" value={student.DOB} />
+                            <DetailItem icon={<Calendar size={16} className="text-gray-400"/>} label="Enrollment Date" value={student.EnrollmentDate} />
+                        </dl>
+                    </div>
+                    <div className="bg-white p-6 rounded-lg shadow-md">
+                        <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">Academic Info</h3>
+                        <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6">
+                            <DetailItem icon={<School size={16} className="text-gray-400"/>} label="School" value={student.School} />
+                            <DetailItem icon={<GraduationCap size={16} className="text-gray-400"/>} label="Grade" value={student.Grade} />
+                            <DetailItem icon={<Briefcase size={16} className="text-gray-400"/>} label="Major" value={student.Major} />
+                            <DetailItem icon={<DollarSign size={16} className="text-gray-400"/>} label="School Fee" value={`$${parseFloat(student.FeeAmount || 0).toFixed(2)} / ${student.FeeFrequency}`} />
+                        </dl>
+                    </div>
+                       <div className="bg-white p-6 rounded-lg shadow-md">
+                        <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">Guardian Contact</h3>
+                        <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6">
+                            <DetailItem icon={<User size={16} className="text-gray-400"/>} label="Guardian Name" value={student['Guardian Name']} />
+                            <DetailItem icon={<Phone size={16} className="text-gray-400"/>} label="Guardian Contact" value={student['Guardian Contact']} />
+                        </dl>
+                    </div>
+                </div>
+                <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
+                    <div className="flex justify-between items-center border-b pb-2 mb-4">
+                        <h3 className="text-lg font-semibold text-gray-800">Follow-up History</h3>
+                        <button onClick={() => onOpenModal('add-follow-up', student)} className="bg-blue-500 text-white px-3 py-1 rounded-md text-sm hover:bg-blue-600 flex items-center gap-1"><PlusCircle size={14}/> Add</button>
+                    </div>
+                    <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+                        {followUps.length > 0 ? followUps.slice().reverse().map((followUp, index) => {
+                            const originalIndex = followUps.length - 1 - index;
+                            return (
+                                <div key={index} className="bg-gray-50 p-4 rounded-md border">
+                                    <div className="flex justify-between items-start">
+                                        <p className="text-sm text-gray-500">{new Date(followUp.date).toLocaleString()}</p>
+                                        <div className="flex gap-2 flex-shrink-0 ml-4">
+                                            <button onClick={() => onOpenModal('edit-follow-up', {...student, followUpToEdit: followUp, followUpIndex: originalIndex})} className="text-blue-600 hover:underline"><Edit size={14}/></button>
+                                            <button onClick={() => onDeleteFollowUp(student.StudentID, originalIndex)} className="text-red-600 hover:underline"><Trash2 size={14}/></button>
+                                        </div>
+                                    </div>
+                                    <div className="prose prose-sm max-w-none mt-2">
+                                        <h4>Well-being Progress</h4>
+                                        <FollowUpDetail label="Physical Health" {...followUp.physicalHealth} />
+                                        <FollowUpDetail label="Social Interaction" {...followUp.socialInteraction} />
+                                        <FollowUpDetail label="Home Life" {...followUp.homeLife} />
+                                        
+                                        <h4 className="mt-4">Risk Factors</h4>
+                                        {(followUp.riskFactors && followUp.riskFactors.length > 0) ? (
+                                            <>
+                                                <p><strong>Identified:</strong> {followUp.riskFactors.join(', ')}</p>
+                                                {followUp.riskFactorsDetails && <p className="text-sm text-gray-600 whitespace-pre-wrap"><strong>Details:</strong> {followUp.riskFactorsDetails}</p>}
+                                            </>
+                                        ) : <p>None reported.</p>}
+                                        
+                                        <h4 className="mt-4">Notes & Recommendations</h4>
+                                        {followUp.notes && <p className="text-sm text-gray-600 whitespace-pre-wrap"><strong>Notes:</strong> {followUp.notes}</p>}
+                                        {followUp.recommendations && <p className="text-sm text-gray-600 whitespace-pre-wrap"><strong>Recommendations:</strong> {followUp.recommendations}</p>}
+                                    </div>
+                                </div>
+                            );
+                        }) : <p className="text-center text-gray-500 py-4">No follow-up records found.</p>}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// ===================================================================================
+// --- MODAL COMPONENTS (components/modals.js) ---
+// All components that appear as modal dialogs are grouped here.
+// ===================================================================================
 
 const Modal = ({ children, title, onClose, maxWidth = 'max-w-3xl' }) => {
     const modalRef = useRef();
@@ -900,7 +857,7 @@ const Modal = ({ children, title, onClose, maxWidth = 'max-w-3xl' }) => {
 }
 
 const StudentFormModal = ({ student, onReview, onClose, onArchive }) => {
-    const [formData, setFormData] = useState(student || { 'Given Name': '', 'Family Name': '', DOB: '', Sex: '', Grade: '', School: '', Monthly: '', 'Guardian Name': '', 'Guardian Contact': '', 'Major': '', 'Comments': '', 'EnrollmentDate': '' });
+    const [formData, setFormData] = useState(student || { 'Given Name': '', 'Family Name': '', DOB: '', Sex: '', Grade: '', School: '', FeeAmount: '', FeeFrequency: 'Monthly', 'Guardian Name': '', 'Guardian Contact': '', 'Major': '', 'Comments': '', 'EnrollmentDate': '' });
 
     const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
     const handleSubmit = (e) => { e.preventDefault(); onReview(formData); };
@@ -909,18 +866,41 @@ const StudentFormModal = ({ student, onReview, onClose, onArchive }) => {
         <Modal title={student ? "Edit Student" : "Add New Student"} onClose={onClose}>
             <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-                    {Object.keys(formData).filter(k => !['StudentID', 'Age', 'DateLeft'].includes(k)).map(key => (
-                        <div key={key} className={key === 'Comments' ? 'md:col-span-2' : ''}>
-                            <label className="block text-sm font-medium text-gray-700">{key}</label>
-                            {key === 'Comments' ? (
-                                <textarea name={key} value={formData[key] || ''} onChange={handleChange} className="mt-1 block w-full p-2 border rounded-md" rows="3" />
-                            ) : (
-                                <input type={key === 'DOB' || key === 'EnrollmentDate' ? 'date' : key === 'Monthly' ? 'number' : 'text'}
-                                       name={key} value={formData[key] || ''} onChange={handleChange}
-                                       className="mt-1 block w-full p-2 border rounded-md" />
-                            )}
-                        </div>
-                    ))}
+                    {Object.keys(formData).filter(k => !['StudentID', 'Age', 'DateLeft', 'Monthly'].includes(k)).map(key => {
+                        if (key === 'FeeAmount') {
+                            return (
+                                <div key="fee-group" className="md:col-span-2 grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700">Fee Amount</label>
+                                        <input type="number" name="FeeAmount" value={formData.FeeAmount || ''} onChange={handleChange} className="mt-1 block w-full p-2 border rounded-md" />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700">Fee Frequency</label>
+                                        <select name="FeeFrequency" value={formData.FeeFrequency || 'Monthly'} onChange={handleChange} className="mt-1 block w-full p-2 border rounded-md">
+                                            <option>Monthly</option>
+                                            <option>Quarterly</option>
+                                            <option>Semester</option>
+                                            <option>Yearly</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            )
+                        }
+                        if (key === 'FeeFrequency') return null; // Handled by FeeAmount
+                        
+                        return (
+                            <div key={key} className={key === 'Comments' ? 'md:col-span-2' : ''}>
+                                <label className="block text-sm font-medium text-gray-700">{key}</label>
+                                {key === 'Comments' ? (
+                                    <textarea name={key} value={formData[key] || ''} onChange={handleChange} className="mt-1 block w-full p-2 border rounded-md" rows="3" />
+                                ) : (
+                                    <input type={key === 'DOB' || key === 'EnrollmentDate' ? 'date' : 'text'}
+                                           name={key} value={formData[key] || ''} onChange={handleChange}
+                                           className="mt-1 block w-full p-2 border rounded-md" />
+                                )}
+                            </div>
+                        )
+                    })}
                 </div>
                 <div className="mt-6 flex justify-between items-center">
                     {student && <button type="button" onClick={onArchive} className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600">Archive Student</button>}
@@ -948,116 +928,153 @@ const ReviewModal = ({ data, onConfirm, onEdit, onClose }) => (
     </Modal>
 );
 
-const DetailItem = ({ icon, label, value }) => (
-    <div>
-        <dt className="text-sm font-medium text-gray-500 flex items-center gap-2">
-            {icon} {label}
-        </dt>
-        <dd className="mt-1 text-md text-gray-900">{value || 'N/A'}</dd>
-    </div>
-);
+const FollowUpFormModal = ({ student, followUp, onSave, onClose }) => {
+    const isEditMode = !!followUp;
+    const ALL_RISK_FACTORS = [
+        "Abandonment", "Emotional Abuse", "Physical Abuse", "Sexual Abuse", "Addiction (family members)", 
+        "Addiction (child)", "Bullying", "Family Debt", "Forced Begging", "Garbage Collection", "Gang Involvement", 
+        "Sexual Grooming", "Housing Insecurity", "Mental Health Challenges", "Neglect", "Orphan", 
+        "Parent/ Guardian Marital Status Change", "Parent/ Guardian in Jail", "Physical Health Challenges", 
+        "Drug use/ Drug selling (family members)", "Drugs use/ Drug selling (child)", "Single Parent/ Guardian"
+    ];
 
-const StudentProfilePage = ({ student, onOpenModal, setActiveTab, followUps, onAddFollowUp, onUpdateFollowUp, onDeleteFollowUp }) => {
-    const [newNote, setNewNote] = useState('');
-    const [editingIndex, setEditingIndex] = useState(null);
-    const [editingText, setEditingText] = useState('');
+    const [formData, setFormData] = useState(isEditMode ? followUp : {
+        date: new Date().toISOString(),
+        physicalHealth: { rating: 'Good', details: '' },
+        socialInteraction: { rating: 'Good', details: '' },
+        homeLife: { rating: 'Good', details: '' },
+        riskFactors: [],
+        riskFactorsDetails: '',
+        notes: '',
+        recommendations: '',
+    });
 
-    if (!student) {
-        return <div className="p-8 text-center text-gray-600">No student selected. Please go back to the dashboard.</div>;
-    }
-
-    const handleAddNote = () => {
-        if (newNote.trim()) {
-            onAddFollowUp(student.StudentID, newNote.trim());
-            setNewNote('');
-        }
+    const handleWellbeingChange = (field, subfield, value) => {
+        setFormData(prev => ({
+            ...prev,
+            [field]: { ...prev[field], [subfield]: value }
+        }));
     };
 
-    const handleEdit = (note, index) => {
-        setEditingIndex(index);
-        setEditingText(note.note);
+    const handleRiskFactorChange = (risk) => {
+        setFormData(prev => {
+            const newRiskFactors = prev.riskFactors.includes(risk)
+                ? prev.riskFactors.filter(r => r !== risk)
+                : [...prev.riskFactors, risk];
+            return { ...prev, riskFactors: newRiskFactors };
+        });
+    };
+    
+    const handleChange = (e) => {
+        setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
-    const handleSaveEdit = (index) => {
-        onUpdateFollowUp(student.StudentID, index, editingText);
-        setEditingIndex(null);
-        setEditingText('');
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onSave(student.StudentID, formData);
     };
+
+    const WellbeingInput = ({ label, fieldName }) => (
+        <div>
+            <label className="block text-sm font-medium text-gray-700">{label}</label>
+            <select
+                value={formData[fieldName].rating}
+                onChange={(e) => handleWellbeingChange(fieldName, 'rating', e.target.value)}
+                className="mt-1 block w-full p-2 border rounded-md"
+            >
+                <option>Good</option>
+                <option>Average</option>
+                <option>Poor</option>
+            </select>
+            {(formData[fieldName].rating === 'Average' || formData[fieldName].rating === 'Poor') && (
+                <textarea
+                    placeholder={`Please share the main problem and how we can help.`}
+                    value={formData[fieldName].details}
+                    onChange={(e) => handleWellbeingChange(fieldName, 'details', e.target.value)}
+                    className="mt-2 block w-full p-2 border rounded-md text-sm"
+                    rows="2"
+                />
+            )}
+        </div>
+    );
 
     return (
-        <div className="p-4 sm:p-6 lg:p-8">
-            <header className="bg-white shadow-md rounded-lg p-6 mb-6">
-                <div className="flex justify-between items-center">
-                    <div>
-                        <h1 className="text-3xl font-bold text-gray-900">{student['Given Name']} {student['Family Name']}</h1>
-                        <p className="text-gray-600">Student Profile</p>
+        <Modal title={isEditMode ? "Edit Follow-Up" : "Add Follow-Up"} onClose={onClose}>
+            <form onSubmit={handleSubmit} className="space-y-6">
+                <fieldset>
+                    <legend className="text-lg font-semibold text-gray-800 border-b w-full pb-1 mb-2">Well-being Progress</legend>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <WellbeingInput label="Physical Health" fieldName="physicalHealth" />
+                        <WellbeingInput label="Social Interaction" fieldName="socialInteraction" />
+                        <WellbeingInput label="Home Life" fieldName="homeLife" />
                     </div>
-                    <div className="flex gap-2">
-                        <button onClick={() => onOpenModal('edit', student)} className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 flex items-center gap-2"><Edit size={16}/> Edit</button>
-                        <button onClick={() => { setActiveTab('grades'); }} className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 flex items-center gap-2"><Eye size={16}/> View Grades</button>
+                </fieldset>
+                
+                <fieldset>
+                    <legend className="text-lg font-semibold text-gray-800 border-b w-full pb-1 mb-2">Risk Factors</legend>
+                    <p className="text-sm text-gray-500 mb-2">Select ALL that apply.</p>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 max-h-48 overflow-y-auto p-2 border rounded-md">
+                        {ALL_RISK_FACTORS.map(risk => (
+                            <label key={risk} className="flex items-center space-x-2 text-sm">
+                                <input
+                                    type="checkbox"
+                                    checked={formData.riskFactors.includes(risk)}
+                                    onChange={() => handleRiskFactorChange(risk)}
+                                    className="rounded"
+                                />
+                                <span>{risk}</span>
+                            </label>
+                        ))}
                     </div>
-                </div>
-            </header>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-1 space-y-6">
-                    <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">Personal Details</h3>
-                        <dl className="space-y-4">
-                            <DetailItem icon={<User size={16} className="text-gray-400"/>} label="Student ID" value={student.StudentID} />
-                            <DetailItem icon={<User size={16} className="text-gray-400"/>} label="Age" value={student.Age} />
-                            <DetailItem icon={<User size={16} className="text-gray-400"/>} label="Sex" value={student.Sex === 'M' ? 'Male' : 'Female'} />
-                            <DetailItem icon={<Calendar size={16} className="text-gray-400"/>} label="Date of Birth" value={student.DOB} />
-                            <DetailItem icon={<Calendar size={16} className="text-gray-400"/>} label="Enrollment Date" value={student.EnrollmentDate} />
-                        </dl>
-                    </div>
-                    <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">Academic Info</h3>
-                        <dl className="space-y-4">
-                            <DetailItem icon={<School size={16} className="text-gray-400"/>} label="School" value={student.School} />
-                            <DetailItem icon={<GraduationCap size={16} className="text-gray-400"/>} label="Grade" value={student.Grade} />
-                            <DetailItem icon={<Briefcase size={16} className="text-gray-400"/>} label="Major" value={student.Major} />
-                            <DetailItem icon={<DollarSign size={16} className="text-gray-400"/>} label="Monthly Fee" value={`$${parseFloat(student.Monthly || 0).toFixed(2)}`} />
-                        </dl>
-                    </div>
-                </div>
-                <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
-                    <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">Follow-up History</h3>
-                    <div className="space-y-4">
+                     {formData.riskFactors.length > 0 && (
+                        <div className="mt-2">
+                            <label className="block text-sm font-medium text-gray-700">Details for ALL selected risk factors</label>
+                             <textarea
+                                name="riskFactorsDetails"
+                                value={formData.riskFactorsDetails}
+                                onChange={handleChange}
+                                className="mt-1 block w-full p-2 border rounded-md"
+                                rows="3"
+                                placeholder="Example: Housing Insecurity - family unable to pay rent and must move every month or two."
+                            />
+                        </div>
+                    )}
+                </fieldset>
+                
+                <fieldset>
+                     <legend className="text-lg font-semibold text-gray-800 border-b w-full pb-1 mb-2">Staff Notes</legend>
+                     <div className="space-y-4">
                         <div>
-                            <textarea value={newNote} onChange={(e) => setNewNote(e.target.value)} className="w-full p-2 border rounded-md" rows="3" placeholder="Add a new follow-up note..."></textarea>
-                            <button onClick={handleAddNote} className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Add Note</button>
+                            <label className="block text-sm font-medium text-gray-700">Notes</label>
+                             <textarea
+                                name="notes"
+                                value={formData.notes}
+                                onChange={handleChange}
+                                className="mt-1 block w-full p-2 border rounded-md"
+                                rows="3"
+                                placeholder="Please write any information you learned that is not included elsewhere in this form."
+                            />
                         </div>
-                        <div className="space-y-4 max-h-96 overflow-y-auto">
-                            {followUps.slice().reverse().map((followUp, index) => {
-                                const originalIndex = followUps.length - 1 - index;
-                                return (
-                                    <div key={index} className="bg-gray-50 p-4 rounded-md">
-                                        <div className="flex justify-between items-start">
-                                            <div>
-                                                <p className="text-sm text-gray-500">{new Date(followUp.date).toLocaleString()}</p>
-                                                {editingIndex === originalIndex ? (
-                                                    <textarea value={editingText} onChange={(e) => setEditingText(e.target.value)} className="mt-1 w-full p-2 border rounded-md" rows="2"></textarea>
-                                                ) : (
-                                                    <p className="mt-1">{followUp.note}</p>
-                                                )}
-                                            </div>
-                                            <div className="flex gap-2 flex-shrink-0 ml-4">
-                                                {editingIndex === originalIndex ? (
-                                                    <button onClick={() => handleSaveEdit(originalIndex)} className="text-sm text-green-600 hover:underline">Save</button>
-                                                ) : (
-                                                    <button onClick={() => handleEdit(followUp, originalIndex)} className="text-sm text-blue-600 hover:underline"><Edit size={14}/></button>
-                                                )}
-                                                <button onClick={() => onDeleteFollowUp(student.StudentID, originalIndex)} className="text-sm text-red-600 hover:underline"><Trash2 size={14}/></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                );
-                            })}
+                         <div>
+                            <label className="block text-sm font-medium text-gray-700">Changes / Recommendations</label>
+                             <textarea
+                                name="recommendations"
+                                value={formData.recommendations}
+                                onChange={handleChange}
+                                className="mt-1 block w-full p-2 border rounded-md"
+                                rows="3"
+                                placeholder="Please share any changes that you believe may be helpful."
+                            />
                         </div>
-                    </div>
+                     </div>
+                </fieldset>
+
+                <div className="mt-6 flex justify-end gap-4">
+                    <button type="button" onClick={onClose} className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400">Cancel</button>
+                    <button type="submit" className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Save</button>
                 </div>
-            </div>
-        </div>
+            </form>
+        </Modal>
     );
 };
 
@@ -1204,3 +1221,271 @@ const ConfirmationModal = ({ title, message, onConfirm, onClose }) => {
         </div>
     );
 };
+
+
+// ===================================================================================
+// --- MAIN APP COMPONENT ---
+// This is the root component that brings everything together.
+// ===================================================================================
+
+export default function App() {
+    // --- State Management ---
+    const [students, setStudents] = useStickyState(initialStudents, 'studentDashboardData');
+    const [archivedStudents, setArchivedStudents] = useStickyState([], 'archivedStudentData');
+    const [grades, setGrades] = useStickyState(initialGrades, 'studentGradesData');
+    const [curriculum, setCurriculum] = useStickyState(initialCurriculum, 'studentCurriculumData');
+    const [followUps, setFollowUps] = useStickyState(initialFollowUps, 'studentFollowUpsData');
+    
+    const ALL_COLUMNS = useMemo(() => [
+        { key: 'StudentID', label: 'Student ID' }, { key: 'Given Name', label: 'First Name' }, { key: 'Family Name', label: 'Family Name' },
+        { key: 'Age', label: 'Age' }, { key: 'Sex', label: 'Sex' }, { key: 'Grade', label: 'Grade' },
+        { key: 'School', label: 'School' }, { key: 'Fee', label: 'Fee' }, { key: 'EnrollmentDate', label: 'Enrolled' }
+    ], []);
+
+    const [visibleColumns, setVisibleColumns] = useStickyState(
+        ALL_COLUMNS.reduce((acc, col) => ({ ...acc, [col.key]: true }), {}),
+        'studentDashboardColumns'
+    );
+
+    const [activeTab, setActiveTab] = useState('dashboard');
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [selectedStudent, setSelectedStudent] = useState(null);
+    const [selectedSchool, setSelectedSchool] = useState(null);
+    const [modal, setModal] = useState(null); 
+    const [reviewData, setReviewData] = useState(null);
+    
+    const [filters, setFilters] = useState({
+        search: '', grade: '', school: '', sex: '', age: '', status: ''
+    });
+    const [category, setCategory] = useState('all');
+    const [sort, setSort] = useState({ column: 'Given Name', direction: 'asc' });
+    const menuBtnRef = useRef();
+
+    // --- Derived State & Data Processing ---
+    const studentsWithAge = useMemo(() => {
+        return students.map(s => ({
+            ...s,
+            Age: s.DOB ? new Date().getFullYear() - new Date(s.DOB).getFullYear() : 'N/A'
+        }));
+    }, [students]);
+
+    const getCategoryForStudent = (student) => {
+        const grade = student.Grade ? String(student.Grade).toLowerCase() : '';
+        if (grade.includes('university') || grade.includes('year')) return 'university';
+        const gradeNum = parseInt(grade);
+        if (!isNaN(gradeNum)) {
+            if (gradeNum >= 9) return 'high-school';
+            if (gradeNum >= 6) return 'middle-school';
+            return 'elementary';
+        }
+        return 'other';
+    };
+    
+    const calculateMonthlyEquivalent = (amount, frequency) => {
+        const numericAmount = parseFloat(amount) || 0;
+        switch (frequency) {
+            case 'Quarterly': return numericAmount / 3;
+            case 'Semester': return numericAmount / 6;
+            case 'Yearly': return numericAmount / 12;
+            case 'Monthly':
+            default:
+                return numericAmount;
+        }
+    };
+
+    const filteredAndSortedStudents = useMemo(() => {
+        let processedData = studentsWithAge
+            .filter(student => category === 'all' || getCategoryForStudent(student) === category)
+            .filter(student => {
+                const fullName = `${student['Given Name'] || ''} ${student['Family Name'] || ''}`.toLowerCase();
+                const isComplete = student.School && student.Age !== 'N/A' && student.FeeAmount;
+                return (
+                    fullName.includes(filters.search.toLowerCase()) &&
+                    (!filters.grade || student.Grade === filters.grade) &&
+                    (!filters.school || student.School === filters.school) &&
+                    (!filters.sex || student.Sex === filters.sex) &&
+                    (!filters.age || student.Age.toString() === filters.age) &&
+                    (!filters.status || (filters.status === 'complete' && isComplete) || (filters.status === 'incomplete' && !isComplete))
+                );
+            });
+
+        if (sort.column) {
+            processedData.sort((a, b) => {
+                let valA = a[sort.column] || '';
+                let valB = b[sort.column] || '';
+
+                if (sort.column === 'Fee') {
+                    valA = calculateMonthlyEquivalent(a.FeeAmount, a.FeeFrequency);
+                    valB = calculateMonthlyEquivalent(b.FeeAmount, b.FeeFrequency);
+                } else if (sort.column === 'Age') {
+                    valA = parseFloat(valA) || 0; 
+                    valB = parseFloat(valB) || 0;
+                } else if (sort.column === 'EnrollmentDate') {
+                    valA = new Date(valA); 
+                    valB = new Date(valB);
+                } else {
+                    valA = String(valA).toLowerCase(); 
+                    valB = String(valB).toLowerCase();
+                }
+
+                if (valA < valB) return sort.direction === 'asc' ? -1 : 1;
+                if (valA > valB) return sort.direction === 'asc' ? 1 : -1;
+                return 0;
+            });
+        }
+        return processedData;
+    }, [studentsWithAge, category, filters, sort]);
+    
+    const studentGrades = useMemo(() => {
+        if (!selectedStudent) return [];
+        return grades.filter(g => g.StudentID === selectedStudent.StudentID);
+    }, [grades, selectedStudent]);
+
+    const totals = useMemo(() => ({
+        count: filteredAndSortedStudents.length,
+        fees: filteredAndSortedStudents.reduce((sum, s) => sum + calculateMonthlyEquivalent(s.FeeAmount, s.FeeFrequency), 0)
+    }), [filteredAndSortedStudents]);
+
+
+    // --- Handlers ---
+    const handleSort = (columnKey) => setSort(s => ({ column: columnKey, direction: s.column === columnKey && s.direction === 'asc' ? 'desc' : 'asc' }));
+    
+    const handleSelectSchool = (schoolName) => {
+        setSelectedSchool(schoolName);
+        setActiveTab('school-center');
+    };
+
+    const handleSelectStudent = (student) => {
+        setSelectedStudent(student);
+        setActiveTab('profile');
+    };
+
+    const handleReviewStudent = (formData) => {
+        setReviewData(formData);
+        setModal('review');
+    };
+
+    const handleSaveStudent = () => {
+        const formData = reviewData;
+        if (modal === 'edit') {
+            setStudents(students.map(s => s.StudentID === formData.StudentID ? formData : s));
+            setSelectedStudent(formData);
+        } else {
+            const newId = `CPB${Math.floor(10000 + Math.random() * 90000)}`;
+            setStudents([...students, { ...formData, StudentID: newId }]);
+        }
+        setModal(null);
+        setReviewData(null);
+    };
+    
+    const handleArchiveStudent = () => {
+        const studentToArchive = {
+            ...selectedStudent,
+            DateLeft: new Date().toISOString().split('T')[0]
+        };
+        setArchivedStudents([...archivedStudents, studentToArchive]);
+        setStudents(students.filter(s => s.StudentID !== selectedStudent.StudentID));
+        setModal(null);
+        setSelectedStudent(null);
+        setActiveTab('dashboard');
+    };
+    
+    const handleRestoreStudent = (studentToRestore) => {
+        const { DateLeft, ...restoredStudent } = studentToRestore;
+        setStudents([...students, restoredStudent]);
+        setArchivedStudents(archivedStudents.filter(s => s.StudentID !== studentToRestore.StudentID));
+    };
+
+    const handleResetData = () => {
+        if (window.confirm("Are you sure? This will erase all changes and restore the original student list.")) {
+            localStorage.clear();
+            window.location.reload();
+        }
+    };
+    
+    const openModal = (modalType, student = null) => {
+        setSelectedStudent(student);
+        setModal(modalType);
+    };
+
+    const handleAddGrades = (newGrades) => {
+        setGrades(prevGrades => [...prevGrades, ...newGrades]);
+        setModal(null);
+    };
+
+    const handleAddFollowUp = (studentId, followUpData) => {
+        setFollowUps(prev => ({
+            ...prev,
+            [studentId]: [...(prev[studentId] || []), followUpData]
+        }));
+        setModal(null);
+    };
+    
+    const handleUpdateFollowUp = (studentId, index, updatedFollowUp) => {
+        setFollowUps(prev => {
+            const updatedFollowUps = [...(prev[studentId] || [])];
+            updatedFollowUps[index] = updatedFollowUp;
+            return { ...prev, [studentId]: updatedFollowUps };
+        });
+        setModal(null);
+    };
+
+    const handleDeleteFollowUp = (studentId, index) => {
+        if (window.confirm("Are you sure you want to delete this follow-up?")) {
+            setFollowUps(prev => {
+                const updatedFollowUps = [...(prev[studentId] || [])];
+                updatedFollowUps.splice(index, 1);
+                return { ...prev, [studentId]: updatedFollowUps };
+            });
+        }
+    };
+
+    // --- Render Components ---
+    const renderModals = () => (
+        <>
+            {modal === 'add' && <StudentFormModal onReview={handleReviewStudent} onClose={() => setModal(null)} />}
+            {modal === 'edit' && <StudentFormModal student={selectedStudent} onReview={handleReviewStudent} onClose={() => setModal(null)} onArchive={() => setModal('archive')} />}
+            {modal === 'review' && <ReviewModal data={reviewData} onConfirm={handleSaveStudent} onEdit={() => setModal(selectedStudent ? 'edit' : 'add')} onClose={() => setModal(null)} />}
+            {modal === 'filter' && <FilterModal currentFilters={filters} onApply={setFilters} onClose={() => setModal(null)} allStudents={studentsWithAge} />}
+            {modal === 'settings' && <SettingsModal visibleColumns={visibleColumns} setVisibleColumns={setVisibleColumns} allColumns={ALL_COLUMNS} onReset={handleResetData} onClose={() => setModal(null)} />}
+            {modal === 'archive' && <ConfirmationModal title="Confirm Archive" message={`Are you sure you want to archive ${selectedStudent?.['Given Name']}?`} onConfirm={handleArchiveStudent} onClose={() => setActiveTab('profile')} />}
+            {modal === 'add-grades' && <AddGradesModal student={selectedStudent} curriculum={curriculum} onAddGrades={handleAddGrades} onClose={() => setModal(null)} />}
+            {modal === 'add-follow-up' && <FollowUpFormModal student={selectedStudent} onSave={handleAddFollowUp} onClose={() => setModal(null)} />}
+            {modal === 'edit-follow-up' && <FollowUpFormModal student={selectedStudent} followUp={selectedStudent.followUpToEdit} onSave={(studentId, data) => handleUpdateFollowUp(studentId, selectedStudent.followUpIndex, data)} onClose={() => setModal(null)} />}
+        </>
+    );
+
+    const renderActiveTab = () => {
+        switch (activeTab) {
+            case 'dashboard':
+                return <DashboardPage students={filteredAndSortedStudents} onSort={handleSort} sort={sort} visibleColumns={visibleColumns} allColumns={ALL_COLUMNS} onOpenModal={openModal} setCategory={setCategory} category={category} totals={totals} onSelectSchool={handleSelectSchool} onSelectStudent={handleSelectStudent} />;
+            case 'profile':
+                return <StudentProfilePage student={selectedStudent} onOpenModal={openModal} setActiveTab={setActiveTab} followUps={selectedStudent ? followUps[selectedStudent.StudentID] || [] : []} onDeleteFollowUp={handleDeleteFollowUp} />;
+            case 'grades':
+                return <GradesPage student={selectedStudent} grades={studentGrades} onOpenModal={openModal} />;
+            case 'school-center':
+                return <SchoolCenterPage students={studentsWithAge} grades={grades} selectedSchool={selectedSchool} onSelectSchool={setSelectedSchool} getCategoryForStudent={getCategoryForStudent} onSelectStudent={handleSelectStudent}/>;
+            case 'curriculum':
+                return <CurriculumPage curriculum={curriculum} setCurriculum={setCurriculum} />;
+            case 'archive':
+                return <ArchivePage archivedStudents={archivedStudents} onRestore={handleRestoreStudent} />;
+            case 'manual-instructions':
+                return <ManualInstructionsPage />;
+            default:
+                return <DashboardPage students={filteredAndSortedStudents} onSort={handleSort} sort={sort} visibleColumns={visibleColumns} allColumns={ALL_COLUMNS} onOpenModal={openModal} setCategory={setCategory} category={category} totals={totals} onSelectSchool={handleSelectSchool} onSelectStudent={handleSelectStudent} />;
+        }
+    };
+
+    return (
+        <div className="bg-gray-100 text-gray-800 h-screen overflow-hidden flex font-sans relative">
+            <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} isOpen={isSidebarOpen} setOpen={setIsSidebarOpen} onOpenSettings={() => setModal('settings')} menuRef={menuBtnRef} />
+            <div className="flex-grow flex flex-col h-screen w-full">
+                <TopBar onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} menuBtnRef={menuBtnRef} />
+                <div className="flex-grow overflow-y-auto">
+                    {renderActiveTab()}
+                </div>
+            </div>
+            {renderModals()}
+        </div>
+    );
+}
