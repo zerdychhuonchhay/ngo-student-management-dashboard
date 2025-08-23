@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
-import { Menu, X, Users, DollarSign, Archive, Settings, Filter, PlusCircle, ArrowUpDown, BookOpen, FileText, BarChart2, Mail, CreditCard, Building, Edit, Eye, User, Mail as MailIcon, Phone, GraduationCap, School, Briefcase, BookCopy, Trash2, Calendar, ArrowLeft, ChevronDown } from 'lucide-react';
+import { Menu, X, Users, DollarSign, Archive, Settings, Filter, PlusCircle, ArrowUpDown, BookOpen, FileText, BarChart2, Mail, CreditCard, Building, Edit, Eye, User, Mail as MailIcon, Phone, GraduationCap, School, Briefcase, BookCopy, Trash2, Calendar, ArrowLeft, ChevronDown, MapPin } from 'lucide-react';
 
 // ===================================================================================
 // --- DATA (data.js) ---
@@ -8,22 +8,23 @@ import { Menu, X, Users, DollarSign, Archive, Settings, Filter, PlusCircle, Arro
 // ===================================================================================
 
 const initialStudents = [
-    { "StudentID": "CPB00039", "Given Name": "Kunthea", "Family Name": "Yim", "Sex": "F", "DOB": "2003-05-12", "Grade": "University", "School": "RULE", "FeeAmount": "300", "FeeFrequency": "Monthly", "Guardian Name": "Chan Makara", "Guardian Contact": "012345678", "Major": "Laws", "Comments": "Top 5 in school", "EnrollmentDate": "2022-09-01" },
-    { "StudentID": "CPG00025", "Given Name": "Sopheaktra", "Family Name": "Nim", "Sex": "F", "DOB": "2002-09-20", "Grade": "University", "School": "RUPP", "FeeAmount": "175", "FeeFrequency": "Monthly", "Guardian Name": "", "Guardian Contact": "", "Major": "Business", "EnrollmentDate": "2022-09-01" },
-    { "StudentID": "CPB00041", "Given Name": "Dara", "Family Name": "Yim", "Sex": "M", "DOB": "2001-01-30", "Grade": "University", "School": "RULE", "FeeAmount": "750", "FeeFrequency": "Quarterly", "Guardian Name": "", "Guardian Contact": "", "Major": "Laws", "EnrollmentDate": "2021-09-01" },
-    { "StudentID": "CPG00026", "Given Name": "Manita", "Family Name": "Run", "Sex": "F", "DOB": "2004-03-15", "Grade": "University", "School": "UEF", "FeeAmount": "620", "FeeFrequency": "Semester", "Guardian Name": "Mom Sopheap", "Guardian Contact": "965455371", "Major": "Accounting and Finance", "EnrollmentDate": "2023-09-01" },
-    { "StudentID": "CPB00042", "Given Name": "Songha", "Family Name": "Run", "Sex": "M", "DOB": "2000-11-05", "Grade": "University", "School": "PPIU", "FeeAmount": "449.4", "FeeFrequency": "Semester", "Guardian Name": "Mom Sopheap", "Guardian Contact": "965455371", "Major": "Business", "EnrollmentDate": "2020-09-01" },
-    { "StudentID": "CPG00027", "Given Name": "SivKheu", "Family Name": "Ny", "Sex": "F", "DOB": "2003-08-22", "Grade": "University", "School": "UEF", "FeeAmount": "310", "FeeFrequency": "Monthly", "Guardian Name": "Sor Sokhom", "Guardian Contact": "89217867", "Major": "Accounting and Finance", "EnrollmentDate": "2023-09-01" },
-    { "StudentID": "CPB00043", "Given Name": "Sreypich", "Family Name": "Chan", "Sex": "F", "DOB": "2005-02-10", "Grade": "12", "School": "SPS_Tep", "FeeAmount": "1500", "FeeFrequency": "Yearly", "Guardian Name": "", "Guardian Contact": "", "EnrollmentDate": "2018-09-01" },
-    { "StudentID": "CPG00028", "Given Name": "Raveen", "Family Name": "Samnang", "Sex": "M", "DOB": "2009-07-18", "Grade": "9", "School": "NewLife", "FeeAmount": "70", "FeeFrequency": "Monthly", "Guardian Name": "Say Sotheary", "Guardian Contact": "977408378", "EnrollmentDate": "2015-09-01" },
-    { "StudentID": "CPB00002", "Given Name": "Sovanna", "Family Name": "Sok (Mao)", "Sex": "M", "DOB": "2008-10-07", "Grade": "4", "School": "NewLife", "FeeAmount": "60", "FeeFrequency": "Monthly", "Guardian Name": "Sok Khoeun", "Guardian Contact": "095 927592", "Major": "", "Comments": "", "EnrollmentDate": "" },
-    { "StudentID": "CPB00008", "Given Name": "Chanvie", "Family Name": "Sophan", "Sex": "M", "DOB": "2010-09-10", "Grade": "6", "School": "", "FeeAmount": "149", "FeeFrequency": "Monthly", "Guardian Name": "Sophan Chankakada", "Guardian Contact": "", "Major": "", "Comments": "", "EnrollmentDate": "2015-10-28" },
-    { "StudentID": "CPB00009", "Given Name": "Meng", "Family Name": "Sorn", "Sex": "M", "DOB": "2005-05-15", "Grade": "10", "School": "SPS_TK", "FeeAmount": "70", "FeeFrequency": "Monthly", "Guardian Name": "Ti Ra", "Guardian Contact": "096 3378336", "Major": "", "Comments": "Trying, abcent a lot, not catching up, not attending math tutoring", "EnrollmentDate": "" },
-    { "StudentID": "CPB00018", "Given Name": "Chantha", "Family Name": "Samnang", "Sex": "M", "DOB": "2006-06-12", "Grade": "11", "School": "NewLife", "FeeAmount": "10", "FeeFrequency": "Monthly", "Guardian Name": "Say Sotheary", "Guardian Contact": "097 7408378", "Major": "", "Comments": "", "EnrollmentDate": "" },
-    { "StudentID": "CPB00021", "Given Name": "Raveen", "Family Name": "Samnang", "Sex": "M", "DOB": "2009-02-01", "Grade": "9", "School": "NewLife", "FeeAmount": "70", "FeeFrequency": "Monthly", "Guardian Name": "Say Sotheary", "Guardian Contact": "097 7408378", "Major": "", "Comments": "Try hard but couldn’t catch the lessons, attendance regularly", "EnrollmentDate": "" },
-    { "StudentID": "CPB00031", "Given Name": "Parin", "Family Name": "Proseur", "Sex": "M", "DOB": "2010-02-03", "Grade": "7", "School": "NewLife", "FeeAmount": "70", "FeeFrequency": "Monthly", "Guardian Name": "", "Guardian Contact": "", "Major": "", "Comments": "", "EnrollmentDate": "" },
-    { "StudentID": "CPB00035", "Given Name": "Daravichen", "Family Name": "Sem", "Sex": "M", "DOB": "2009-03-21", "Grade": "9", "School": "SPS_Tep", "FeeAmount": "130", "FeeFrequency": "Monthly", "Guardian Name": "Chan Thom", "Guardian Contact": "", "Major": "", "Comments": "Getting better, but still limited, not attend math tutoring regualarly", "EnrollmentDate": "" }
+    { "StudentID": "CPB00039", "Given Name": "Kunthea", "Family Name": "Yim", "Sex": "F", "DOB": "2003-05-12", "Grade": "University", "School": { "name": "RULE", "campus": "" }, "financials": [{ "category": "Education", "item": "Tuition Fee", "amount": "300", "frequency": "Monthly", "date": "2022-09-01" }, { "category": "Supplies", "item": "Textbooks", "amount": "150", "frequency": "Yearly", "date": "2022-09-01" }], "guardians": [{ "name": "Chan Makara", "relationship": "Mother", "contact": "012345678", "job": "Vendor", "income": 250 }], "Major": "Laws", "Comments": "Top 5 in school", "EnrollmentDate": "2022-09-01", "Location": "Phnom Penh" },
+    { "StudentID": "CPG00025", "Given Name": "Sopheaktra", "Family Name": "Nim", "Sex": "F", "DOB": "2002-09-20", "Grade": "University", "School": { "name": "RUPP", "campus": "" }, "financials": [{ "category": "Education", "item": "Tuition Fee", "amount": "175", "frequency": "Monthly", "date": "2022-09-01" }], "guardians": [], "Major": "Business", "EnrollmentDate": "2022-09-01", "Location": "Phnom Penh" },
+    { "StudentID": "CPB00041", "Given Name": "Dara", "Family Name": "Yim", "Sex": "M", "DOB": "2001-01-30", "Grade": "University", "School": { "name": "RULE", "campus": "" }, "financials": [{ "category": "Education", "item": "Tuition Fee", "amount": "750", "frequency": "Quarterly", "date": "2021-09-01" }], "guardians": [], "Major": "Laws", "EnrollmentDate": "2021-09-01", "Location": "Phnom Penh" },
+    { "StudentID": "CPG00026", "Given Name": "Manita", "Family Name": "Run", "Sex": "F", "DOB": "2004-03-15", "Grade": "University", "School": { "name": "UEF", "campus": "" }, "financials": [{ "category": "Education", "item": "Tuition Fee", "amount": "620", "frequency": "Semester", "date": "2023-09-01" }], "guardians": [{ "name": "Mom Sopheap", "relationship": "Mother", "contact": "965455371", "job": "Factory Worker", "income": 200 }], "Major": "Accounting and Finance", "EnrollmentDate": "2023-09-01", "Location": "Railroad" },
+    { "StudentID": "CPB00042", "Given Name": "Songha", "Family Name": "Run", "Sex": "M", "DOB": "2000-11-05", "Grade": "University", "School": { "name": "PPIU", "campus": "" }, "financials": [{ "category": "Education", "item": "Tuition Fee", "amount": "449.4", "frequency": "Semester", "date": "2020-09-01" }], "guardians": [{ "name": "Mom Sopheap", "relationship": "Mother", "contact": "965455371", "job": "Factory Worker", "income": 200 }], "Major": "Business", "EnrollmentDate": "2020-09-01", "Location": "Railroad" },
+    { "StudentID": "CPG00027", "Given Name": "SivKheu", "Family Name": "Ny", "Sex": "F", "DOB": "2003-08-22", "Grade": "University", "School": { "name": "UEF", "campus": "" }, "financials": [{ "category": "Education", "item": "Tuition Fee", "amount": "310", "frequency": "Monthly", "date": "2023-09-01" }], "guardians": [{ "name": "Sor Sokhom", "relationship": "Mother", "contact": "89217867", "job": "Cleaner", "income": 180 }], "Major": "Accounting and Finance", "EnrollmentDate": "2023-09-01", "Location": "Railroad" },
+    { "StudentID": "CPB00043", "Given Name": "Sreypich", "Family Name": "Chan", "Sex": "F", "DOB": "2005-02-10", "Grade": "12", "School": { "name": "SPS", "campus": "Tep" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "1500", "frequency": "Yearly", "date": "2018-09-01" }], "guardians": [], "EnrollmentDate": "2018-09-01", "Location": "Sorla" },
+    { "StudentID": "CPG00028", "Given Name": "Raveen", "Family Name": "Samnang", "Sex": "M", "DOB": "2009-07-18", "Grade": "9", "School": { "name": "NewLife", "campus": "" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "70", "frequency": "Monthly", "date": "2015-09-01" }], "guardians": [{ "name": "Say Sotheary", "relationship": "Mother", "contact": "977408378", "job": "Vendor", "income": 150 }], "EnrollmentDate": "2015-09-01", "Location": "Steang MeanChey" },
+    { "StudentID": "CPB00002", "Given Name": "Sovanna", "Family Name": "Sok (Mao)", "Sex": "M", "DOB": "2008-10-07", "Grade": "4", "School": { "name": "NewLife", "campus": "" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "60", "frequency": "Monthly", "date": "2023-09-01" }], "guardians": [{ "name": "Sok Khoeun", "relationship": "Father", "contact": "095 927592", "job": "Construction", "income": 220 }], "Major": "", "Comments": "", "EnrollmentDate": "", "Location": "Hope House" },
+    { "StudentID": "CPB00008", "Given Name": "Chanvie", "Family Name": "Sophan", "Sex": "M", "DOB": "2010-09-10", "Grade": "6", "School": { "name": "", "campus": "" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "149", "frequency": "Monthly", "date": "2015-10-28" }], "guardians": [{ "name": "Sophan Chankakada", "relationship": "Father", "contact": "", "job": "", "income": 0 }], "Major": "", "Comments": "", "EnrollmentDate": "2015-10-28", "Location": "" },
+    { "StudentID": "CPB00009", "Given Name": "Meng", "Family Name": "Sorn", "Sex": "M", "DOB": "2005-05-15", "Grade": "10", "School": { "name": "SPS", "campus": "TK" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "70", "frequency": "Monthly", "date": "2023-09-01" }], "guardians": [{ "name": "Ti Ra", "relationship": "Mother", "contact": "096 3378336", "job": "Vendor", "income": 120 }], "Major": "", "Comments": "Trying, abcent a lot, not catching up, not attending math tutoring", "EnrollmentDate": "", "Location": "Packaging" },
+    { "StudentID": "CPB00018", "Given Name": "Chantha", "Family Name": "Samnang", "Sex": "M", "DOB": "2006-06-12", "Grade": "11", "School": { "name": "NewLife", "campus": "" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "10", "frequency": "Monthly", "date": "2023-09-01" }], "guardians": [{ "name": "Say Sotheary", "relationship": "Mother", "contact": "097 7408378", "job": "Vendor", "income": 150 }], "Major": "", "Comments": "", "EnrollmentDate": "", "Location": "Steang MeanChey" },
+    { "StudentID": "CPB00021", "Given Name": "Raveen", "Family Name": "Samnang", "Sex": "M", "DOB": "2009-02-01", "Grade": "9", "School": { "name": "NewLife", "campus": "" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "70", "frequency": "Monthly", "date": "2023-09-01" }], "guardians": [{ "name": "Say Sotheary", "relationship": "Mother", "contact": "097 7408378", "job": "Vendor", "income": 150 }], "Major": "", "Comments": "Try hard but couldn’t catch the lessons, attendance regularly", "EnrollmentDate": "", "Location": "Steang MeanChey" },
+    { "StudentID": "CPB00031", "Given Name": "Parin", "Family Name": "Proseur", "Sex": "M", "DOB": "2010-02-03", "Grade": "7", "School": { "name": "NewLife", "campus": "" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "70", "frequency": "Monthly", "date": "2023-09-01" }], "guardians": [], "Major": "", "Comments": "", "EnrollmentDate": "", "Location": "Steang MeanChey" },
+    { "StudentID": "CPB00035", "Given Name": "Daravichen", "Family Name": "Sem", "Sex": "M", "DOB": "2009-03-21", "Grade": "9", "School": { "name": "SPS", "campus": "Tep" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "130", "frequency": "Monthly", "date": "2023-09-01" }], "guardians": [{ "name": "Chan Thom", "relationship": "Mother", "contact": "", "job": "N/A", "income": 0 }], "Major": "", "Comments": "Getting better, but still limited, not attend math tutoring regualarly", "EnrollmentDate": "", "Location": "Railroad" }
 ];
+
 
 const initialGrades = [
   { "StudentID": "CPB00039", "Date": "2025-01-15", "Subject": "Contract Law", "Score": 88 },
@@ -35,54 +36,78 @@ const initialGrades = [
   { "StudentID": "CPG00025", "Date": "2025-07-15", "Subject": "Investment Analysis", "Score": 78 },
   { "StudentID": "CPG00025", "Date": "2025-07-15", "Subject": "International Trade", "Score": 71 },
   { "StudentID": "CPB00043", "Date": "2025-01-15", "Subject": "Math", "Score": 80 },
-  { "StudentID": "CPB00043", "Date": "2025-01-15", "Subject": "Science", "Score": 75 }
+  { "StudentID": "CPB00043", "Date": "2025-01-15", "Subject": "Science", "Score": 75 },
+  { "StudentID": "CPB00035", "Date": "2025-04-30", "Subject": "Essay (KGE-WR)", "Score": 30.60 },
+  { "StudentID": "CPB00035", "Date": "2025-04-30", "Subject": "Dictation (KGE-DI)", "Score": 21.50 },
+  { "StudentID": "CPB00035", "Date": "2025-04-30", "Subject": "Math (KGE-MA)", "Score": 42.00 },
+  { "StudentID": "CPB00035", "Date": "2025-04-30", "Subject": "Physics (KGE-PS)", "Score": 19.50 },
+  { "StudentID": "CPB00035", "Date": "2025-04-30", "Subject": "Chemistry (KGE-CHE)", "Score": 14.40 },
+  { "StudentID": "CPB00035", "Date": "2025-04-30", "Subject": "Biology (KGE-BIO)", "Score": 22.30 },
+  { "StudentID": "CPB00035", "Date": "2025-04-30", "Subject": "Earth Studies (KGE-ES)", "Score": 18.00 },
+  { "StudentID": "CPB00035", "Date": "2025-04-30", "Subject": "Geography (KGE-GE)", "Score": 23.60 },
+  { "StudentID": "CPB00035", "Date": "2025-04-30", "Subject": "History (KGE-HI)", "Score": 30.90 },
+  { "StudentID": "CPB00035", "Date": "2025-04-30", "Subject": "Moral Studies (KGE-MO)", "Score": 28.30 },
+  { "StudentID": "CPB00035", "Date": "2025-04-30", "Subject": "English (KGE-EN)", "Score": 31.00 },
+  { "StudentID": "CPB00035", "Date": "2025-04-30", "Subject": "Morality & Attendance (KGE-ATT)", "Score": 35.24 }
 ];
 
 const initialCurriculum = {
     "NewLife": {
-        "4": ["Math", "Science", "Khmer", "English"],
-        "6": ["Math", "Science", "Khmer", "English"],
-        "7": ["Math", "Science", "Khmer", "English"],
-        "9": ["Math", "Science", "Khmer", "English", "Social Studies"],
-        "10": ["Algebra", "Biology", "Khmer Literature", "English II", "World History"],
-        "11": ["Algebra II", "Chemistry", "Khmer Literature", "English III", "World History"],
+        "": {
+            "4": ["Math", "Science", "Khmer", "English"],
+            "6": ["Math", "Science", "Khmer", "English"],
+            "7": ["Math", "Science", "Khmer", "English"],
+            "9": ["Math", "Science", "Khmer", "English", "Social Studies"],
+            "10": ["Algebra", "Biology", "Khmer Literature", "English II", "World History"],
+            "11": ["Algebra II", "Chemistry", "Khmer Literature", "English III", "World History"],
+        }
     },
-    "SPS_Tep": {
-        "9": ["Math", "Physics", "Khmer", "English"],
-        "12": ["Calculus", "Physics", "Chemistry", "Advanced English", "Cambodian History"]
-    },
-     "SPS_TK": {
-        "10": ["Math", "Science", "Khmer", "English"]
+    "SPS": {
+        "Tep": {
+            "9": ["Math", "Physics", "Khmer", "English"],
+            "12": ["Calculus", "Physics", "Chemistry", "Advanced English", "Cambodian History"]
+        },
+        "TK": {
+            "10": ["Math", "Science", "Khmer", "English"]
+        }
     },
     "UEF": {
-        "Accounting and Finance": {
-            "Year 1": {
-                "Semester 1": ["Business English I", "History", "Contract Law", "Business Mathematics", "Microeconomics", "Accounting in Business I (FI)"],
-                "Semester 2": ["Business English II", "Philosophy", "Business Statistics", "Macroeconomics", "Human Resource Management"]
+        "": {
+            "Accounting and Finance": {
+                "Year 1": {
+                    "Semester 1": ["Business English I", "History", "Contract Law", "Business Mathematics", "Microeconomics", "Accounting in Business I (FI)"],
+                    "Semester 2": ["Business English II", "Philosophy", "Business Statistics", "Macroeconomics", "Human Resource Management"]
+                }
             }
         }
     },
     "RULE": {
-        "Laws": {
-            "Year 1": {
-                "Semester 1": ["Contract Law", "Constitutional Law"],
-                "Semester 2": ["Criminal Law", "Legal Research"]
+        "": {
+            "Laws": {
+                "Year 1": {
+                    "Semester 1": ["Contract Law", "Constitutional Law"],
+                    "Semester 2": ["Criminal Law", "Legal Research"]
+                }
             }
         }
     },
     "RUPP": {
-        "Business": {
-             "Year 1": {
-                "Semester 1": ["Principles of Management", "Principles of Marketing"],
-                "Semester 2": ["Business Law", "Business Communication"]
+        "": {
+            "Business": {
+                 "Year 1": {
+                    "Semester 1": ["Principles of Management", "Principles of Marketing"],
+                    "Semester 2": ["Business Law", "Business Communication"]
+                }
             }
         }
     },
     "PPIU": {
-        "Business": {
-             "Year 1": {
-                "Semester 1": ["Intro to Business", "Accounting I"],
-                "Semester 2": ["Microeconomics", "Business Statistics"]
+        "": {
+            "Business": {
+                 "Year 1": {
+                    "Semester 1": ["Intro to Business", "Accounting I"],
+                    "Semester 2": ["Microeconomics", "Business Statistics"]
+                }
             }
         }
     }
@@ -152,7 +177,7 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, setOpen, onOpenSettings, men
     );
     return (
         <aside ref={sidebarRef} className={`bg-white w-64 h-full shadow-lg p-4 flex flex-col flex-shrink-0 absolute transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out z-40`}>
-            <h2 className="text-2xl font-bold text-gray-800 px-2">Dashboard</h2>
+            <a href="#" onClick={(e) => { e.preventDefault(); setActiveTab('dashboard'); setOpen(false); }} className="text-2xl font-bold text-gray-800 px-2 mb-2 block">Dashboard</a>
             <nav className="mt-4 space-y-1">
                 <Tab id="dashboard" icon={<Users className="w-5 h-5" />}>Student List</Tab>
                 <Tab id="school-center" icon={<Building className="w-5 h-5" />}>School Center</Tab>
@@ -189,8 +214,8 @@ const DashboardPage = ({ students, onSort, sort, visibleColumns, allColumns, onO
                         <p className="text-2xl font-bold text-indigo-600 mt-1">{totals.count}</p>
                     </div>
                     <div>
-                        <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider">Total Monthly Fees</h3>
-                        <p className="text-2xl font-bold text-indigo-600 mt-1">${totals.fees.toFixed(2)}</p>
+                        <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider">Total Monthly Costs</h3>
+                        <p className="text-2xl font-bold text-indigo-600 mt-1">${totals.costs.toFixed(2)}</p>
                     </div>
                 </div>
             </div>
@@ -249,12 +274,17 @@ const StudentTable = ({ students, onSort, sort, visibleColumns, allColumns, onSe
                                         {student[col.key] || 'N/A'}
                                     </a>
                                 ) : col.key === 'School' ? (
-                                    <a href="#" onClick={(e) => { e.preventDefault(); onSelectSchool(student.School); }}
+                                    <a href="#" onClick={(e) => { e.preventDefault(); onSelectSchool(); }}
                                        className="font-semibold text-blue-600 hover:underline">
-                                        {student[col.key] || 'N/A'}
+                                        {student.School.name}{student.School.campus && ` (${student.School.campus})`}
                                     </a>
-                                ) : col.key === 'Fee' ? (
-                                    `$${parseFloat(student.FeeAmount || 0).toFixed(2)} / ${student.FeeFrequency || 'N/A'}`
+                                ) : col.key === 'MonthlyCosts' ? (
+                                    `$${(student.financials || []).reduce((total, item) => {
+                                        if (item.frequency !== 'One-time') {
+                                           return total + calculateMonthlyEquivalent(item.amount, item.frequency)
+                                        }
+                                        return total;
+                                    }, 0).toFixed(2)} / Monthly Eq.`
                                 ) : (
                                     student[col.key] || 'N/A'
                                 )}
@@ -277,56 +307,49 @@ const getCambodianGrade = (score) => {
     return { grade: 'F', color: 'text-red-800' };
 };
 
-const GradesPage = ({ student, grades, onOpenModal }) => {
-    const monthlySummary = useMemo(() => {
-        if (!grades || grades.length === 0) return { subjects: [], data: [] };
-        const months = {};
-        const subjects = [...new Set(grades.map(g => g.Subject))];
-        
-        grades.forEach(g => {
-            const month = new Date(g.Date).toLocaleString('default', { month: 'long', year: 'numeric' });
-            if (!months[month]) {
-                months[month] = { month, scores: {}, total: 0, count: 0 };
-            }
-            if (!months[month].scores[g.Subject]) {
-                months[month].scores[g.Subject] = { total: 0, count: 0 };
-            }
-            months[month].scores[g.Subject].total += g.Score;
-            months[month].scores[g.Subject].count++;
-            months[month].total += g.Score;
-            months[month].count++;
-        });
-
-        return {
-            subjects,
-            data: Object.values(months).map(monthData => {
-                const row = { month: monthData.month };
-                subjects.forEach(subject => {
-                    const subjectData = monthData.scores[subject];
-                    row[subject] = subjectData ? (subjectData.total / subjectData.count).toFixed(2) : 'N/A';
-                });
-                row.Average = (monthData.total / monthData.count).toFixed(2);
-                return row;
-            })
-        };
-    }, [grades]);
-
-    const yearlySummary = useMemo(() => {
+const GradesPage = ({ student, grades, onOpenModal, onBack, schoolAverages }) => {
+    const performanceTrendData = useMemo(() => {
         if (!grades || grades.length === 0) return [];
-        const years = {};
-        grades.forEach(g => {
-            const year = new Date(g.Date).getFullYear();
-            if (!years[year]) {
-                years[year] = { scores: [], count: 0 };
+        
+        const dataByDate = grades.reduce((acc, grade) => {
+            const dateKey = grade.Date.substring(0, 7); // Group by month (YYYY-MM)
+            if (!acc[dateKey]) {
+                acc[dateKey] = { total: 0, count: 0, date: grade.Date };
             }
-            years[year].scores.push(g.Score);
-            years[year].count++;
-        });
-        return Object.entries(years).map(([year, data]) => ({
-            year,
-            average: (data.scores.reduce((a, b) => a + b, 0) / data.count).toFixed(2)
-        }));
+            acc[dateKey].total += grade.Score;
+            acc[dateKey].count++;
+            return acc;
+        }, {});
+
+        return Object.values(dataByDate)
+            .map(({ date, total, count }) => ({
+                date: new Date(date).toLocaleString('default', { month: 'short', year: 'numeric' }),
+                "Average Score": parseFloat((total / count).toFixed(2)),
+            }))
+            .sort((a, b) => new Date(a.date) - new Date(b.date));
+
     }, [grades]);
+    
+    const subjectComparisonData = useMemo(() => {
+        if (!grades || grades.length === 0) return [];
+        const subjectScores = {};
+        grades.forEach(grade => {
+            if (!subjectScores[grade.Subject]) {
+                subjectScores[grade.Subject] = [];
+            }
+            subjectScores[grade.Subject].push(grade.Score);
+        });
+
+        return Object.entries(subjectScores).map(([subject, scores]) => {
+            const studentAvg = scores.reduce((a, b) => a + b, 0) / scores.length;
+            const schoolAvgKey = `${student.School.name}-${student.Grade}-${subject}`;
+            return {
+                subject,
+                "Student Score": parseFloat(studentAvg.toFixed(2)),
+                "School Average": schoolAverages[schoolAvgKey] || 0,
+            };
+        });
+    }, [grades, student, schoolAverages]);
 
     if (!student) {
         return <div className="p-8 text-center text-gray-600">Please select a student from the dashboard to view their grades.</div>;
@@ -334,216 +357,239 @@ const GradesPage = ({ student, grades, onOpenModal }) => {
 
     return (
         <div className="p-4 sm:p-6 lg:p-8 flex flex-col flex-grow min-h-0 overflow-y-auto">
-            <header className="bg-white shadow-md rounded-lg p-6 mb-6 flex justify-between items-center">
-                <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Grade Center: {student['Given Name']}</h1>
-                    <p className="text-gray-600">Student ID: {student.StudentID}</p>
+            <header className="bg-white shadow-md rounded-lg p-6 mb-6">
+                 <div className="flex justify-between items-center">
+                    <div>
+                        <button onClick={onBack} className="text-sm text-indigo-600 hover:underline flex items-center gap-1 mb-2">
+                            <ArrowLeft size={14} /> Back to Profile
+                        </button>
+                        <h1 className="text-3xl font-bold text-gray-900">Grade Center: {student['Given Name']}</h1>
+                        <p className="text-gray-600">Student ID: {student.StudentID}</p>
+                    </div>
+                    <button onClick={() => onOpenModal('add-grades', student)} className="bg-indigo-600 text-white px-4 py-2 rounded-md shadow-sm hover:bg-indigo-700 flex items-center gap-2"><PlusCircle size={16} /> Add Grades</button>
                 </div>
-                <button onClick={() => onOpenModal('add-grades', student)} className="bg-indigo-600 text-white px-4 py-2 rounded-md shadow-sm hover:bg-indigo-700 flex items-center gap-2"><PlusCircle size={16} /> Add Grades</button>
             </header>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="bg-white p-6 rounded-lg shadow-md lg:col-span-2">
-                       <h2 className="text-xl font-semibold mb-4">All Grade Records</h2>
-                       <div className="max-h-80 overflow-y-auto">
-                            <table className="min-w-full">
-                                <thead className="bg-gray-50 sticky top-0"><tr><th className="px-4 py-2 text-left">Date</th><th className="px-4 py-2 text-left">Subject</th><th className="px-4 py-2 text-left">Score</th><th className="px-4 py-2 text-left">Grade</th></tr></thead>
-                                <tbody>
-                                {grades.map((grade, i) => {
-                                    const cambodianGrade = getCambodianGrade(grade.Score);
-                                    return (
-                                        <tr key={i} className="border-b">
-                                            <td className="px-4 py-2">{grade.Date}</td>
-                                            <td className="px-4 py-2">{grade.Subject}</td>
-                                            <td className="px-4 py-2 font-semibold">{grade.Score}</td>
-                                            <td className={`px-4 py-2 font-bold ${cambodianGrade.color}`}>{cambodianGrade.grade}</td>
-                                        </tr>
-                                    )
-                                })}
-                                </tbody>
-                            </table>
-                       </div>
-                </div>
-                <div className="bg-white p-6 rounded-lg shadow-md lg:col-span-2">
-                    <h2 className="text-xl font-semibold mb-4">Monthly/Semester Summary</h2>
-                    <div className="max-h-80 overflow-y-auto">
-                        <table className="min-w-full">
-                            <thead className="bg-gray-50 sticky top-0">
-                                <tr>
-                                    <th className="px-4 py-2 text-left">Period</th>
-                                    {monthlySummary.subjects.map(s => <th key={s} className="px-4 py-2 text-left">{s}</th>)}
-                                    <th className="px-4 py-2 text-left">Average</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {monthlySummary.data.map(row => (
-                                    <tr key={row.month} className="border-b">
-                                        <td className="px-4 py-2">{row.month}</td>
-                                        {monthlySummary.subjects.map(s => <td key={s} className="px-4 py-2">{row[s]}</td>)}
-                                        <td className="px-4 py-2 font-semibold">{row.Average}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                 <div className="bg-white p-6 rounded-lg shadow-md">
-                    <h2 className="text-xl font-semibold mb-4">Yearly Summary</h2>
-                    <div className="max-h-80 overflow-y-auto">
-                        <table className="min-w-full">
-                            <thead className="bg-gray-50 sticky top-0"><tr><th className="px-4 py-2 text-left">Year</th><th className="px-4 py-2 text-left">Average Score</th></tr></thead>
-                            <tbody>{yearlySummary.map(s => <tr key={s.year} className="border-b"><td className="px-4 py-2">{s.year}</td><td className="px-4 py-2 font-semibold">{s.average}</td></tr>)}</tbody>
-                        </table>
-                    </div>
+                    <h2 className="text-xl font-semibold mb-4">Performance Trend</h2>
+                    <ResponsiveContainer width="100%" height={300}>
+                        <LineChart data={performanceTrendData}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="date" />
+                            <YAxis domain={[0, 100]} />
+                            <Tooltip />
+                            <Legend />
+                            <Line type="monotone" dataKey="Average Score" stroke="#8884d8" activeDot={{ r: 8 }} />
+                        </LineChart>
+                    </ResponsiveContainer>
+                </div>
+                 <div className="bg-white p-6 rounded-lg shadow-md">
+                    <h2 className="text-xl font-semibold mb-4">Subject Strengths & Weaknesses</h2>
+                    <ResponsiveContainer width="100%" height={300}>
+                        <BarChart data={subjectComparisonData}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="subject" />
+                            <YAxis domain={[0, 100]}/>
+                            <Tooltip />
+                            <Legend />
+                            <Bar dataKey="Student Score" fill="#8884d8" />
+                            <Bar dataKey="School Average" fill="#82ca9d" />
+                        </BarChart>
+                    </ResponsiveContainer>
+                </div>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-md lg:col-span-2">
+                <h2 className="text-xl font-semibold mb-4">All Grade Records</h2>
+                <div className="max-h-80 overflow-y-auto">
+                    <table className="min-w-full">
+                        <thead className="bg-gray-50 sticky top-0">
+                            <tr>
+                                <th className="px-4 py-2 text-left">Date</th>
+                                <th className="px-4 py-2 text-left">Subject</th>
+                                <th className="px-4 py-2 text-left">Score</th>
+                                <th className="px-4 py-2 text-left">School Average</th>
+                                <th className="px-4 py-2 text-left">Grade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {grades.map((gradeItem, index) => {
+                            const cambodianGrade = getCambodianGrade(gradeItem.Score);
+                            const schoolAvgKey = `${student.School.name}-${student.Grade}-${gradeItem.Subject}`;
+                            const schoolAvg = schoolAverages[schoolAvgKey] ? schoolAverages[schoolAvgKey].toFixed(2) : 'N/A';
+                            return (
+                                <tr key={index} className="border-b">
+                                    <td className="px-4 py-2">{gradeItem.Date}</td>
+                                    <td className="px-4 py-2">{gradeItem.Subject}</td>
+                                    <td className="px-4 py-2 font-semibold">{gradeItem.Score}</td>
+                                    <td className="px-4 py-2">{schoolAvg}</td>
+                                    <td className={`px-4 py-2 font-bold ${cambodianGrade.color}`}>{cambodianGrade.grade}</td>
+                                </tr>
+                            )
+                        })}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     );
 };
 
-const SchoolCenterPage = ({ students, grades, selectedSchool, onSelectSchool, getCategoryForStudent, onSelectStudent }) => {
-    const analyticsData = useMemo(() => {
-        const studentIds = students.map(s => s.StudentID);
-        const relevantGrades = grades.filter(g => studentIds.includes(g.StudentID));
+const SchoolCenterPage = ({ students, grades, onSelectStudent, getCategoryForStudent }) => {
+    const schoolData = useMemo(() => {
+        const schools = {};
 
-        const dataByLevel = {};
+        students.forEach(student => {
+            if (!student.School || !student.School.name) return;
 
-        relevantGrades.forEach(grade => {
+            const schoolName = student.School.name;
+            if (!schools[schoolName]) {
+                schools[schoolName] = {
+                    name: schoolName,
+                    students: [],
+                    grades: [],
+                    gradeLevels: {},
+                    category: getCategoryForStudent(student) === 'university' ? 'university' : 'k12'
+                };
+            }
+            schools[schoolName].students.push(student);
+            if (getCategoryForStudent(student) === 'university') {
+                schools[schoolName].category = 'university';
+            }
+            if (!schools[schoolName].gradeLevels[student.Grade]) {
+                schools[schoolName].gradeLevels[student.Grade] = 0;
+            }
+            schools[schoolName].gradeLevels[student.Grade]++;
+        });
+
+        grades.forEach(grade => {
             const student = students.find(s => s.StudentID === grade.StudentID);
-            if (!student) return;
+            if (student && student.School && student.School.name && schools[student.School.name]) {
+                schools[student.School.name].grades.push(grade);
+            }
+        });
+
+        const categorizedSchools = { university: [], k12: [] };
+
+        Object.values(schools).forEach(school => {
+            const totalScore = school.grades.reduce((sum, g) => sum + g.Score, 0);
+            const averageScore = school.grades.length > 0 ? (totalScore / school.grades.length).toFixed(2) : 'N/A';
             
-            const level = getCategoryForStudent(student);
-            if (!dataByLevel[level]) {
-                dataByLevel[level] = { name: level, subjects: {} };
-            }
-            if (!dataByLevel[level].subjects[grade.Subject]) {
-                dataByLevel[level].subjects[grade.Subject] = { total: 0, count: 0 };
-            }
-            dataByLevel[level].subjects[grade.Subject].total += grade.Score;
-            dataByLevel[level].subjects[grade.Subject].count += 1;
-        });
-
-        const chartData = Object.values(dataByLevel).map(levelData => {
-            const levelAverages = { name: levelData.name.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()) };
-            Object.entries(levelData.subjects).forEach(([subject, data]) => {
-                levelAverages[subject] = (data.total / data.count).toFixed(2);
+            const studentsWithAvg = school.students.map(stud => {
+                 const studentGrades = grades.filter(g => g.StudentID === stud.StudentID);
+                 const total = studentGrades.reduce((sum, g) => sum + g.Score, 0);
+                 const avg = studentGrades.length > 0 ? (total / studentGrades.length).toFixed(2) : 'N/A';
+                 return {...stud, averageScore: avg };
             });
-            return levelAverages;
+
+            const finalSchoolData = {
+                ...school,
+                averageScore,
+                students: studentsWithAvg,
+            };
+
+            if (school.category === 'university') {
+                categorizedSchools.university.push(finalSchoolData);
+            } else {
+                categorizedSchools.k12.push(finalSchoolData);
+            }
         });
 
-        return chartData;
+        return categorizedSchools;
+
     }, [students, grades, getCategoryForStudent]);
 
-    const schoolStudents = useMemo(() => {
-        if (!selectedSchool) return [];
-        return students.filter(s => s.School === selectedSchool);
-    }, [students, selectedSchool]);
-
-    const schoolData = useMemo(() => {
-        if (!selectedSchool) return null;
-        const schoolStudentIds = schoolStudents.map(s => s.StudentID);
-        const schoolGrades = grades.filter(g => schoolStudentIds.includes(g.StudentID));
-
-        const subjectData = {};
-        schoolGrades.forEach(grade => {
-            if (!subjectData[grade.Subject]) {
-                subjectData[grade.Subject] = { total: 0, count: 0 };
-            }
-            subjectData[grade.Subject].total += grade.Score;
-            subjectData[grade.Subject].count += 1;
-        });
-        
-        return Object.entries(subjectData).map(([subject, data]) => ({
-            name: subject,
-            Average: (data.total / data.count).toFixed(2)
-        }));
-
-    }, [grades, selectedSchool, schoolStudents]);
+    const SchoolCard = ({ school }) => (
+        <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+            <h3 className="text-2xl font-semibold text-gray-800 border-b pb-2 mb-4">{school.name}</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
+                <div className="bg-gray-50 p-4 rounded-lg text-center">
+                    <h4 className="text-sm font-medium text-gray-500 uppercase">Total Students</h4>
+                    <p className="text-3xl font-bold text-indigo-600 mt-1">{school.students.length}</p>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg text-center">
+                    <h4 className="text-sm font-medium text-gray-500 uppercase">Avg. Performance</h4>
+                    <p className="text-3xl font-bold text-indigo-600 mt-1">{school.averageScore}</p>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                    <h4 className="text-sm font-medium text-gray-500 uppercase text-center mb-2">Students by Grade</h4>
+                    <div className="text-xs text-center">
+                        {Object.entries(school.gradeLevels).map(([grade, count]) => (
+                            <span key={grade} className="inline-block bg-indigo-100 text-indigo-800 rounded-full px-2 py-1 mr-1 mb-1">
+                                Grade {grade}: <strong>{count}</strong>
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            </div>
+            <div>
+               <h4 className="text-lg font-semibold mb-2">Student List</h4>
+               <div className="max-h-72 overflow-y-auto border rounded-md">
+                   <table className="min-w-full">
+                       <thead className="bg-gray-50 sticky top-0">
+                           <tr>
+                               <th className="px-4 py-2 text-left text-sm">Name</th>
+                               <th className="px-4 py-2 text-left text-sm">Grade</th>
+                               <th className="px-4 py-2 text-left text-sm">Average Score</th>
+                           </tr>
+                       </thead>
+                       <tbody>
+                           {school.students.map(student => (
+                               <tr key={student.StudentID} className="border-b">
+                                   <td className="px-4 py-2">
+                                       <a href="#" onClick={(e) => { e.preventDefault(); onSelectStudent(student); }} className="text-indigo-600 hover:underline">{student['Given Name']} {student['Family Name']}</a>
+                                   </td>
+                                   <td className="px-4 py-2">{student.Grade}</td>
+                                   <td className="px-4 py-2 font-semibold">{student.averageScore}</td>
+                               </tr>
+                           ))}
+                       </tbody>
+                   </table>
+               </div>
+           </div>
+        </div>
+    );
 
     return (
         <div className="p-4 sm:p-6 lg:p-8">
             <header className="bg-white shadow-md rounded-lg p-6 mb-6">
                 <h1 className="text-3xl font-bold text-gray-900">School Center</h1>
-                <p className="text-gray-600 mt-1">Compare academic performance across different levels and schools.</p>
+                <p className="text-gray-600 mt-1">An overview of all schools, organized by level.</p>
             </header>
-            <div className="grid grid-cols-1 gap-6">
-                <div className="bg-white p-6 rounded-lg shadow-md">
-                    <h2 className="text-xl font-semibold mb-4">Average Grades by School Level</h2>
-                    <ResponsiveContainer width="100%" height={300}>
-                        <BarChart data={analyticsData}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="name" />
-                            <YAxis domain={[0, 100]}/>
-                            <Tooltip />
-                            <Legend />
-                            <Bar dataKey="Math" fill="#8884d8" />
-                            <Bar dataKey="Science" fill="#82ca9d" />
-                            <Bar dataKey="Khmer" fill="#ffc658" />
-                        </BarChart>
-                    </ResponsiveContainer>
-                </div>
-                 {selectedSchool && (
-                    <div className="bg-white p-6 rounded-lg shadow-md">
-                        <div className="flex justify-between items-start">
-                            <h2 className="text-xl font-semibold mb-4">Details for {selectedSchool}</h2>
-                            <button onClick={() => onSelectSchool(null)} className="text-sm text-gray-500 hover:text-gray-800">&times; Clear Selection</button>
-                        </div>
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <div>
-                                <h3 className="text-lg font-semibold mb-2">Average Grades</h3>
-                                <ResponsiveContainer width="100%" height={250}>
-                                    <BarChart data={schoolData}>
-                                        <CartesianGrid strokeDasharray="3 3" />
-                                        <XAxis dataKey="name" />
-                                        <YAxis domain={[0, 100]}/>
-                                        <Tooltip />
-                                        <Bar dataKey="Average" fill="#3b82f6" />
-                                    </BarChart>
-                                </ResponsiveContainer>
-                            </div>
-                             <div>
-                                <h3 className="text-lg font-semibold mb-2">Students ({schoolStudents.length})</h3>
-                                <div className="max-h-64 overflow-y-auto border rounded-md">
-                                    <table className="min-w-full">
-                                        <thead className="bg-gray-50 sticky top-0">
-                                            <tr>
-                                                <th className="px-4 py-2 text-left text-sm">Name</th>
-                                                <th className="px-4 py-2 text-left text-sm">Grade</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {schoolStudents.map(student => (
-                                                <tr key={student.StudentID} className="border-b">
-                                                    <td className="px-4 py-2">
-                                                        <a href="#" onClick={(e) => { e.preventDefault(); onSelectStudent(student); }} className="text-indigo-600 hover:underline">{student['Given Name']} {student['Family Name']}</a>
-                                                    </td>
-                                                    <td className="px-4 py-2">{student.Grade}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
+            <div>
+                <h2 className="text-3xl font-bold text-gray-700 border-b-2 border-indigo-300 pb-2 mb-4">Universities</h2>
+                {schoolData.university.length > 0 ? schoolData.university.map(school => <SchoolCard key={school.name} school={school} />) : <p className="text-gray-500">No university data available.</p>}
+            </div>
+            <div className="mt-8">
+                <h2 className="text-3xl font-bold text-gray-700 border-b-2 border-indigo-300 pb-2 mb-4">K-12 Schools</h2>
+                {schoolData.k12.length > 0 ? schoolData.k12.map(school => <SchoolCard key={school.name} school={school} />) : <p className="text-gray-500">No K-12 school data available.</p>}
             </div>
         </div>
     );
 };
 
 
-const ArchivePage = ({ archivedStudents, onRestore }) => (
+const ArchivePage = ({ archivedStudents, onRestore, onDelete, onViewProfile }) => (
      <div className="p-4 sm:p-6 lg:p-8 flex flex-col flex-grow min-h-0">
         <header className="bg-white shadow-md rounded-lg p-6 mb-6"><h1 className="text-3xl font-bold text-gray-900">Archived Students</h1></header>
         <main className="flex-grow overflow-y-auto bg-white shadow-md rounded-lg">
             <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50"><tr><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student ID</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grade</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Left</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th></tr></thead>
+                    <thead className="bg-gray-50"><tr><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student ID</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reason for Leaving</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Left</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th></tr></thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                         {archivedStudents.map(student => (
                             <tr key={student.StudentID}>
-                                <td className="px-6 py-4">{student.StudentID}</td><td className="px-6 py-4">{student['Given Name']} {student['Family Name']}</td><td className="px-6 py-4">{student.Grade}</td><td className="px-6 py-4">{student.DateLeft}</td>
-                                <td className="px-6 py-4"><button onClick={() => onRestore(student)} className="text-indigo-600 hover:underline">Restore</button></td>
+                                <td className="px-6 py-4">{student.StudentID}</td>
+                                <td className="px-6 py-4">
+                                    <a href="#" onClick={(e) => { e.preventDefault(); onViewProfile(student); }} className="font-semibold text-indigo-600 hover:underline">
+                                        {student['Given Name']} {student['Family Name']}
+                                    </a>
+                                </td>
+                                <td className="px-6 py-4">{student.ReasonLeft}</td>
+                                <td className="px-6 py-4">{student.DateLeft}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <button onClick={() => onRestore(student)} className="text-indigo-600 hover:underline">Restore</button>
+                                    <button onClick={() => onDelete(student)} className="text-red-600 hover:underline ml-4">Delete</button>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
@@ -579,48 +625,52 @@ const CurriculumPage = ({ curriculum, setCurriculum }) => {
                     <div key={schoolName} className="bg-white p-6 rounded-lg shadow-md">
                         <h2 className="text-2xl font-semibold text-gray-800 border-b pb-2 mb-4">{schoolName}</h2>
                         <div className="space-y-4">
-                            {Object.entries(schoolData).map(([gradeOrMajor, gradeOrMajorData]) => {
-                                // Check if this is a K-12 grade (array of subjects) or Uni major (object of years)
-                                if (Array.isArray(gradeOrMajorData)) {
-                                    return ( // K-12 Grade Level
-                                        <div key={gradeOrMajor}>
-                                            <label className="block text-lg font-semibold text-gray-700">Grade {gradeOrMajor}</label>
-                                            <textarea
-                                                className="w-full p-2 border rounded-md mt-1"
-                                                rows="2"
-                                                defaultValue={gradeOrMajorData.join(', ')}
-                                                onChange={(e) => handleSubjectChange([schoolName, gradeOrMajor], e.target.value)}
-                                            />
-                                        </div>
-                                    );
-                                } else {
-                                    return ( // University Major
-                                        <div key={gradeOrMajor} className="pl-4 border-l-2 border-indigo-200">
-                                            <h3 className="text-xl font-semibold text-gray-700">{gradeOrMajor}</h3>
-                                            <div className="space-y-3 mt-2">
-                                                {Object.entries(gradeOrMajorData).map(([year, yearData]) => (
-                                                    <div key={year} className="pl-4">
-                                                        <h4 className="text-lg font-semibold text-gray-600">{year}</h4>
+                            {Object.entries(schoolData).map(([campus, campusData]) => (
+                                <div key={campus} className="pl-4 border-l-2 border-gray-200">
+                                    <h3 className="text-xl font-semibold text-gray-700">{campus || 'Main Campus'}</h3>
+                                    <div className="space-y-3 mt-2">
+                                        {Object.entries(campusData).map(([gradeOrMajor, gradeOrMajorData]) => {
+                                            if (Array.isArray(gradeOrMajorData)) {
+                                                return (
+                                                    <div key={gradeOrMajor}>
+                                                        <label className="block text-lg font-semibold text-gray-700">Grade {gradeOrMajor}</label>
+                                                        <textarea
+                                                            className="w-full p-2 border rounded-md mt-1"
+                                                            rows="2"
+                                                            defaultValue={gradeOrMajorData.join(', ')}
+                                                            onChange={(e) => handleSubjectChange([schoolName, campus, gradeOrMajor], e.target.value)}
+                                                        />
+                                                    </div>
+                                                );
+                                            } else {
+                                                return (
+                                                    <div key={gradeOrMajor} className="pl-4 border-l-2 border-indigo-200">
+                                                        <h4 className="text-lg font-semibold text-gray-600">{gradeOrMajor}</h4>
                                                         <div className="space-y-2 mt-1">
-                                                            {Object.entries(yearData).map(([semester, subjects]) => (
-                                                                <div key={semester}>
-                                                                    <label className="block font-medium text-gray-500">{semester}</label>
-                                                                    <textarea
-                                                                        className="w-full p-2 border rounded-md mt-1"
-                                                                        rows="2"
-                                                                        defaultValue={subjects.join(', ')}
-                                                                        onChange={(e) => handleSubjectChange([schoolName, gradeOrMajor, year, semester], e.target.value)}
-                                                                    />
+                                                            {Object.entries(gradeOrMajorData).map(([year, yearData]) => (
+                                                                <div key={year} className="pl-4">
+                                                                    <h5 className="font-semibold text-gray-500">{year}</h5>
+                                                                    {Object.entries(yearData).map(([semester, subjects]) => (
+                                                                        <div key={semester} className="mt-1">
+                                                                            <label className="block font-medium text-gray-500">{semester}</label>
+                                                                            <textarea
+                                                                                className="w-full p-2 border rounded-md mt-1"
+                                                                                rows="2"
+                                                                                defaultValue={subjects.join(', ')}
+                                                                                onChange={(e) => handleSubjectChange([schoolName, campus, gradeOrMajor, year, semester], e.target.value)}
+                                                                            />
+                                                                        </div>
+                                                                    ))}
                                                                 </div>
                                                             ))}
                                                         </div>
                                                     </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    );
-                                }
-                            })}
+                                                );
+                                            }
+                                        })}
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 ))}
@@ -658,7 +708,7 @@ const ManualInstructionsPage = () => {
             <Section title="Student Profile Page">
                 <p>This page shows all information for a single student.</p>
                 <ul>
-                    <li><strong>Information Cards:</strong> Personal, Academic, and Guardian details are displayed in separate cards for clarity.</li>
+                    <li><strong>Information Cards:</strong> Personal, Academic, Guardian, and Financial details are displayed in separate cards for clarity.</li>
                     <li><strong>Edit Profile:</strong> Click the <strong>Edit</strong> button to open a form where you can update the student's information. From the edit form, you can also <strong>Archive</strong> the student.</li>
                     <li><strong>View Grades:</strong> Click the <strong>View Grades</strong> button to navigate to the <strong>Grades Center</strong> for that specific student.</li>
                     <li><strong>Follow-up History:</strong> This section shows a chronological list of all follow-ups. You can <strong>Add</strong>, <strong>Edit</strong>, or <strong>Delete</strong> follow-up records from here.</li>
@@ -730,7 +780,7 @@ const DetailItem = ({ icon, label, value }) => (
     </div>
 );
 
-const StudentProfilePage = ({ student, onOpenModal, setActiveTab, followUps, onDeleteFollowUp }) => {
+const StudentProfilePage = ({ student, onOpenModal, setActiveTab, followUps, onDeleteFollowUp, onBack }) => {
     if (!student) {
         return <div className="p-8 text-center text-gray-600">No student selected. Please go back to the dashboard.</div>;
     }
@@ -749,12 +799,15 @@ const StudentProfilePage = ({ student, onOpenModal, setActiveTab, followUps, onD
     return (
         <div className="p-4 sm:p-6 lg:p-8">
             <header className="bg-white shadow-md rounded-lg p-6 mb-6">
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-start">
                     <div>
+                        <button onClick={onBack} className="text-sm text-indigo-600 hover:underline flex items-center gap-1 mb-2">
+                            <ArrowLeft size={14} /> Back to Dashboard
+                        </button>
                         <h1 className="text-3xl font-bold text-gray-900">{student['Given Name']} {student['Family Name']}</h1>
                         <p className="text-gray-600">Student Profile</p>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 mt-8">
                         <button onClick={() => onOpenModal('edit', student)} className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 flex items-center gap-2"><Edit size={16}/> Edit</button>
                         <button onClick={() => { setActiveTab('grades'); }} className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 flex items-center gap-2"><Eye size={16}/> View Grades</button>
                     </div>
@@ -770,22 +823,42 @@ const StudentProfilePage = ({ student, onOpenModal, setActiveTab, followUps, onD
                             <DetailItem icon={<User size={16} className="text-gray-400"/>} label="Sex" value={student.Sex === 'M' ? 'Male' : 'Female'} />
                             <DetailItem icon={<Calendar size={16} className="text-gray-400"/>} label="Date of Birth" value={student.DOB} />
                             <DetailItem icon={<Calendar size={16} className="text-gray-400"/>} label="Enrollment Date" value={student.EnrollmentDate} />
+                            <DetailItem icon={<MapPin size={16} className="text-gray-400"/>} label="Location" value={student.Location} />
                         </dl>
                     </div>
                     <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">Academic Info</h3>
+                        <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">Academic & Financial Info</h3>
                         <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6">
-                            <DetailItem icon={<School size={16} className="text-gray-400"/>} label="School" value={student.School} />
+                            <DetailItem icon={<School size={16} className="text-gray-400"/>} label="School" value={`${student.School.name}${student.School.campus ? ` (${student.School.campus})` : ''}`} />
                             <DetailItem icon={<GraduationCap size={16} className="text-gray-400"/>} label="Grade" value={student.Grade} />
                             <DetailItem icon={<Briefcase size={16} className="text-gray-400"/>} label="Major" value={student.Major} />
-                            <DetailItem icon={<DollarSign size={16} className="text-gray-400"/>} label="School Fee" value={`$${parseFloat(student.FeeAmount || 0).toFixed(2)} / ${student.FeeFrequency}`} />
+                             <div className="sm:col-span-2">
+                                <dt className="text-sm font-medium text-gray-500 flex items-center gap-2">
+                                    <DollarSign size={16} className="text-gray-400" /> Financial Records
+                                </dt>
+                                {(student.financials || []).length > 0 ? (student.financials || []).map((item, index) => (
+                                    <dd key={index} className="mt-2 text-md text-gray-900 pl-4 border-l ml-2 py-1">
+                                         <p className="font-semibold">{item.item} <span className="text-xs bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full">{item.category}</span></p>
+                                         <p className="text-sm">${parseFloat(item.amount || 0).toFixed(2)} ({item.frequency})</p>
+                                         <p className="text-xs text-gray-500">Date: {item.date || 'N/A'}</p>
+                                    </dd>
+                                )) : <dd className="mt-1 text-md text-gray-900 pl-6">No financial records.</dd>}
+                            </div>
                         </dl>
                     </div>
-                       <div className="bg-white p-6 rounded-lg shadow-md">
+                        <div className="bg-white p-6 rounded-lg shadow-md">
                         <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">Guardian Contact</h3>
                         <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6">
-                            <DetailItem icon={<User size={16} className="text-gray-400"/>} label="Guardian Name" value={student['Guardian Name']} />
-                            <DetailItem icon={<Phone size={16} className="text-gray-400"/>} label="Guardian Contact" value={student['Guardian Contact']} />
+                           {student.guardians && student.guardians.length > 0 ? (
+                                <>
+                                    <DetailItem icon={<User size={16} className="text-gray-400"/>} label="Guardian Name" value={student.guardians[0].name} />
+                                    <DetailItem icon={<Phone size={16} className="text-gray-400"/>} label="Contact" value={student.guardians[0].contact} />
+                                    <DetailItem icon={<Briefcase size={16} className="text-gray-400"/>} label="Job" value={student.guardians[0].job} />
+                                    <DetailItem icon={<DollarSign size={16} className="text-gray-400"/>} label="Income" value={`$${student.guardians[0].income}`} />
+                                </>
+                            ) : (
+                                <p className="col-span-2 text-gray-500">No guardian information available.</p>
+                            )}
                         </dl>
                     </div>
                 </div>
@@ -834,6 +907,115 @@ const StudentProfilePage = ({ student, onOpenModal, setActiveTab, followUps, onD
     );
 };
 
+const ArchivedProfilePage = ({ student, setActiveTab, followUps }) => {
+    if (!student) {
+        return <div className="p-8 text-center text-gray-600">No student selected.</div>;
+    }
+
+    const FollowUpDetail = ({ label, rating, details }) => {
+        const color = rating === 'Good' ? 'text-green-600' : rating === 'Average' ? 'text-yellow-600' : 'text-red-600';
+        return (
+            <div>
+                <strong>{label}:</strong>
+                <span className={`font-semibold ml-2 ${color}`}>{rating}</span>
+                {details && <p className="text-sm text-gray-600 pl-4">- {details}</p>}
+            </div>
+        );
+    };
+
+    return (
+        <div className="p-4 sm:p-6 lg:p-8">
+             <header className="bg-white shadow-md rounded-lg p-6 mb-6">
+                <div className="flex justify-between items-center">
+                    <div>
+                        <h1 className="text-3xl font-bold text-gray-900">{student['Given Name']} {student['Family Name']}</h1>
+                        <p className="text-red-600 font-semibold">Archived Student</p>
+                    </div>
+                    <button onClick={() => setActiveTab('archive')} className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 flex items-center gap-2"><ArrowLeft size={16}/> Back to Archive</button>
+                </div>
+                <div className="mt-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md">
+                    <p><strong>Date Left:</strong> {student.DateLeft}</p>
+                    <p><strong>Reason:</strong> {student.ReasonLeft}</p>
+                </div>
+            </header>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-1 space-y-6">
+                     <div className="bg-white p-6 rounded-lg shadow-md">
+                        <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">Personal Details</h3>
+                        <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6">
+                            <DetailItem icon={<User size={16} className="text-gray-400"/>} label="Student ID" value={student.StudentID} />
+                            <DetailItem icon={<User size={16} className="text-gray-400"/>} label="Age" value={student.Age} />
+                            <DetailItem icon={<User size={16} className="text-gray-400"/>} label="Sex" value={student.Sex === 'M' ? 'Male' : 'Female'} />
+                            <DetailItem icon={<Calendar size={16} className="text-gray-400"/>} label="Date of Birth" value={student.DOB} />
+                            <DetailItem icon={<Calendar size={16} className="text-gray-400"/>} label="Enrollment Date" value={student.EnrollmentDate} />
+                            <DetailItem icon={<MapPin size={16} className="text-gray-400"/>} label="Location" value={student.Location} />
+                        </dl>
+                    </div>
+                    <div className="bg-white p-6 rounded-lg shadow-md">
+                        <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">Academic & Financial Info</h3>
+                        <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6">
+                            <DetailItem icon={<School size={16} className="text-gray-400"/>} label="School" value={`${student.School.name}${student.School.campus ? ` (${student.School.campus})` : ''}`} />
+                            <DetailItem icon={<GraduationCap size={16} className="text-gray-400"/>} label="Grade" value={student.Grade} />
+                            <DetailItem icon={<Briefcase size={16} className="text-gray-400"/>} label="Major" value={student.Major} />
+                             <div className="sm:col-span-2">
+                                <dt className="text-sm font-medium text-gray-500 flex items-center gap-2">
+                                    <DollarSign size={16} className="text-gray-400" /> Financial Records
+                                </dt>
+                                {(student.financials || []).length > 0 ? (student.financials || []).map((item, index) => (
+                                    <dd key={index} className="mt-2 text-md text-gray-900 pl-4 border-l ml-2 py-1">
+                                         <p className="font-semibold">{item.item} <span className="text-xs bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full">{item.category}</span></p>
+                                         <p className="text-sm">${parseFloat(item.amount || 0).toFixed(2)} ({item.frequency})</p>
+                                         <p className="text-xs text-gray-500">Date: {item.date || 'N/A'}</p>
+                                    </dd>
+                                )) : <dd className="mt-1 text-md text-gray-900 pl-6">No financial records.</dd>}
+                            </div>
+                        </dl>
+                    </div>
+                        <div className="bg-white p-6 rounded-lg shadow-md">
+                        <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">Guardian Contact</h3>
+                        <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6">
+                            <DetailItem icon={<User size={16} className="text-gray-400"/>} label="Guardian Name" value={student['Guardian Name']} />
+                            <DetailItem icon={<Phone size={16} className="text-gray-400"/>} label="Guardian Contact" value={student['Guardian Contact']} />
+                        </dl>
+                    </div>
+                </div>
+                <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
+                    <div className="flex justify-between items-center border-b pb-2 mb-4">
+                        <h3 className="text-lg font-semibold text-gray-800">Follow-up History</h3>
+                    </div>
+                    <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+                        {followUps.length > 0 ? followUps.slice().reverse().map((followUp, index) => (
+                            <div key={index} className="bg-gray-50 p-4 rounded-md border">
+                                <div className="flex justify-between items-start">
+                                    <p className="text-sm text-gray-500">{new Date(followUp.date).toLocaleString()}</p>
+                                </div>
+                                <div className="prose prose-sm max-w-none mt-2">
+                                    <h4>Well-being Progress</h4>
+                                    <FollowUpDetail label="Physical Health" {...followUp.physicalHealth} />
+                                    <FollowUpDetail label="Social Interaction" {...followUp.socialInteraction} />
+                                    <FollowUpDetail label="Home Life" {...followUp.homeLife} />
+                                    
+                                    <h4 className="mt-4">Risk Factors</h4>
+                                    {(followUp.riskFactors && followUp.riskFactors.length > 0) ? (
+                                        <>
+                                            <p><strong>Identified:</strong> {followUp.riskFactors.join(', ')}</p>
+                                            {followUp.riskFactorsDetails && <p className="text-sm text-gray-600 whitespace-pre-wrap"><strong>Details:</strong> {followUp.riskFactorsDetails}</p>}
+                                        </>
+                                    ) : <p>None reported.</p>}
+                                    
+                                    <h4 className="mt-4">Notes & Recommendations</h4>
+                                    {followUp.notes && <p className="text-sm text-gray-600 whitespace-pre-wrap"><strong>Notes:</strong> {followUp.notes}</p>}
+                                    {followUp.recommendations && <p className="text-sm text-gray-600 whitespace-pre-wrap"><strong>Recommendations:</strong> {followUp.recommendations}</p>}
+                                </div>
+                            </div>
+                        )) : <p className="text-center text-gray-500 py-4">No follow-up records found.</p>}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 // ===================================================================================
 // --- MODAL COMPONENTS (components/modals.js) ---
 // All components that appear as modal dialogs are grouped here.
@@ -857,50 +1039,170 @@ const Modal = ({ children, title, onClose, maxWidth = 'max-w-3xl' }) => {
 }
 
 const StudentFormModal = ({ student, onReview, onClose, onArchive }) => {
-    const [formData, setFormData] = useState(student || { 'Given Name': '', 'Family Name': '', DOB: '', Sex: '', Grade: '', School: '', FeeAmount: '', FeeFrequency: 'Monthly', 'Guardian Name': '', 'Guardian Contact': '', 'Major': '', 'Comments': '', 'EnrollmentDate': '' });
+    const [formData, setFormData] = useState(student || { 'StudentID': '', 'Given Name': '', 'Family Name': '', DOB: '', Sex: '', Grade: '', School: { name: '', campus: '' }, financials: [{ category: 'Education', item: '', amount: '', frequency: 'Monthly', date: '' }], guardians: [{ name: '', relationship: '', contact: '', job: '', income: '' }], 'Major': '', 'Comments': '', 'EnrollmentDate': '', 'Location': '' });
 
-    const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        if (name === 'schoolName' || name === 'schoolCampus') {
+            const field = name === 'schoolName' ? 'name' : 'campus';
+            setFormData(prev => ({ ...prev, School: { ...prev.School, [field]: value } }));
+        } else {
+            setFormData({ ...formData, [name]: value });
+        }
+    };
+    
+    const handleFinancialChange = (index, field, value) => {
+        const newFinancials = [...(formData.financials || [])];
+        newFinancials[index][field] = value;
+        setFormData({ ...formData, financials: newFinancials });
+    };
+
+    const addFinancial = () => {
+        const newFinancials = [...(formData.financials || []), { category: 'Education', item: '', amount: '', frequency: 'Monthly', date: new Date().toISOString().split('T')[0] }];
+        setFormData({ ...formData, financials: newFinancials });
+    };
+
+    const removeFinancial = (index) => {
+        const newFinancials = (formData.financials || []).filter((_, i) => i !== index);
+        setFormData({ ...formData, financials: newFinancials });
+    };
+
+    const handleGuardianChange = (index, field, value) => {
+        const newGuardians = [...(formData.guardians || [])];
+        newGuardians[index][field] = value;
+        setFormData({ ...formData, guardians: newGuardians });
+    };
+
+    const addGuardian = () => {
+        const newGuardians = [...(formData.guardians || []), { name: '', relationship: '', contact: '', job: '', income: '' }];
+        setFormData({ ...formData, guardians: newGuardians });
+    };
+
+    const removeGuardian = (index) => {
+        const newGuardians = (formData.guardians || []).filter((_, i) => i !== index);
+        setFormData({ ...formData, guardians: newGuardians });
+    };
+
     const handleSubmit = (e) => { e.preventDefault(); onReview(formData); };
+
+    const formFields = Object.keys(formData).filter(k => {
+        const fieldsToExclude = ['StudentID', 'Age', 'DateLeft', 'financials', 'School', 'guardians'];
+        return !fieldsToExclude.includes(k);
+    });
 
     return (
         <Modal title={student ? "Edit Student" : "Add New Student"} onClose={onClose}>
             <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-                    {Object.keys(formData).filter(k => !['StudentID', 'Age', 'DateLeft', 'Monthly'].includes(k)).map(key => {
-                        if (key === 'FeeAmount') {
-                            return (
-                                <div key="fee-group" className="md:col-span-2 grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700">Fee Amount</label>
-                                        <input type="number" name="FeeAmount" value={formData.FeeAmount || ''} onChange={handleChange} className="mt-1 block w-full p-2 border rounded-md" />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700">Fee Frequency</label>
-                                        <select name="FeeFrequency" value={formData.FeeFrequency || 'Monthly'} onChange={handleChange} className="mt-1 block w-full p-2 border rounded-md">
-                                            <option>Monthly</option>
-                                            <option>Quarterly</option>
-                                            <option>Semester</option>
-                                            <option>Yearly</option>
-                                        </select>
-                                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Student ID</label>
+                        <input 
+                            type="text" 
+                            name="StudentID" 
+                            value={formData.StudentID || ''} 
+                            onChange={handleChange} 
+                            className="mt-1 block w-full p-2 border rounded-md bg-gray-100 focus:bg-white"
+                            disabled={!!student} // Disable if editing
+                            required 
+                        />
+                    </div>
+                    <div className="md:col-span-1 grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">School Name</label>
+                            <input type="text" name="schoolName" value={formData.School.name || ''} onChange={handleChange} className="mt-1 block w-full p-2 border rounded-md" />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">Campus/Branch</label>
+                            <input type="text" name="schoolCampus" value={formData.School.campus || ''} onChange={handleChange} className="mt-1 block w-full p-2 border rounded-md" />
+                        </div>
+                    </div>
+                    {formFields.map(key => (
+                        <div key={key} className={key === 'Comments' ? 'md:col-span-2' : ''}>
+                            <label className="block text-sm font-medium text-gray-700">{key}</label>
+                            {key === 'Comments' ? (
+                                <textarea name={key} value={formData[key] || ''} onChange={handleChange} className="mt-1 block w-full p-2 border rounded-md" rows="3" />
+                            ) : (
+                                <input type={key === 'DOB' || key === 'EnrollmentDate' ? 'date' : 'text'}
+                                       name={key} value={formData[key] || ''} onChange={handleChange}
+                                       className="mt-1 block w-full p-2 border rounded-md" />
+                            )}
+                        </div>
+                    ))}
+                    <div className="md:col-span-2">
+                        <h3 className="text-lg font-semibold text-gray-800 border-b pb-1 mb-2">Guardians</h3>
+                        {(formData.guardians || []).map((guardian, index) => (
+                            <div key={index} className="grid grid-cols-12 gap-2 mb-2 p-2 border rounded-md">
+                                <div className="col-span-6">
+                                    <label className="block text-sm font-medium text-gray-700">Name</label>
+                                    <input type="text" value={guardian.name} onChange={(e) => handleGuardianChange(index, 'name', e.target.value)} className="mt-1 block w-full p-2 border rounded-md" />
                                 </div>
-                            )
-                        }
-                        if (key === 'FeeFrequency') return null; // Handled by FeeAmount
-                        
-                        return (
-                            <div key={key} className={key === 'Comments' ? 'md:col-span-2' : ''}>
-                                <label className="block text-sm font-medium text-gray-700">{key}</label>
-                                {key === 'Comments' ? (
-                                    <textarea name={key} value={formData[key] || ''} onChange={handleChange} className="mt-1 block w-full p-2 border rounded-md" rows="3" />
-                                ) : (
-                                    <input type={key === 'DOB' || key === 'EnrollmentDate' ? 'date' : 'text'}
-                                           name={key} value={formData[key] || ''} onChange={handleChange}
-                                           className="mt-1 block w-full p-2 border rounded-md" />
-                                )}
+                                <div className="col-span-6">
+                                    <label className="block text-sm font-medium text-gray-700">Relationship</label>
+                                    <input type="text" value={guardian.relationship} onChange={(e) => handleGuardianChange(index, 'relationship', e.target.value)} className="mt-1 block w-full p-2 border rounded-md" />
+                                </div>
+                                <div className="col-span-6">
+                                    <label className="block text-sm font-medium text-gray-700">Contact</label>
+                                    <input type="text" value={guardian.contact} onChange={(e) => handleGuardianChange(index, 'contact', e.target.value)} className="mt-1 block w-full p-2 border rounded-md" />
+                                </div>
+                                <div className="col-span-6">
+                                    <label className="block text-sm font-medium text-gray-700">Job</label>
+                                    <input type="text" value={guardian.job} onChange={(e) => handleGuardianChange(index, 'job', e.target.value)} className="mt-1 block w-full p-2 border rounded-md" />
+                                </div>
+                                <div className="col-span-11">
+                                    <label className="block text-sm font-medium text-gray-700">Monthly Income ($)</label>
+                                    <input type="number" value={guardian.income} onChange={(e) => handleGuardianChange(index, 'income', e.target.value)} className="mt-1 block w-full p-2 border rounded-md" />
+                                </div>
+                                <div className="col-span-1 flex items-end">
+                                    <button type="button" onClick={() => removeGuardian(index)} className="p-2 text-red-500 hover:text-red-700 mt-6"><Trash2 size={16}/></button>
+                                </div>
                             </div>
-                        )
-                    })}
+                        ))}
+                        <button type="button" onClick={addGuardian} className="text-sm text-indigo-600 hover:underline">+ Add Guardian</button>
+                    </div>
+                    <div className="md:col-span-2">
+                        <h3 className="text-lg font-semibold text-gray-800 border-b pb-1 mb-2">Financial Records</h3>
+                        {(formData.financials || []).map((item, index) => (
+                            <div key={index} className="grid grid-cols-12 gap-2 mb-2 p-2 border rounded-md items-center">
+                                <div className="col-span-full md:col-span-6">
+                                    <label className="block text-sm font-medium text-gray-700">Item Description</label>
+                                    <input type="text" value={item.item} onChange={(e) => handleFinancialChange(index, 'item', e.target.value)} className="mt-1 block w-full p-2 border rounded-md" placeholder="e.g., Tuition Fee, Books" />
+                                </div>
+                                <div className="col-span-6 md:col-span-3">
+                                    <label className="block text-sm font-medium text-gray-700">Category</label>
+                                    <select value={item.category} onChange={(e) => handleFinancialChange(index, 'category', e.target.value)} className="mt-1 block w-full p-2 border rounded-md">
+                                        <option>Education</option>
+                                        <option>Supplies</option>
+                                        <option>Transportation</option>
+                                        <option>Healthcare</option>
+                                        <option>Other</option>
+                                    </select>
+                                </div>
+                                <div className="col-span-6 md:col-span-3">
+                                    <label className="block text-sm font-medium text-gray-700">Amount ($)</label>
+                                    <input type="number" value={item.amount} onChange={(e) => handleFinancialChange(index, 'amount', e.target.value)} className="mt-1 block w-full p-2 border rounded-md" />
+                                </div>
+                                <div className="col-span-6 md:col-span-4">
+                                    <label className="block text-sm font-medium text-gray-700">Frequency</label>
+                                    <select value={item.frequency} onChange={(e) => handleFinancialChange(index, 'frequency', e.target.value)} className="mt-1 block w-full p-2 border rounded-md">
+                                        <option>One-time</option>
+                                        <option>Monthly</option>
+                                        <option>Quarterly</option>
+                                        <option>Semester</option>
+                                        <option>Yearly</option>
+                                    </select>
+                                </div>
+                                <div className="col-span-6 md:col-span-4">
+                                     <label className="block text-sm font-medium text-gray-700">Date</label>
+                                     <input type="date" value={item.date} onChange={(e) => handleFinancialChange(index, 'date', e.target.value)} className="mt-1 block w-full p-2 border rounded-md" />
+                                </div>
+                                <div className="col-span-11 md:col-span-3"></div>
+                                <div className="col-span-1 flex items-end">
+                                    <button type="button" onClick={() => removeFinancial(index)} className="p-2 text-red-500 hover:text-red-700 mt-6"><Trash2 size={16}/></button>
+                                </div>
+                            </div>
+                        ))}
+                        <button type="button" onClick={addFinancial} className="text-sm text-indigo-600 hover:underline">+ Add Financial Record</button>
+                    </div>
                 </div>
                 <div className="mt-6 flex justify-between items-center">
                     {student && <button type="button" onClick={onArchive} className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600">Archive Student</button>}
@@ -917,9 +1219,41 @@ const StudentFormModal = ({ student, onReview, onClose, onArchive }) => {
 const ReviewModal = ({ data, onConfirm, onEdit, onClose }) => (
     <Modal title="Review Student Details" onClose={onClose} maxWidth="max-w-lg">
         <div className="space-y-2 mb-6">
-            {Object.entries(data).map(([key, value]) => (
-                <p key={key}><strong className="font-medium text-gray-600">{key}:</strong> {value || 'N/A'}</p>
-            ))}
+            {Object.entries(data).map(([key, value]) => {
+                if (key === 'financials') {
+                    return (
+                        <div key={key}>
+                            <strong className="font-medium text-gray-600">Financial Records:</strong>
+                            {(value || []).map((item, index) => (
+                                <div key={index} className="pl-4 text-sm mt-1">
+                                    <p className="font-semibold">{item.item} ({item.category})</p>
+                                    <p>${item.amount} / {item.frequency} (Date: {item.date || 'N/A'})</p>
+                                </div>
+                            ))}
+                        </div>
+                    )
+                }
+                if (key === 'School') {
+                    return <p key={key}><strong className="font-medium text-gray-600">School:</strong> {value.name}{value.campus && ` (${value.campus})`}</p>
+                }
+                if (key === 'guardians') {
+                    return (
+                        <div key={key}>
+                            <strong className="font-medium text-gray-600">Guardians:</strong>
+                            {(value || []).map((guardian, index) => (
+                                <div key={index} className="pl-4">
+                                    <p>{guardian.name} ({guardian.relationship})</p>
+                                    <p className="text-sm text-gray-500">{guardian.job} - ${guardian.income}/month</p>
+                                    <p className="text-sm text-gray-500">{guardian.contact}</p>
+                                </div>
+                            ))}
+                        </div>
+                    )
+                }
+                return (
+                    <p key={key}><strong className="font-medium text-gray-600">{key}:</strong> {String(value) || 'N/A'}</p>
+                )
+            })}
         </div>
         <div className="mt-6 flex justify-end gap-4">
             <button type="button" onClick={onEdit} className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400">Go Back & Edit</button>
@@ -1083,7 +1417,7 @@ const FilterModal = ({ currentFilters, onApply, onClose, allStudents }) => {
     const [filters, setFilters] = useState(currentFilters);
     const options = useMemo(() => ({
         grades: [...new Set(allStudents.map(s => s.Grade).filter(Boolean))].sort(),
-        schools: [...new Set(allStudents.map(s => s.School).filter(Boolean))].sort(),
+        schools: [...new Set(allStudents.map(s => s.School.name).filter(Boolean))].sort(),
         sexes: [...new Set(allStudents.map(s => s.Sex).filter(Boolean))].sort(),
         ages: [...new Set(allStudents.map(s => s.Age).filter(a => a !== 'N/A'))].sort((a, b) => a - b),
     }), [allStudents]);
@@ -1138,10 +1472,10 @@ const AddGradesModal = ({ student, curriculum, onAddGrades, onClose }) => {
 
     const subjects = useMemo(() => {
         if (!isUniversity) {
-            return curriculum[student.School]?.[student.Grade] || [];
+            return curriculum[student.School.name]?.[student.School.campus]?.[student.Grade] || [];
         }
         if (year && semester) {
-            return curriculum[student.School]?.[student.Major]?.[year]?.[semester] || [];
+            return curriculum[student.School.name]?.[student.School.campus]?.[student.Major]?.[year]?.[semester] || [];
         }
         return [];
     }, [isUniversity, student, curriculum, year, semester]);
@@ -1222,6 +1556,48 @@ const ConfirmationModal = ({ title, message, onConfirm, onClose }) => {
     );
 };
 
+const ArchiveReasonModal = ({ onConfirm, onClose }) => {
+    const [reason, setReason] = useState('');
+
+    const handleSubmit = () => {
+        if (reason.trim()) {
+            onConfirm(reason);
+        }
+    };
+
+    return (
+        <Modal title="Reason for Archiving" onClose={onClose} maxWidth="max-w-md">
+            <div className="space-y-4">
+                <p>Please provide a reason for archiving this student.</p>
+                <textarea
+                    value={reason}
+                    onChange={(e) => setReason(e.target.value)}
+                    className="w-full p-2 border rounded-md"
+                    rows="3"
+                    placeholder="e.g., Graduated, Moved to another province, etc."
+                />
+            </div>
+            <div className="mt-6 flex justify-end gap-4">
+                <button onClick={onClose} className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400">Cancel</button>
+                <button onClick={handleSubmit} disabled={!reason.trim()} className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 disabled:bg-yellow-300">Confirm Archive</button>
+            </div>
+        </Modal>
+    );
+};
+
+const calculateMonthlyEquivalent = (amount, frequency) => {
+    const numericAmount = parseFloat(amount) || 0;
+    switch (frequency) {
+        case 'Quarterly': return numericAmount / 3;
+        case 'Semester': return numericAmount / 6;
+        case 'Yearly': return numericAmount / 12;
+        case 'One-time': return 0; // One-time costs don't contribute to monthly equivalent
+        case 'Monthly':
+        default:
+            return numericAmount;
+    }
+};
+
 
 // ===================================================================================
 // --- MAIN APP COMPONENT ---
@@ -1239,7 +1615,7 @@ export default function App() {
     const ALL_COLUMNS = useMemo(() => [
         { key: 'StudentID', label: 'Student ID' }, { key: 'Given Name', label: 'First Name' }, { key: 'Family Name', label: 'Family Name' },
         { key: 'Age', label: 'Age' }, { key: 'Sex', label: 'Sex' }, { key: 'Grade', label: 'Grade' },
-        { key: 'School', label: 'School' }, { key: 'Fee', label: 'Fee' }, { key: 'EnrollmentDate', label: 'Enrolled' }
+        { key: 'School', label: 'School' }, { key: 'MonthlyCosts', label: 'Monthly Costs' }, { key: 'EnrollmentDate', label: 'Enrolled' }, { key: 'Comments', label: 'Comments' }
     ], []);
 
     const [visibleColumns, setVisibleColumns] = useStickyState(
@@ -1250,9 +1626,9 @@ export default function App() {
     const [activeTab, setActiveTab] = useState('dashboard');
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState(null);
-    const [selectedSchool, setSelectedSchool] = useState(null);
     const [modal, setModal] = useState(null); 
     const [reviewData, setReviewData] = useState(null);
+    const [studentToDelete, setStudentToDelete] = useState(null);
     
     const [filters, setFilters] = useState({
         search: '', grade: '', school: '', sex: '', age: '', status: ''
@@ -1268,6 +1644,28 @@ export default function App() {
             Age: s.DOB ? new Date().getFullYear() - new Date(s.DOB).getFullYear() : 'N/A'
         }));
     }, [students]);
+    
+    const schoolAverages = useMemo(() => {
+        const averages = {};
+        const subjectData = {};
+
+        grades.forEach(grade => {
+            const student = students.find(s => s.StudentID === grade.StudentID);
+            if (!student) return;
+
+            const key = `${student.School.name}-${student.Grade}-${grade.Subject}`;
+            if (!subjectData[key]) {
+                subjectData[key] = { total: 0, count: 0 };
+            }
+            subjectData[key].total += grade.Score;
+            subjectData[key].count++;
+        });
+
+        for (const key in subjectData) {
+            averages[key] = subjectData[key].total / subjectData[key].count;
+        }
+        return averages;
+    }, [grades, students]);
 
     const getCategoryForStudent = (student) => {
         const grade = student.Grade ? String(student.Grade).toLowerCase() : '';
@@ -1280,29 +1678,17 @@ export default function App() {
         }
         return 'other';
     };
-    
-    const calculateMonthlyEquivalent = (amount, frequency) => {
-        const numericAmount = parseFloat(amount) || 0;
-        switch (frequency) {
-            case 'Quarterly': return numericAmount / 3;
-            case 'Semester': return numericAmount / 6;
-            case 'Yearly': return numericAmount / 12;
-            case 'Monthly':
-            default:
-                return numericAmount;
-        }
-    };
 
     const filteredAndSortedStudents = useMemo(() => {
         let processedData = studentsWithAge
             .filter(student => category === 'all' || getCategoryForStudent(student) === category)
             .filter(student => {
                 const fullName = `${student['Given Name'] || ''} ${student['Family Name'] || ''}`.toLowerCase();
-                const isComplete = student.School && student.Age !== 'N/A' && student.FeeAmount;
+                const isComplete = student.School && student.Age !== 'N/A' && (student.financials || []).length > 0;
                 return (
                     fullName.includes(filters.search.toLowerCase()) &&
                     (!filters.grade || student.Grade === filters.grade) &&
-                    (!filters.school || student.School === filters.school) &&
+                    (!filters.school || student.School.name === filters.school) &&
                     (!filters.sex || student.Sex === filters.sex) &&
                     (!filters.age || student.Age.toString() === filters.age) &&
                     (!filters.status || (filters.status === 'complete' && isComplete) || (filters.status === 'incomplete' && !isComplete))
@@ -1311,21 +1697,20 @@ export default function App() {
 
         if (sort.column) {
             processedData.sort((a, b) => {
-                let valA = a[sort.column] || '';
-                let valB = b[sort.column] || '';
+                let valA, valB;
 
-                if (sort.column === 'Fee') {
-                    valA = calculateMonthlyEquivalent(a.FeeAmount, a.FeeFrequency);
-                    valB = calculateMonthlyEquivalent(b.FeeAmount, b.FeeFrequency);
+                if (sort.column === 'MonthlyCosts') {
+                    valA = (a.financials || []).reduce((sum, item) => sum + calculateMonthlyEquivalent(item.amount, item.frequency), 0);
+                    valB = (b.financials || []).reduce((sum, item) => sum + calculateMonthlyEquivalent(item.amount, item.frequency), 0);
                 } else if (sort.column === 'Age') {
-                    valA = parseFloat(valA) || 0; 
-                    valB = parseFloat(valB) || 0;
+                    valA = parseFloat(a[sort.column]) || 0; 
+                    valB = parseFloat(b[sort.column]) || 0;
                 } else if (sort.column === 'EnrollmentDate') {
-                    valA = new Date(valA); 
-                    valB = new Date(valB);
+                    valA = new Date(a[sort.column]); 
+                    valB = new Date(b[sort.column]);
                 } else {
-                    valA = String(valA).toLowerCase(); 
-                    valB = String(valB).toLowerCase();
+                    valA = String(a[sort.column] || '').toLowerCase(); 
+                    valB = String(b[sort.column] || '').toLowerCase();
                 }
 
                 if (valA < valB) return sort.direction === 'asc' ? -1 : 1;
@@ -1343,15 +1728,19 @@ export default function App() {
 
     const totals = useMemo(() => ({
         count: filteredAndSortedStudents.length,
-        fees: filteredAndSortedStudents.reduce((sum, s) => sum + calculateMonthlyEquivalent(s.FeeAmount, s.FeeFrequency), 0)
+        costs: filteredAndSortedStudents.reduce((sum, s) => {
+            const studentTotal = (s.financials || []).reduce((studentSum, item) => {
+                return studentSum + calculateMonthlyEquivalent(item.amount, item.frequency);
+            }, 0);
+            return sum + studentTotal;
+        }, 0)
     }), [filteredAndSortedStudents]);
 
 
     // --- Handlers ---
     const handleSort = (columnKey) => setSort(s => ({ column: columnKey, direction: s.column === columnKey && s.direction === 'asc' ? 'desc' : 'asc' }));
     
-    const handleSelectSchool = (schoolName) => {
-        setSelectedSchool(schoolName);
+    const handleSelectSchool = () => {
         setActiveTab('school-center');
     };
 
@@ -1367,21 +1756,29 @@ export default function App() {
 
     const handleSaveStudent = () => {
         const formData = reviewData;
-        if (modal === 'edit') {
-            setStudents(students.map(s => s.StudentID === formData.StudentID ? formData : s));
-            setSelectedStudent(formData);
+        const studentIndex = students.findIndex(s => s.StudentID === formData.StudentID);
+
+        if (studentIndex > -1) {
+            // Student exists, so update it.
+            const updatedStudents = [...students];
+            updatedStudents[studentIndex] = formData;
+            setStudents(updatedStudents);
+            if (selectedStudent?.StudentID === formData.StudentID) {
+                setSelectedStudent(formData);
+            }
         } else {
-            const newId = `CPB${Math.floor(10000 + Math.random() * 90000)}`;
-            setStudents([...students, { ...formData, StudentID: newId }]);
+            // Student does not exist, so add a new one.
+            setStudents([...students, formData]);
         }
         setModal(null);
         setReviewData(null);
     };
     
-    const handleArchiveStudent = () => {
+    const handleArchiveStudent = (reason) => {
         const studentToArchive = {
             ...selectedStudent,
-            DateLeft: new Date().toISOString().split('T')[0]
+            DateLeft: new Date().toISOString().split('T')[0],
+            ReasonLeft: reason,
         };
         setArchivedStudents([...archivedStudents, studentToArchive]);
         setStudents(students.filter(s => s.StudentID !== selectedStudent.StudentID));
@@ -1391,9 +1788,22 @@ export default function App() {
     };
     
     const handleRestoreStudent = (studentToRestore) => {
-        const { DateLeft, ...restoredStudent } = studentToRestore;
+        const { DateLeft, ReasonLeft, ...restoredStudent } = studentToRestore;
         setStudents([...students, restoredStudent]);
         setArchivedStudents(archivedStudents.filter(s => s.StudentID !== studentToRestore.StudentID));
+    };
+    
+    const handlePermanentDelete = () => {
+        if (!studentToDelete) return;
+        setArchivedStudents(prev => prev.filter(s => s.StudentID !== studentToDelete.StudentID));
+        setGrades(prev => prev.filter(g => g.StudentID !== studentToDelete.StudentID));
+        setFollowUps(prev => {
+            const newFollowUps = { ...prev };
+            delete newFollowUps[studentToDelete.StudentID];
+            return newFollowUps;
+        });
+        setModal(null);
+        setStudentToDelete(null);
     };
 
     const handleResetData = () => {
@@ -1444,11 +1854,12 @@ export default function App() {
     const renderModals = () => (
         <>
             {modal === 'add' && <StudentFormModal onReview={handleReviewStudent} onClose={() => setModal(null)} />}
-            {modal === 'edit' && <StudentFormModal student={selectedStudent} onReview={handleReviewStudent} onClose={() => setModal(null)} onArchive={() => setModal('archive')} />}
-            {modal === 'review' && <ReviewModal data={reviewData} onConfirm={handleSaveStudent} onEdit={() => setModal(selectedStudent ? 'edit' : 'add')} onClose={() => setModal(null)} />}
+            {modal === 'edit' && <StudentFormModal student={selectedStudent} onReview={handleReviewStudent} onClose={() => setModal(null)} onArchive={() => setModal('archive-reason')} />}
+            {modal === 'review' && <ReviewModal data={reviewData} onConfirm={handleSaveStudent} onEdit={() => setModal(reviewData.StudentID ? 'edit' : 'add')} onClose={() => setModal(null)} />}
             {modal === 'filter' && <FilterModal currentFilters={filters} onApply={setFilters} onClose={() => setModal(null)} allStudents={studentsWithAge} />}
             {modal === 'settings' && <SettingsModal visibleColumns={visibleColumns} setVisibleColumns={setVisibleColumns} allColumns={ALL_COLUMNS} onReset={handleResetData} onClose={() => setModal(null)} />}
-            {modal === 'archive' && <ConfirmationModal title="Confirm Archive" message={`Are you sure you want to archive ${selectedStudent?.['Given Name']}?`} onConfirm={handleArchiveStudent} onClose={() => setActiveTab('profile')} />}
+            {modal === 'archive-reason' && <ArchiveReasonModal onConfirm={handleArchiveStudent} onClose={() => setModal(null)} />}
+            {modal === 'delete' && <ConfirmationModal title="Confirm Permanent Deletion" message={`Are you sure you want to permanently delete ${studentToDelete?.['Given Name']}? This action cannot be undone.`} onConfirm={handlePermanentDelete} onClose={() => setModal(null)} />}
             {modal === 'add-grades' && <AddGradesModal student={selectedStudent} curriculum={curriculum} onAddGrades={handleAddGrades} onClose={() => setModal(null)} />}
             {modal === 'add-follow-up' && <FollowUpFormModal student={selectedStudent} onSave={handleAddFollowUp} onClose={() => setModal(null)} />}
             {modal === 'edit-follow-up' && <FollowUpFormModal student={selectedStudent} followUp={selectedStudent.followUpToEdit} onSave={(studentId, data) => handleUpdateFollowUp(studentId, selectedStudent.followUpIndex, data)} onClose={() => setModal(null)} />}
@@ -1460,15 +1871,17 @@ export default function App() {
             case 'dashboard':
                 return <DashboardPage students={filteredAndSortedStudents} onSort={handleSort} sort={sort} visibleColumns={visibleColumns} allColumns={ALL_COLUMNS} onOpenModal={openModal} setCategory={setCategory} category={category} totals={totals} onSelectSchool={handleSelectSchool} onSelectStudent={handleSelectStudent} />;
             case 'profile':
-                return <StudentProfilePage student={selectedStudent} onOpenModal={openModal} setActiveTab={setActiveTab} followUps={selectedStudent ? followUps[selectedStudent.StudentID] || [] : []} onDeleteFollowUp={handleDeleteFollowUp} />;
+                return <StudentProfilePage student={selectedStudent} onOpenModal={openModal} setActiveTab={setActiveTab} followUps={selectedStudent ? followUps[selectedStudent.StudentID] || [] : []} onDeleteFollowUp={handleDeleteFollowUp} onBack={() => setActiveTab('dashboard')} />;
+            case 'archived-profile':
+                return <ArchivedProfilePage student={selectedStudent} setActiveTab={setActiveTab} followUps={selectedStudent ? followUps[selectedStudent.StudentID] || [] : []} />;
             case 'grades':
-                return <GradesPage student={selectedStudent} grades={studentGrades} onOpenModal={openModal} />;
+                return <GradesPage student={selectedStudent} grades={studentGrades} onOpenModal={openModal} onBack={() => setActiveTab('profile')} schoolAverages={schoolAverages} />;
             case 'school-center':
-                return <SchoolCenterPage students={studentsWithAge} grades={grades} selectedSchool={selectedSchool} onSelectSchool={setSelectedSchool} getCategoryForStudent={getCategoryForStudent} onSelectStudent={handleSelectStudent}/>;
+                return <SchoolCenterPage students={studentsWithAge} grades={grades} onSelectStudent={handleSelectStudent} getCategoryForStudent={getCategoryForStudent} />;
             case 'curriculum':
                 return <CurriculumPage curriculum={curriculum} setCurriculum={setCurriculum} />;
             case 'archive':
-                return <ArchivePage archivedStudents={archivedStudents} onRestore={handleRestoreStudent} />;
+                return <ArchivePage archivedStudents={archivedStudents} onRestore={handleRestoreStudent} onDelete={(student) => { setStudentToDelete(student); setModal('delete'); }} onViewProfile={(student) => { setSelectedStudent(student); setActiveTab('archived-profile'); }} />;
             case 'manual-instructions':
                 return <ManualInstructionsPage />;
             default:
