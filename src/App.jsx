@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 import { Menu, X, Users, DollarSign, Archive, Settings, Filter, PlusCircle, ArrowUpDown, BookOpen, FileText, BarChart2, Mail, CreditCard, Building, Edit, Eye, User, Mail as MailIcon, Phone, GraduationCap, School, Briefcase, BookCopy, Trash2, Calendar, ArrowLeft, ChevronDown, MapPin } from 'lucide-react';
 
 // ===================================================================================
@@ -179,7 +179,9 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, setOpen, onOpenSettings, men
         <aside ref={sidebarRef} className={`bg-white w-64 h-full shadow-lg p-4 flex flex-col flex-shrink-0 absolute transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out z-40`}>
             <a href="#" onClick={(e) => { e.preventDefault(); setActiveTab('dashboard'); setOpen(false); }} className="text-2xl font-bold text-gray-800 px-2 mb-2 block">Dashboard</a>
             <nav className="mt-4 space-y-1">
-                <Tab id="dashboard" icon={<Users className="w-5 h-5" />}>Student List</Tab>
+                <Tab id="dashboard" icon={<BarChart2 className="w-5 h-5" />}>Dashboard</Tab>
+                <Tab id="student-list" icon={<Users className="w-5 h-5" />}>Student List</Tab>
+                <Tab id="parents-list" icon={<Users className="w-5 h-5" />}>Parents List</Tab>
                 <Tab id="school-center" icon={<Building className="w-5 h-5" />}>School Center</Tab>
                 <Tab id="curriculum" icon={<BookCopy className="w-5 h-5" />}>Curriculum</Tab>
                 <Tab id="archive" icon={<Archive className="w-5 h-5" />}>Archived</Tab>
@@ -200,7 +202,7 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, setOpen, onOpenSettings, men
 // Each component here represents a major view/page in the application.
 // ===================================================================================
 
-const DashboardPage = ({ students, onSort, sort, visibleColumns, allColumns, onOpenModal, setCategory, category, totals, onSelectSchool, onSelectStudent }) => (
+const StudentListPage = ({ students, onSort, sort, visibleColumns, allColumns, onOpenModal, setCategory, category, totals, onSelectSchool, onSelectStudent }) => (
     <div className="p-4 sm:p-6 lg:p-8 flex flex-col flex-grow min-h-0">
         <header className="bg-white shadow-md rounded-lg p-6 mb-6">
             <div className="flex flex-col md:flex-row justify-between md:items-center">
@@ -232,6 +234,160 @@ const DashboardPage = ({ students, onSort, sort, visibleColumns, allColumns, onO
         </main>
     </div>
 );
+
+const HomePage = ({ students, onSelectStudent, getCategoryForStudent }) => {
+    const studentStats = useMemo(() => {
+        const stats = {
+            total: students.length,
+            university: 0,
+            k12: 0,
+        };
+        students.forEach(s => {
+            if (getCategoryForStudent(s) === 'university') {
+                stats.university++;
+            } else {
+                stats.k12++;
+            }
+        });
+        return stats;
+    }, [students, getCategoryForStudent]);
+
+    const financialStats = useMemo(() => {
+        const stats = { total: 0, categories: {} };
+        students.forEach(s => {
+            (s.financials || []).forEach(item => {
+                const monthlyCost = calculateMonthlyEquivalent(item.amount, item.frequency);
+                stats.total += monthlyCost;
+                if (!stats.categories[item.category]) {
+                    stats.categories[item.category] = 0;
+                }
+                stats.categories[item.category] += monthlyCost;
+            });
+        });
+        return {
+            total: stats.total,
+            categoryData: Object.entries(stats.categories).map(([name, value]) => ({ name, value: parseFloat(value.toFixed(2)) })),
+        };
+    }, [students]);
+
+    const recentlyAdded = useMemo(() => {
+        return [...students]
+            .sort((a, b) => new Date(b.EnrollmentDate) - new Date(a.EnrollmentDate))
+            .slice(0, 5);
+    }, [students]);
+    
+    const studentLevelData = [
+        { name: 'University', count: studentStats.university },
+        { name: 'K-12', count: studentStats.k12 },
+    ];
+    
+    const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042', '#0088FE'];
+
+    return (
+        <div className="p-4 sm:p-6 lg:p-8">
+            <header className="bg-white shadow-md rounded-lg p-6 mb-6">
+                <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
+                <p className="text-gray-600 mt-1">A high-level summary of your student data.</p>
+            </header>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2 space-y-6">
+                    <div className="bg-white p-6 rounded-lg shadow-md">
+                        <h2 className="text-xl font-semibold mb-4">Student Overview</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="bg-indigo-50 p-4 rounded-lg text-center">
+                                <h3 className="text-lg font-medium text-gray-600">Total Students</h3>
+                                <p className="text-4xl font-bold text-indigo-600 mt-2">{studentStats.total}</p>
+                            </div>
+                            <div className="md:col-span-2">
+                                <ResponsiveContainer width="100%" height={200}>
+                                    <BarChart data={studentLevelData}>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="name" />
+                                        <YAxis />
+                                        <Tooltip />
+                                        <Bar dataKey="count" fill="#8884d8" />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="bg-white p-6 rounded-lg shadow-md">
+                        <h2 className="text-xl font-semibold mb-4">Financial Overview</h2>
+                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="bg-green-50 p-4 rounded-lg text-center">
+                                <h3 className="text-lg font-medium text-gray-600">Total Monthly Costs</h3>
+                                <p className="text-4xl font-bold text-green-600 mt-2">${financialStats.total.toFixed(2)}</p>
+                            </div>
+                            <div className="md:col-span-2">
+                                <ResponsiveContainer width="100%" height={200}>
+                                    <PieChart>
+                                        <Pie data={financialStats.categoryData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
+                                            {financialStats.categoryData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
+                                        </Pie>
+                                        <Tooltip formatter={(value) => `$${value}`} />
+                                        <Legend />
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="lg:col-span-1 space-y-6">
+                    <CalendarWidget />
+                    <div className="bg-white p-6 rounded-lg shadow-md">
+                        <h2 className="text-xl font-semibold mb-4">Recently Added Students</h2>
+                        <ul className="space-y-3">
+                            {recentlyAdded.map(s => (
+                                <li key={s.StudentID} className="flex items-center justify-between">
+                                    <div>
+                                        <a href="#" onClick={(e) => {e.preventDefault(); onSelectStudent(s);}} className="font-semibold text-indigo-600 hover:underline">{s['Given Name']} {s['Family Name']}</a>
+                                        <p className="text-xs text-gray-500">{s.School.name}</p>
+                                    </div>
+                                    <span className="text-xs text-gray-500">{s.EnrollmentDate}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const CalendarWidget = () => {
+    const [date] = useState(new Date());
+
+    const month = date.toLocaleString('default', { month: 'long' });
+    const year = date.getFullYear();
+    const daysInMonth = new Date(year, date.getMonth() + 1, 0).getDate();
+    const firstDayOfMonth = new Date(year, date.getMonth(), 1).getDay();
+    const today = new Date();
+
+    const days = Array.from({ length: firstDayOfMonth }, (_, i) => <div key={`empty-${i}`}></div>);
+    for (let day = 1; day <= daysInMonth; day++) {
+        const isToday = day === today.getDate() && date.getMonth() === today.getMonth() && year === today.getFullYear();
+        days.push(
+            <div key={day} className={`text-center py-1 rounded-full ${isToday ? 'bg-indigo-600 text-white' : ''}`}>
+                {day}
+            </div>
+        );
+    }
+
+    return (
+        <div className="bg-white p-6 rounded-lg shadow-md">
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold">{month} {year}</h2>
+            </div>
+            <div className="grid grid-cols-7 gap-2 text-sm text-center text-gray-500">
+                <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+            </div>
+            <div className="grid grid-cols-7 gap-2 mt-2">
+                {days}
+            </div>
+        </div>
+    );
+};
+
 
 const CategoryFilters = ({ setCategory, activeCategory }) => {
     const categories = ['all', 'university', 'high-school', 'middle-school', 'elementary'];
@@ -506,7 +662,7 @@ const SchoolCenterPage = ({ students, grades, onSelectStudent, getCategoryForStu
     }, [students, grades, getCategoryForStudent]);
 
     const SchoolCard = ({ school }) => (
-        <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+        <div id={`school-${school.name.replace(/\s+/g, '-')}`} className="bg-white p-6 rounded-lg shadow-md mb-6">
             <h3 className="text-2xl font-semibold text-gray-800 border-b pb-2 mb-4">{school.name}</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
                 <div className="bg-gray-50 p-4 rounded-lg text-center">
@@ -562,6 +718,21 @@ const SchoolCenterPage = ({ students, grades, onSelectStudent, getCategoryForStu
                 <h1 className="text-3xl font-bold text-gray-900">School Center</h1>
                 <p className="text-gray-600 mt-1">An overview of all schools, organized by level.</p>
             </header>
+            <div className="bg-white p-4 rounded-lg shadow-md mb-6">
+                <h3 className="text-lg font-semibold mb-2">Jump to School</h3>
+                <div className="flex flex-wrap gap-2">
+                    {schoolData.university.map(school => (
+                        <a key={school.name} href={`#school-${school.name.replace(/\s+/g, '-')}`} className="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm hover:bg-indigo-200">
+                            {school.name}
+                        </a>
+                    ))}
+                    {schoolData.k12.map(school => (
+                        <a key={school.name} href={`#school-${school.name.replace(/\s+/g, '-')}`} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm hover:bg-blue-200">
+                            {school.name}
+                        </a>
+                    ))}
+                </div>
+            </div>
             <div>
                 <h2 className="text-3xl font-bold text-gray-700 border-b-2 border-indigo-300 pb-2 mb-4">Universities</h2>
                 {schoolData.university.length > 0 ? schoolData.university.map(school => <SchoolCard key={school.name} school={school} />) : <p className="text-gray-500">No university data available.</p>}
@@ -1959,7 +2130,9 @@ export default function App() {
     const renderActiveTab = () => {
         switch (activeTab) {
             case 'dashboard':
-                return <DashboardPage students={filteredAndSortedStudents} onSort={handleSort} sort={sort} visibleColumns={visibleColumns} allColumns={ALL_COLUMNS} onOpenModal={openModal} setCategory={setCategory} category={category} totals={totals} onSelectSchool={handleSelectSchool} onSelectStudent={handleSelectStudent} />;
+                return <HomePage students={studentsWithAge} onSelectStudent={handleSelectStudent} getCategoryForStudent={getCategoryForStudent} />;
+            case 'student-list':
+                return <StudentListPage students={filteredAndSortedStudents} onSort={handleSort} sort={sort} visibleColumns={visibleColumns} allColumns={ALL_COLUMNS} onOpenModal={openModal} setCategory={setCategory} category={category} totals={totals} onSelectSchool={handleSelectSchool} onSelectStudent={handleSelectStudent} />;
             case 'profile':
                 return <StudentProfilePage student={selectedStudent} onOpenModal={openModal} setActiveTab={setActiveTab} followUps={selectedStudent ? followUps[selectedStudent.StudentID] || [] : []} onDeleteFollowUp={handleDeleteFollowUp} onBack={() => setActiveTab('dashboard')} />;
             case 'archived-profile':
@@ -1974,8 +2147,10 @@ export default function App() {
                 return <ArchivePage archivedStudents={archivedStudents} onRestore={handleRestoreStudent} onDelete={(student) => { setStudentToDelete(student); setModal('delete'); }} onViewProfile={(student) => { setSelectedStudent(student); setActiveTab('archived-profile'); }} />;
             case 'manual-instructions':
                 return <ManualInstructionsPage />;
+            case 'parents-list':
+                return <ParentsListPage students={studentsWithAge} onSelectStudent={handleSelectStudent} />;
             default:
-                return <DashboardPage students={filteredAndSortedStudents} onSort={handleSort} sort={sort} visibleColumns={visibleColumns} allColumns={ALL_COLUMNS} onOpenModal={openModal} setCategory={setCategory} category={category} totals={totals} onSelectSchool={handleSelectSchool} onSelectStudent={handleSelectStudent} />;
+                return <HomePage students={studentsWithAge} onSelectStudent={handleSelectStudent} getCategoryForStudent={getCategoryForStudent} />;
         }
     };
 
@@ -1992,3 +2167,61 @@ export default function App() {
         </div>
     );
 }
+
+const ParentsListPage = ({ students, onSelectStudent }) => {
+    const parentsData = useMemo(() => {
+        const parents = {};
+        students.forEach(student => {
+            (student.guardians || []).forEach(guardian => {
+                if (!guardian.name) return;
+                if (!parents[guardian.name]) {
+                    parents[guardian.name] = {
+                        ...guardian,
+                        children: []
+                    };
+                }
+                parents[guardian.name].children.push(student);
+            });
+        });
+        return Object.values(parents);
+    }, [students]);
+
+    return (
+        <div className="p-4 sm:p-6 lg:p-8">
+            <header className="bg-white shadow-md rounded-lg p-6 mb-6">
+                <h1 className="text-3xl font-bold text-gray-900">Parents & Guardians</h1>
+                <p className="text-gray-600 mt-1">A list of all parents and the students they are associated with.</p>
+            </header>
+            <div className="space-y-6">
+                {parentsData.map(parent => (
+                    <div key={parent.name} className="bg-white p-6 rounded-lg shadow-md">
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <h2 className="text-2xl font-semibold text-gray-800">{parent.name}</h2>
+                                <p className="text-sm text-gray-500">{parent.relationship}</p>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-sm text-gray-600 flex items-center gap-2"><Phone size={14} /> {parent.contact || 'N/A'}</p>
+                                <p className="text-sm text-gray-600 flex items-center gap-2"><Briefcase size={14} /> {parent.job || 'N/A'}</p>
+                                <p className="text-sm text-gray-600 flex items-center gap-2"><DollarSign size={14} /> ${parent.income || '0'}/month</p>
+                            </div>
+                        </div>
+                        <div className="mt-4 border-t pt-4">
+                            <h3 className="text-lg font-semibold">Children</h3>
+                            <ul className="mt-2 space-y-2">
+                                {parent.children.map(child => (
+                                    <li key={child.StudentID}>
+                                        <a href="#" onClick={(e) => {e.preventDefault(); onSelectStudent(child)}} className="text-indigo-600 hover:underline">
+                                            {child['Given Name']} {child['Family Name']}
+                                        </a>
+                                        <span className="text-sm text-gray-500 ml-2">({child.Grade})</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
