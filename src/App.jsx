@@ -8,21 +8,21 @@ import { Menu, X, Users, DollarSign, Archive, Settings, Filter, PlusCircle, Arro
 // ===================================================================================
 
 const initialStudents = [
-    { "StudentID": "CPB00039", "Given Name": "Kunthea", "Family Name": "Yim", "Sex": "F", "DOB": "2003-05-12", "Grade": "University", "School": { "name": "RULE", "campus": "" }, "financials": [{ "category": "Education", "item": "Tuition Fee", "amount": "300", "frequency": "Monthly", "date": "2022-09-01" }, { "category": "Supplies", "item": "Textbooks", "amount": "150", "frequency": "Yearly", "date": "2022-09-01" }], "guardians": [{ "name": "Chan Makara", "relationship": "Mother", "contact": "012345678", "job": "Vendor", "income": 250 }], "Major": "Laws", "Comments": "Top 5 in school", "EnrollmentDate": "2022-09-01", "Location": "Phnom Penh" },
-    { "StudentID": "CPG00025", "Given Name": "Sopheaktra", "Family Name": "Nim", "Sex": "F", "DOB": "2002-09-20", "Grade": "University", "School": { "name": "RUPP", "campus": "" }, "financials": [{ "category": "Education", "item": "Tuition Fee", "amount": "175", "frequency": "Monthly", "date": "2022-09-01" }], "guardians": [], "Major": "Business", "EnrollmentDate": "2022-09-01", "Location": "Phnom Penh" },
-    { "StudentID": "CPB00041", "Given Name": "Dara", "Family Name": "Yim", "Sex": "M", "DOB": "2001-01-30", "Grade": "University", "School": { "name": "RULE", "campus": "" }, "financials": [{ "category": "Education", "item": "Tuition Fee", "amount": "750", "frequency": "Quarterly", "date": "2021-09-01" }], "guardians": [], "Major": "Laws", "EnrollmentDate": "2021-09-01", "Location": "Phnom Penh" },
-    { "StudentID": "CPG00026", "Given Name": "Manita", "Family Name": "Run", "Sex": "F", "DOB": "2004-03-15", "Grade": "University", "School": { "name": "UEF", "campus": "" }, "financials": [{ "category": "Education", "item": "Tuition Fee", "amount": "620", "frequency": "Semester", "date": "2023-09-01" }], "guardians": [{ "name": "Mom Sopheap", "relationship": "Mother", "contact": "965455371", "job": "Factory Worker", "income": 200 }], "Major": "Accounting and Finance", "EnrollmentDate": "2023-09-01", "Location": "Railroad" },
-    { "StudentID": "CPB00042", "Given Name": "Songha", "Family Name": "Run", "Sex": "M", "DOB": "2000-11-05", "Grade": "University", "School": { "name": "PPIU", "campus": "" }, "financials": [{ "category": "Education", "item": "Tuition Fee", "amount": "449.4", "frequency": "Semester", "date": "2020-09-01" }], "guardians": [{ "name": "Mom Sopheap", "relationship": "Mother", "contact": "965455371", "job": "Factory Worker", "income": 200 }], "Major": "Business", "EnrollmentDate": "2020-09-01", "Location": "Railroad" },
-    { "StudentID": "CPG00027", "Given Name": "SivKheu", "Family Name": "Ny", "Sex": "F", "DOB": "2003-08-22", "Grade": "University", "School": { "name": "UEF", "campus": "" }, "financials": [{ "category": "Education", "item": "Tuition Fee", "amount": "310", "frequency": "Monthly", "date": "2023-09-01" }], "guardians": [{ "name": "Sor Sokhom", "relationship": "Mother", "contact": "89217867", "job": "Cleaner", "income": 180 }], "Major": "Accounting and Finance", "EnrollmentDate": "2023-09-01", "Location": "Railroad" },
-    { "StudentID": "CPB00043", "Given Name": "Sreypich", "Family Name": "Chan", "Sex": "F", "DOB": "2005-02-10", "Grade": "12", "School": { "name": "SPS", "campus": "Tep" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "1500", "frequency": "Yearly", "date": "2018-09-01" }], "guardians": [], "EnrollmentDate": "2018-09-01", "Location": "Sorla" },
-    { "StudentID": "CPG00028", "Given Name": "Raveen", "Family Name": "Samnang", "Sex": "M", "DOB": "2009-07-18", "Grade": "9", "School": { "name": "NewLife", "campus": "" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "70", "frequency": "Monthly", "date": "2015-09-01" }], "guardians": [{ "name": "Say Sotheary", "relationship": "Mother", "contact": "977408378", "job": "Vendor", "income": 150 }], "EnrollmentDate": "2015-09-01", "Location": "Steang MeanChey" },
-    { "StudentID": "CPB00002", "Given Name": "Sovanna", "Family Name": "Sok (Mao)", "Sex": "M", "DOB": "2008-10-07", "Grade": "4", "School": { "name": "NewLife", "campus": "" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "60", "frequency": "Monthly", "date": "2023-09-01" }], "guardians": [{ "name": "Sok Khoeun", "relationship": "Father", "contact": "095 927592", "job": "Construction", "income": 220 }], "Major": "", "Comments": "", "EnrollmentDate": "", "Location": "Hope House" },
-    { "StudentID": "CPB00008", "Given Name": "Chanvie", "Family Name": "Sophan", "Sex": "M", "DOB": "2010-09-10", "Grade": "6", "School": { "name": "", "campus": "" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "149", "frequency": "Monthly", "date": "2015-10-28" }], "guardians": [{ "name": "Sophan Chankakada", "relationship": "Father", "contact": "", "job": "", "income": 0 }], "Major": "", "Comments": "", "EnrollmentDate": "2015-10-28", "Location": "" },
-    { "StudentID": "CPB00009", "Given Name": "Meng", "Family Name": "Sorn", "Sex": "M", "DOB": "2005-05-15", "Grade": "10", "School": { "name": "SPS", "campus": "TK" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "70", "frequency": "Monthly", "date": "2023-09-01" }], "guardians": [{ "name": "Ti Ra", "relationship": "Mother", "contact": "096 3378336", "job": "Vendor", "income": 120 }], "Major": "", "Comments": "Trying, abcent a lot, not catching up, not attending math tutoring", "EnrollmentDate": "", "Location": "Packaging" },
-    { "StudentID": "CPB00018", "Given Name": "Chantha", "Family Name": "Samnang", "Sex": "M", "DOB": "2006-06-12", "Grade": "11", "School": { "name": "NewLife", "campus": "" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "10", "frequency": "Monthly", "date": "2023-09-01" }], "guardians": [{ "name": "Say Sotheary", "relationship": "Mother", "contact": "097 7408378", "job": "Vendor", "income": 150 }], "Major": "", "Comments": "", "EnrollmentDate": "", "Location": "Steang MeanChey" },
-    { "StudentID": "CPB00021", "Given Name": "Raveen", "Family Name": "Samnang", "Sex": "M", "DOB": "2009-02-01", "Grade": "9", "School": { "name": "NewLife", "campus": "" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "70", "frequency": "Monthly", "date": "2023-09-01" }], "guardians": [{ "name": "Say Sotheary", "relationship": "Mother", "contact": "097 7408378", "job": "Vendor", "income": 150 }], "Major": "", "Comments": "Try hard but couldn’t catch the lessons, attendance regularly", "EnrollmentDate": "", "Location": "Steang MeanChey" },
-    { "StudentID": "CPB00031", "Given Name": "Parin", "Family Name": "Proseur", "Sex": "M", "DOB": "2010-02-03", "Grade": "7", "School": { "name": "NewLife", "campus": "" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "70", "frequency": "Monthly", "date": "2023-09-01" }], "guardians": [], "Major": "", "Comments": "", "EnrollmentDate": "", "Location": "Steang MeanChey" },
-    { "StudentID": "CPB00035", "Given Name": "Daravichen", "Family Name": "Sem", "Sex": "M", "DOB": "2009-03-21", "Grade": "9", "School": { "name": "SPS", "campus": "Tep" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "130", "frequency": "Monthly", "date": "2023-09-01" }], "guardians": [{ "name": "Chan Thom", "relationship": "Mother", "contact": "", "job": "N/A", "income": 0 }], "Major": "", "Comments": "Getting better, but still limited, not attend math tutoring regualarly", "EnrollmentDate": "", "Location": "Railroad" }
+    { "StudentID": "CPB00039", "Given Name": "Kunthea", "Family Name": "Yim", "Sex": "F", "DOB": "2003-05-12", "Grade": "University", "School": { "name": "RULE", "campus": "" }, "financials": [{ "category": "Education", "item": "Tuition Fee", "amount": "300", "frequency": "Monthly", "date": "2022-09-01" }, { "category": "Supplies", "item": "Textbooks", "amount": "150", "frequency": "Yearly", "date": "2022-09-01" }], "guardians": [{ "name": "Chan Makara", "relationship": "Mother", "contact": "012345678", "job": "Vendor", "income": 250 }], "Major": "Laws", "Comments": "Top 5 in school", "EnrollmentDate": "2022-09-01", "Location": "Phnom Penh", "photoUrl": "https://placehold.co/400x400/EFEFEF/333333?text=KY" },
+    { "StudentID": "CPG00025", "Given Name": "Sopheaktra", "Family Name": "Nim", "Sex": "F", "DOB": "2002-09-20", "Grade": "University", "School": { "name": "RUPP", "campus": "" }, "financials": [{ "category": "Education", "item": "Tuition Fee", "amount": "175", "frequency": "Monthly", "date": "2022-09-01" }], "guardians": [], "Major": "Business", "EnrollmentDate": "2022-09-01", "Location": "Phnom Penh", "photoUrl": "" },
+    { "StudentID": "CPB00041", "Given Name": "Dara", "Family Name": "Yim", "Sex": "M", "DOB": "2001-01-30", "Grade": "University", "School": { "name": "RULE", "campus": "" }, "financials": [{ "category": "Education", "item": "Tuition Fee", "amount": "750", "frequency": "Quarterly", "date": "2021-09-01" }], "guardians": [], "Major": "Laws", "EnrollmentDate": "2021-09-01", "Location": "Phnom Penh", "photoUrl": "" },
+    { "StudentID": "CPG00026", "Given Name": "Manita", "Family Name": "Run", "Sex": "F", "DOB": "2004-03-15", "Grade": "University", "School": { "name": "UEF", "campus": "" }, "financials": [{ "category": "Education", "item": "Tuition Fee", "amount": "620", "frequency": "Semester", "date": "2023-09-01" }], "guardians": [{ "name": "Mom Sopheap", "relationship": "Mother", "contact": "965455371", "job": "Factory Worker", "income": 200 }], "Major": "Accounting and Finance", "EnrollmentDate": "2023-09-01", "Location": "Railroad", "photoUrl": "" },
+    { "StudentID": "CPB00042", "Given Name": "Songha", "Family Name": "Run", "Sex": "M", "DOB": "2000-11-05", "Grade": "University", "School": { "name": "PPIU", "campus": "" }, "financials": [{ "category": "Education", "item": "Tuition Fee", "amount": "449.4", "frequency": "Semester", "date": "2020-09-01" }], "guardians": [{ "name": "Mom Sopheap", "relationship": "Mother", "contact": "965455371", "job": "Factory Worker", "income": 200 }], "Major": "Business", "EnrollmentDate": "2020-09-01", "Location": "Railroad", "photoUrl": "" },
+    { "StudentID": "CPG00027", "Given Name": "SivKheu", "Family Name": "Ny", "Sex": "F", "DOB": "2003-08-22", "Grade": "University", "School": { "name": "UEF", "campus": "" }, "financials": [{ "category": "Education", "item": "Tuition Fee", "amount": "310", "frequency": "Monthly", "date": "2023-09-01" }], "guardians": [{ "name": "Sor Sokhom", "relationship": "Mother", "contact": "89217867", "job": "Cleaner", "income": 180 }], "Major": "Accounting and Finance", "EnrollmentDate": "2023-09-01", "Location": "Railroad", "photoUrl": "" },
+    { "StudentID": "CPB00043", "Given Name": "Sreypich", "Family Name": "Chan", "Sex": "F", "DOB": "2005-02-10", "Grade": "12", "School": { "name": "SPS", "campus": "Tep" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "1500", "frequency": "Yearly", "date": "2018-09-01" }], "guardians": [], "EnrollmentDate": "2018-09-01", "Location": "Sorla", "photoUrl": "" },
+    { "StudentID": "CPG00028", "Given Name": "Raveen", "Family Name": "Samnang", "Sex": "M", "DOB": "2009-07-18", "Grade": "9", "School": { "name": "NewLife", "campus": "" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "70", "frequency": "Monthly", "date": "2015-09-01" }], "guardians": [{ "name": "Say Sotheary", "relationship": "Mother", "contact": "977408378", "job": "Vendor", "income": 150 }], "EnrollmentDate": "2015-09-01", "Location": "Steang MeanChey", "photoUrl": "" },
+    { "StudentID": "CPB00002", "Given Name": "Sovanna", "Family Name": "Sok (Mao)", "Sex": "M", "DOB": "2008-10-07", "Grade": "4", "School": { "name": "NewLife", "campus": "" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "60", "frequency": "Monthly", "date": "2023-09-01" }], "guardians": [{ "name": "Sok Khoeun", "relationship": "Father", "contact": "095 927592", "job": "Construction", "income": 220 }], "Major": "", "Comments": "", "EnrollmentDate": "", "Location": "Hope House", "photoUrl": "" },
+    { "StudentID": "CPB00008", "Given Name": "Chanvie", "Family Name": "Sophan", "Sex": "M", "DOB": "2010-09-10", "Grade": "6", "School": { "name": "", "campus": "" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "149", "frequency": "Monthly", "date": "2015-10-28" }], "guardians": [{ "name": "Sophan Chankakada", "relationship": "Father", "contact": "", "job": "", "income": 0 }], "Major": "", "Comments": "", "EnrollmentDate": "2015-10-28", "Location": "", "photoUrl": "" },
+    { "StudentID": "CPB00009", "Given Name": "Meng", "Family Name": "Sorn", "Sex": "M", "DOB": "2005-05-15", "Grade": "10", "School": { "name": "SPS", "campus": "TK" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "70", "frequency": "Monthly", "date": "2023-09-01" }], "guardians": [{ "name": "Ti Ra", "relationship": "Mother", "contact": "096 3378336", "job": "Vendor", "income": 120 }], "Major": "", "Comments": "Trying, abcent a lot, not catching up, not attending math tutoring", "EnrollmentDate": "", "Location": "Packaging", "photoUrl": "" },
+    { "StudentID": "CPB00018", "Given Name": "Chantha", "Family Name": "Samnang", "Sex": "M", "DOB": "2006-06-12", "Grade": "11", "School": { "name": "NewLife", "campus": "" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "10", "frequency": "Monthly", "date": "2023-09-01" }], "guardians": [{ "name": "Say Sotheary", "relationship": "Mother", "contact": "097 7408378", "job": "Vendor", "income": 150 }], "Major": "", "Comments": "", "EnrollmentDate": "", "Location": "Steang MeanChey", "photoUrl": "" },
+    { "StudentID": "CPB00021", "Given Name": "Raveen", "Family Name": "Samnang", "Sex": "M", "DOB": "2009-02-01", "Grade": "9", "School": { "name": "NewLife", "campus": "" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "70", "frequency": "Monthly", "date": "2023-09-01" }], "guardians": [{ "name": "Say Sotheary", "relationship": "Mother", "contact": "097 7408378", "job": "Vendor", "income": 150 }], "Major": "", "Comments": "Try hard but couldn’t catch the lessons, attendance regularly", "EnrollmentDate": "", "Location": "Steang MeanChey", "photoUrl": "" },
+    { "StudentID": "CPB00031", "Given Name": "Parin", "Family Name": "Proseur", "Sex": "M", "DOB": "2010-02-03", "Grade": "7", "School": { "name": "NewLife", "campus": "" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "70", "frequency": "Monthly", "date": "2023-09-01" }], "guardians": [], "Major": "", "Comments": "", "EnrollmentDate": "", "Location": "Steang MeanChey", "photoUrl": "" },
+    { "StudentID": "CPB00035", "Given Name": "Daravichen", "Family Name": "Sem", "Sex": "M", "DOB": "2009-03-21", "Grade": "9", "School": { "name": "SPS", "campus": "Tep" }, "financials": [{ "category": "Education", "item": "School Fee", "amount": "130", "frequency": "Monthly", "date": "2023-09-01" }], "guardians": [{ "name": "Chan Thom", "relationship": "Mother", "contact": "", "job": "N/A", "income": 0 }], "Major": "", "Comments": "Getting better, but still limited, not attend math tutoring regualarly", "EnrollmentDate": "", "Location": "Railroad", "photoUrl": "https://placehold.co/400x400/EFEFEF/333333?text=DS" }
 ];
 
 
@@ -807,12 +807,21 @@ const StudentProfilePage = ({ student, onOpenModal, setActiveTab, followUps, onD
         <div className="p-4 sm:p-6 lg:p-8">
             <header className="bg-white shadow-md rounded-lg p-6 mb-6">
                 <div className="flex justify-between items-start">
-                    <div>
-                        <button onClick={onBack} className="text-sm text-indigo-600 hover:underline flex items-center gap-1 mb-2">
-                            <ArrowLeft size={14} /> Back to Dashboard
-                        </button>
-                        <h1 className="text-3xl font-bold text-gray-900">{student['Given Name']} {student['Family Name']}</h1>
-                        <p className="text-gray-600">Student Profile</p>
+                     <div className="flex items-center gap-4">
+                        {student.photoUrl ? (
+                            <img src={student.photoUrl} alt={`${student['Given Name']}`} className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-sm" />
+                        ) : (
+                            <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center border-4 border-white shadow-sm">
+                                <User className="w-12 h-12 text-gray-500" />
+                            </div>
+                        )}
+                        <div>
+                            <button onClick={onBack} className="text-sm text-indigo-600 hover:underline flex items-center gap-1 mb-2">
+                                <ArrowLeft size={14} /> Back to Dashboard
+                            </button>
+                            <h1 className="text-3xl font-bold text-gray-900">{student['Given Name']} {student['Family Name']}</h1>
+                            <p className="text-gray-600">Student Profile</p>
+                        </div>
                     </div>
                     <div className="flex gap-2 mt-8">
                         <button onClick={() => onOpenModal('edit', student)} className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 flex items-center gap-2"><Edit size={16}/> Edit</button>
@@ -1046,7 +1055,7 @@ const Modal = ({ children, title, onClose, maxWidth = 'max-w-3xl' }) => {
 }
 
 const StudentFormModal = ({ student, onReview, onClose, onArchive }) => {
-    const [formData, setFormData] = useState(student || { 'StudentID': '', 'Given Name': '', 'Family Name': '', DOB: '', Sex: '', Grade: '', School: { name: '', campus: '' }, financials: [{ category: 'Education', item: '', amount: '', frequency: 'Monthly', date: '' }], guardians: [{ name: '', relationship: '', contact: '', job: '', income: '' }], 'Major': '', 'Comments': '', 'EnrollmentDate': '', 'Location': '' });
+    const [formData, setFormData] = useState(student || { 'StudentID': '', 'Given Name': '', 'Family Name': '', DOB: '', Sex: '', Grade: '', School: { name: '', campus: '' }, financials: [{ category: 'Education', item: '', amount: '', frequency: 'Monthly', date: '' }], guardians: [{ name: '', relationship: '', contact: '', job: '', income: '' }], 'Major': '', 'Comments': '', 'EnrollmentDate': '', 'Location': '', 'photoUrl': '' });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -1093,7 +1102,7 @@ const StudentFormModal = ({ student, onReview, onClose, onArchive }) => {
     const handleSubmit = (e) => { e.preventDefault(); onReview(formData); };
 
     const formFields = Object.keys(formData).filter(k => {
-        const fieldsToExclude = ['StudentID', 'Age', 'DateLeft', 'financials', 'School', 'guardians'];
+        const fieldsToExclude = ['StudentID', 'Age', 'DateLeft', 'financials', 'School', 'guardians', 'photoUrl'];
         if (formData.Grade !== 'University') {
             fieldsToExclude.push('Major');
         }
@@ -1138,6 +1147,10 @@ const StudentFormModal = ({ student, onReview, onClose, onArchive }) => {
                             )}
                         </div>
                     ))}
+                     <div className="md:col-span-2">
+                        <label className="block text-sm font-medium text-gray-700">Photo URL</label>
+                        <input type="text" name="photoUrl" value={formData.photoUrl || ''} onChange={handleChange} className="mt-1 block w-full p-2 border rounded-md" />
+                    </div>
                     <div className="md:col-span-2">
                         <h3 className="text-lg font-semibold text-gray-800 border-b pb-1 mb-2">Guardians</h3>
                         {(formData.guardians || []).map((guardian, index) => (
@@ -1515,20 +1528,21 @@ const SettingsModal = ({ visibleColumns, setVisibleColumns, allColumns, onReset,
 
 const AddGradesModal = ({ student, curriculum, onAddGrades, onClose }) => {
     const isUniversity = student.Grade.toLowerCase().includes('university');
+    const [periodType, setPeriodType] = useState(isUniversity ? 'semester' : 'monthly');
     const [period, setPeriod] = useState('');
     const [scores, setScores] = useState({});
     const [year, setYear] = useState('');
     const [semester, setSemester] = useState('');
 
     const subjects = useMemo(() => {
-        if (!isUniversity) {
-            return curriculum[student.School.name]?.[student.School.campus]?.[student.Grade] || [];
+        if (periodType === 'semester') {
+            if (year && semester) {
+                return curriculum[student.School.name]?.[student.School.campus]?.[student.Major]?.[year]?.[semester] || [];
+            }
+            return [];
         }
-        if (year && semester) {
-            return curriculum[student.School.name]?.[student.School.campus]?.[student.Major]?.[year]?.[semester] || [];
-        }
-        return [];
-    }, [isUniversity, student, curriculum, year, semester]);
+        return curriculum[student.School.name]?.[student.School.campus]?.[student.Grade] || [];
+    }, [student, curriculum, year, semester, periodType]);
 
     const handleScoreChange = (subject, score) => {
         setScores(prev => ({ ...prev, [subject]: parseInt(score, 10) || 0 }));
@@ -1536,7 +1550,15 @@ const AddGradesModal = ({ student, curriculum, onAddGrades, onClose }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const date = isUniversity ? (semester === 'Semester 1' ? `${year.split(' ')[1]}-01-15` : `${year.split(' ')[1]}-07-15`) : period + '-15';
+        let date;
+        if (periodType === 'semester') {
+            const yearNum = year.split(' ')[1];
+            const month = semester === 'Semester 1' ? '01' : '07';
+            date = `${yearNum}-${month}-15`;
+        } else {
+            date = period + '-15';
+        }
+        
         const newGrades = Object.entries(scores).map(([subject, score]) => ({
             StudentID: student.StudentID,
             Date: date,
@@ -1550,22 +1572,39 @@ const AddGradesModal = ({ student, curriculum, onAddGrades, onClose }) => {
         <Modal title={`Add Grades for ${student['Given Name']}`} onClose={onClose} maxWidth="max-w-xl">
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700">{isUniversity ? 'Select Period' : 'Select Month'}</label>
-                    {isUniversity ? (
-                        <div className="flex gap-2">
+                    <label className="block text-sm font-medium text-gray-700">Period Type</label>
+                    <div className="flex gap-4 mt-1">
+                        <label className="flex items-center"><input type="radio" value="monthly" checked={periodType === 'monthly'} onChange={(e) => setPeriodType(e.target.value)} className="mr-1" /> Monthly</label>
+                        <label className="flex items-center"><input type="radio" value="semester" checked={periodType === 'semester'} onChange={(e) => setPeriodType(e.target.value)} className="mr-1" /> Semester</label>
+                    </div>
+                </div>
+
+                {periodType === 'monthly' && (
+                     <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700">Select Month</label>
+                        <input type="month" value={period} onChange={(e) => setPeriod(e.target.value)} className="mt-1 block w-full p-2 border rounded-md" required />
+                    </div>
+                )}
+
+                {periodType === 'semester' && (
+                     <div className="mb-4 flex gap-2">
+                        <div className="w-1/2">
+                            <label className="block text-sm font-medium text-gray-700">Select Year</label>
                             <select value={year} onChange={(e) => setYear(e.target.value)} className="mt-1 block w-full p-2 border rounded-md" required>
                                 <option value="">Select Year</option>
                                 <option>Year 1</option><option>Year 2</option><option>Year 3</option><option>Year 4</option>
                             </select>
+                        </div>
+                        <div className="w-1/2">
+                            <label className="block text-sm font-medium text-gray-700">Select Semester</label>
                             <select value={semester} onChange={(e) => setSemester(e.target.value)} className="mt-1 block w-full p-2 border rounded-md" required>
                                 <option value="">Select Semester</option>
                                 <option>Semester 1</option><option>Semester 2</option>
                             </select>
                         </div>
-                    ) : (
-                        <input type="month" value={period} onChange={(e) => setPeriod(e.target.value)} className="mt-1 block w-full p-2 border rounded-md" required />
-                    )}
-                </div>
+                    </div>
+                )}
+                
                 {subjects.length > 0 ? (
                     <div className="grid grid-cols-2 gap-4">
                         {subjects.map(subject => (
@@ -1576,7 +1615,7 @@ const AddGradesModal = ({ student, curriculum, onAddGrades, onClose }) => {
                         ))}
                     </div>
                 ) : (
-                    <p className="text-center text-gray-500">No subjects found for this student's school, grade, and/or major in the curriculum. Please define them on the Curriculum page.</p>
+                    <p className="text-center text-gray-500">Please select a period to see the available subjects.</p>
                 )}
                 <div className="mt-6 flex justify-end gap-4">
                     <button type="button" onClick={onClose} className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400">Cancel</button>
