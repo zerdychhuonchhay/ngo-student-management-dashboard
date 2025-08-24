@@ -228,7 +228,7 @@ const DashboardPage = ({ students, onSort, sort, visibleColumns, allColumns, onO
             </div>
         </header>
         <main className="flex-grow overflow-y-auto bg-white shadow-md rounded-lg">
-            <StudentTable students={students} onSort={onSort} sort={sort} visibleColumns={visibleColumns} allColumns={allColumns} onSelectStudent={onSelectStudent} onSelectSchool={onSelectSchool} />
+            <StudentTable students={students} onSort={onSort} sort={sort} visibleColumns={visibleColumns} allColumns={allColumns} onSelectStudent={onSelectStudent} onSelectSchool={onSelectSchool} onOpenModal={onOpenModal} />
         </main>
     </div>
 );
@@ -247,14 +247,14 @@ const CategoryFilters = ({ setCategory, activeCategory }) => {
     );
 };
 
-const StudentTable = ({ students, onSort, sort, visibleColumns, allColumns, onSelectStudent, onSelectSchool }) => (
+const StudentTable = ({ students, onSort, sort, visibleColumns, allColumns, onSelectStudent, onSelectSchool, onOpenModal }) => (
     <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50 sticky top-0">
                 <tr>
                     {allColumns.map(col => visibleColumns[col.key] && (
                         <th key={col.key} onClick={() => onSort(col.key)}
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
+                            className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer ${col.key === 'Actions' ? 'sticky right-0 bg-gray-50' : ''}`}>
                             <span className="flex items-center gap-2">
                                 {col.label}
                                 {sort.column === col.key ? (sort.direction === 'asc' ? '↑' : '↓') : <ArrowUpDown size={12} />}
@@ -265,9 +265,9 @@ const StudentTable = ({ students, onSort, sort, visibleColumns, allColumns, onSe
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
                 {students.map(student => (
-                    <tr key={student.StudentID} className="hover:bg-gray-50">
+                    <tr key={student.StudentID} className="group hover:bg-gray-50">
                         {allColumns.map(col => visibleColumns[col.key] && (
-                            <td key={col.key} className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            <td key={col.key} className={`px-6 py-4 whitespace-nowrap text-sm text-gray-600 ${col.key === 'Actions' ? 'sticky right-0 bg-white group-hover:bg-gray-50' : ''}`}>
                                 {col.key === 'Given Name' ? (
                                     <a href="#" onClick={(e) => { e.preventDefault(); onSelectStudent(student); }}
                                        className="font-semibold text-indigo-600 hover:underline">
@@ -285,6 +285,13 @@ const StudentTable = ({ students, onSort, sort, visibleColumns, allColumns, onSe
                                         }
                                         return total;
                                     }, 0).toFixed(2)} / Monthly Eq.`
+                                ) : col.key === 'Actions' ? (
+                                    <button
+                                        onClick={() => onOpenModal('add-grades', student)}
+                                        className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-md text-xs font-semibold hover:bg-indigo-200"
+                                    >
+                                        Add Grades
+                                    </button>
                                 ) : (
                                     student[col.key] || 'N/A'
                                 )}
@@ -831,7 +838,7 @@ const StudentProfilePage = ({ student, onOpenModal, setActiveTab, followUps, onD
                         <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6">
                             <DetailItem icon={<School size={16} className="text-gray-400"/>} label="School" value={`${student.School.name}${student.School.campus ? ` (${student.School.campus})` : ''}`} />
                             <DetailItem icon={<GraduationCap size={16} className="text-gray-400"/>} label="Grade" value={student.Grade} />
-                            <DetailItem icon={<Briefcase size={16} className="text-gray-400"/>} label="Major" value={student.Major} />
+                            {student.Grade === 'University' && <DetailItem icon={<Briefcase size={16} className="text-gray-400"/>} label="Major" value={student.Major} />}
                              <div className="sm:col-span-2">
                                 <dt className="text-sm font-medium text-gray-500 flex items-center gap-2">
                                     <DollarSign size={16} className="text-gray-400" /> Financial Records
@@ -1087,6 +1094,9 @@ const StudentFormModal = ({ student, onReview, onClose, onArchive }) => {
 
     const formFields = Object.keys(formData).filter(k => {
         const fieldsToExclude = ['StudentID', 'Age', 'DateLeft', 'financials', 'School', 'guardians'];
+        if (formData.Grade !== 'University') {
+            fieldsToExclude.push('Major');
+        }
         return !fieldsToExclude.includes(k);
     });
 
@@ -1277,10 +1287,19 @@ const FollowUpFormModal = ({ student, followUp, onSave, onClose }) => {
         physicalHealth: { rating: 'Good', details: '' },
         socialInteraction: { rating: 'Good', details: '' },
         homeLife: { rating: 'Good', details: '' },
+        drugsAlcoholViolence: { rating: 'No', details: '' },
         riskFactors: [],
         riskFactorsDetails: '',
+        learningDifficulties: { rating: 'No', details: '' },
+        behaviourInClass: { rating: 'Good', details: '' },
+        peerIssues: { rating: 'No', details: '' },
+        teacherInvolvement: { rating: 'No', details: '' },
+        transportation: { rating: 'Good', details: '' },
+        tutoringParticipation: { rating: 'Good', details: '' },
         notes: '',
         recommendations: '',
+        childProtectionConcerns: 'No',
+        humanTraffickingRisk: 'No'
     });
 
     const handleWellbeingChange = (field, subfield, value) => {
@@ -1308,7 +1327,7 @@ const FollowUpFormModal = ({ student, followUp, onSave, onClose }) => {
         onSave(student.StudentID, formData);
     };
 
-    const WellbeingInput = ({ label, fieldName }) => (
+    const WellbeingInput = ({ label, fieldName, options = ['Good', 'Average', 'Poor'] }) => (
         <div>
             <label className="block text-sm font-medium text-gray-700">{label}</label>
             <select
@@ -1316,13 +1335,11 @@ const FollowUpFormModal = ({ student, followUp, onSave, onClose }) => {
                 onChange={(e) => handleWellbeingChange(fieldName, 'rating', e.target.value)}
                 className="mt-1 block w-full p-2 border rounded-md"
             >
-                <option>Good</option>
-                <option>Average</option>
-                <option>Poor</option>
+                {options.map(opt => <option key={opt}>{opt}</option>)}
             </select>
-            {(formData[fieldName].rating === 'Average' || formData[fieldName].rating === 'Poor') && (
+            {(formData[fieldName].rating !== options[0]) && (
                 <textarea
-                    placeholder={`Please share the main problem and how we can help.`}
+                    placeholder="Please provide details."
                     value={formData[fieldName].details}
                     onChange={(e) => handleWellbeingChange(fieldName, 'details', e.target.value)}
                     className="mt-2 block w-full p-2 border rounded-md text-sm"
@@ -1337,10 +1354,11 @@ const FollowUpFormModal = ({ student, followUp, onSave, onClose }) => {
             <form onSubmit={handleSubmit} className="space-y-6">
                 <fieldset>
                     <legend className="text-lg font-semibold text-gray-800 border-b w-full pb-1 mb-2">Well-being Progress</legend>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                         <WellbeingInput label="Physical Health" fieldName="physicalHealth" />
                         <WellbeingInput label="Social Interaction" fieldName="socialInteraction" />
                         <WellbeingInput label="Home Life" fieldName="homeLife" />
+                        <WellbeingInput label="Drugs/Alcohol/Violence" fieldName="drugsAlcoholViolence" options={['No', 'Yes']} />
                     </div>
                 </fieldset>
                 
@@ -1374,6 +1392,18 @@ const FollowUpFormModal = ({ student, followUp, onSave, onClose }) => {
                         </div>
                     )}
                 </fieldset>
+
+                <fieldset>
+                    <legend className="text-lg font-semibold text-gray-800 border-b w-full pb-1 mb-2">Educational Progress</legend>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <WellbeingInput label="Learning Difficulties" fieldName="learningDifficulties" options={['No', 'Yes']} />
+                        <WellbeingInput label="Behaviour in Class" fieldName="behaviourInClass" />
+                        <WellbeingInput label="Peer Issues" fieldName="peerIssues" options={['No', 'Yes']} />
+                        <WellbeingInput label="Teacher Involvement" fieldName="teacherInvolvement" options={['No', 'Yes']} />
+                        <WellbeingInput label="Transportation" fieldName="transportation" />
+                        <WellbeingInput label="Tutoring Participation" fieldName="tutoringParticipation" />
+                    </div>
+                </fieldset>
                 
                 <fieldset>
                      <legend className="text-lg font-semibold text-gray-800 border-b w-full pb-1 mb-2">Staff Notes</legend>
@@ -1386,7 +1416,7 @@ const FollowUpFormModal = ({ student, followUp, onSave, onClose }) => {
                                 onChange={handleChange}
                                 className="mt-1 block w-full p-2 border rounded-md"
                                 rows="3"
-                                placeholder="Please write any information you learned that is not included elsewhere in this form."
+                                placeholder="Please write any information you learned that is not included in this form."
                             />
                         </div>
                          <div>
@@ -1400,6 +1430,26 @@ const FollowUpFormModal = ({ student, followUp, onSave, onClose }) => {
                                 placeholder="Please share any changes that you believe may be helpful."
                             />
                         </div>
+                     </div>
+                </fieldset>
+                
+                <fieldset>
+                     <legend className="text-lg font-semibold text-gray-800 border-b w-full pb-1 mb-2">Conclusion</legend>
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                         <div>
+                             <label className="block text-sm font-medium text-gray-700">Child Protection Concerns?</label>
+                             <select name="childProtectionConcerns" value={formData.childProtectionConcerns} onChange={handleChange} className="mt-1 block w-full p-2 border rounded-md">
+                                 <option>No</option>
+                                 <option>Yes</option>
+                             </select>
+                         </div>
+                         <div>
+                             <label className="block text-sm font-medium text-gray-700">Increased Risk of Trafficking/Abuse?</label>
+                             <select name="humanTraffickingRisk" value={formData.humanTraffickingRisk} onChange={handleChange} className="mt-1 block w-full p-2 border rounded-md">
+                                 <option>No</option>
+                                 <option>Yes</option>
+                             </select>
+                         </div>
                      </div>
                 </fieldset>
 
@@ -1615,7 +1665,8 @@ export default function App() {
     const ALL_COLUMNS = useMemo(() => [
         { key: 'StudentID', label: 'Student ID' }, { key: 'Given Name', label: 'First Name' }, { key: 'Family Name', label: 'Family Name' },
         { key: 'Age', label: 'Age' }, { key: 'Sex', label: 'Sex' }, { key: 'Grade', label: 'Grade' },
-        { key: 'School', label: 'School' }, { key: 'MonthlyCosts', label: 'Monthly Costs' }, { key: 'EnrollmentDate', label: 'Enrolled' }, { key: 'Comments', label: 'Comments' }
+        { key: 'School', label: 'School' }, { key: 'MonthlyCosts', label: 'Monthly Costs' }, { key: 'EnrollmentDate', label: 'Enrolled' }, { key: 'Comments', label: 'Comments' },
+        { key: 'Actions', label: 'Actions' }
     ], []);
 
     const [visibleColumns, setVisibleColumns] = useStickyState(
